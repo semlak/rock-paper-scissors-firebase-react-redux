@@ -1,0 +1,11 @@
+
+const config = {
+  apiKey: "YOURAPIKEY",
+  authDomain: "rps-game-d93c5.firebaseapp.com",
+  databaseURL: "https://rps-game-d93c5.firebaseio.com",
+  projectId: "rps-game-d93c5",
+  storageBucket: "rps-game-d93c5.appspot.com",
+  messagingSenderId: "YOURID"
+};
+
+export default config;
