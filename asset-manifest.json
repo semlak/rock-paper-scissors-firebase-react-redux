@@ -1,7 +1,7 @@
 {
   "main.css": "/rock-paper-scissors-firebase-react-redux/static/css/main.da1d9e56.chunk.css",
-  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.886647b9.chunk.js",
-  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.886647b9.chunk.js.map",
+  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.e8e4d8d5.chunk.js",
+  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.e8e4d8d5.chunk.js.map",
   "static/css/1.9c13e2ee.chunk.css": "/rock-paper-scissors-firebase-react-redux/static/css/1.9c13e2ee.chunk.css",
   "static/js/1.36ecbfda.chunk.js": "/rock-paper-scissors-firebase-react-redux/static/js/1.36ecbfda.chunk.js",
   "static/js/1.36ecbfda.chunk.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/1.36ecbfda.chunk.js.map",
@@ -12,6 +12,6 @@
   "static/css/main.da1d9e56.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/main.da1d9e56.chunk.css.map",
   "static/css/1.9c13e2ee.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/1.9c13e2ee.chunk.css.map",
   "index.html": "/rock-paper-scissors-firebase-react-redux/index.html",
-  "precache-manifest.d73a3cf0543e863485d9bc6b09e606e9.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.d73a3cf0543e863485d9bc6b09e606e9.js",
+  "precache-manifest.c83adb7644ac76183315bea81639dabc.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.c83adb7644ac76183315bea81639dabc.js",
   "service-worker.js": "/rock-paper-scissors-firebase-react-redux/service-worker.js"
 }
