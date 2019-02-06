@@ -72,7 +72,7 @@ class AppNavbar extends React.Component {
         {props.auth ?
           <Button outline onClick={userSignOut}>Log Out {auth.displayName}</Button>
           :
-          <Button outline onClick={userSignIn}>Log In</Button>
+          <Button outline onClick={userSignIn}>Log In/Sign Up</Button>
         }
       </NavItem>
     );

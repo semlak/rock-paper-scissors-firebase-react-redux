@@ -1,5 +1,6 @@
 // import firebase, { authRef, provider, } from '../firebase';
-import firebase, { provider, } from '../firebase';
+// import firebase, { provider, } from '../firebase';
+import firebase, { googleProvider, } from '../firebase';
 // import { authRef, provider, } from '../firebase';
 import { leaveGathering } from './gatheringActions';
 // import { FETCH_USER } from './types';
@@ -28,7 +29,7 @@ export const fetchUser = () => dispatch => firebase.auth().onAuthStateChanged(us
 export const signIn = () => dispatch => firebase.auth()
 // export const signIn = () => dispatch => {
 // export const signIn = () => () => authRef
-  .signInWithPopup(provider)
+  .signInWithPopup(googleProvider)
   // .then(result => {})
   .then(() => {
     // no need to dispatch auth signer, because then is done using the onAuthStateChanged event listener
@@ -98,4 +99,20 @@ export const signOut = ({ gathering }) => dispatch => {
   
   // return Promise.resolve(handleSignOut());
   return dispatch(handleSignOut());
+};
+
+export const registerUserAction = ({ username, email, password }) => dispatch => {
+  console.log('in registerUser Action');
+  return dispatch({
+    type: 'REGISTER_USER_FAKE',
+    payload: { username, email, password },
+  });
+};
+
+export const loginUserWithEmailPassword = ({ email, password }) => dispatch => {
+  console.log('in loginUserWithEmailPassword');
+  return dispatch({
+    type: 'LOGIN_USER_FAKE',
+    payload: { email, password },
+  });
 };

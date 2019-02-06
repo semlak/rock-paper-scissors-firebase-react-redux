@@ -6,7 +6,7 @@ import { App } from './App';
 
 it('renders without crashing', () => {
   // const div = document.createElement('div');
-  const home = <App />;
+  // const home = <App />;
   // console.log('home', home);
   // ReactDOM.render(<App />, div);
   // ReactDOM.unmountComponentAtNode(div);

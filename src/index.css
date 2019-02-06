@@ -12,3 +12,80 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+
+
+@media only screen and (min-width: 992px) {
+  .add-right-border {
+    border-right: 1px dotted #C2C2C2;
+    padding-right: 30px;
+  }
+  div#OR {
+    height: 30px;
+    width: 30px;
+    border: 1px solid #C2C2C2;
+    border-radius: 50%;
+    font-weight: bold;
+    line-height: 28px;
+    text-align: center;
+    font-size: 12px;
+    float: right;
+    position: absolute;
+    right: -16px;
+    top: 40%;
+    z-index: 1;
+    background: #DFDFDF;
+  }
+}
+
+
+@media only screen and (max-width: 991px) {
+  #nav-tab-content {
+    border-bottom: 2px dotted #C2C2C2;
+    padding-bottom: 2rem;
+    /* padding-left: 20px; */
+  }
+  /* .add-right-border {                  */
+  /*   border-bottom: 1px dotted #C2C2C2; */
+  /* }                                    */
+  div#OR {
+      height: 30px;
+      width: 30px;
+      border: 1px solid #C2C2C2;
+      border-radius: 50%;
+      font-weight: bold;
+      line-height: 28px;
+      text-align: center;
+      font-size: 12px;
+      /* float: right;       */
+      /* position: absolute; */
+      /* right: -16px;       */
+      /* top: 40%;           */
+      position: relative;
+      top: -16px;
+      left: 46%;
+      z-index: 1;
+      background: #DFDFDF;
+  }
+}
+
+
+.btn#github-signin {
+    color: #fff;
+    background-color: #444;
+    border-color: rgba(0,0,0,0.2);
+}
+
+#github-signin:hover {
+    color: #fff;
+    background-color: #2b2b2b;
+    border-color: rgba(0,0,0,0.2);
+}
+
+#github-signin:not([disabled]):not(.disabled).active, #github-signin:not([disabled]):not(.disabled):active {
+    /* border-color: #b21f2d;                       */
+    /* box-shadow: 0 0 0 0.2rem rgba(220,53,69,.5); */
+    /* background-color: #1a252f; */
+    box-shadow: 0 0 0 0.2rem rgba(76, 91, 106, 0.5);
+    border-color: #151e27;
+}

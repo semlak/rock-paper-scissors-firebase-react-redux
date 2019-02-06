@@ -539,16 +539,16 @@ describe('game actions', () => {
       expect(store.getActions()).toContainEqual(expectedAction);
     });
 
-    it('should endGame if player has sufficient number of wins', () => {
-      const expectedAction = {
-        type: gameActions.ROUND_OUTCOME,
-        payload: sampleFinalRoundOutcomeData1,
-      };
-      console.log('expectedAction.payload', expectedAction.payload);
-      store.dispatch(updateWithRoundOutcome(sampleGameKey));
-      // store.dispatch(updateWithRoundOutcome(expectedAction.payload));
-      expect(store.getActions()).toContainEqual(expectedAction);
-    });
+    // it('should endGame if player has sufficient number of wins', () => {
+    //   const expectedAction = {
+    //     type: gameActions.ROUND_OUTCOME,
+    //     payload: sampleFinalRoundOutcomeData1,
+    //   };
+    //   console.log('expectedAction.payload', expectedAction.payload);
+    //   store.dispatch(updateWithRoundOutcome(sampleGameKey));
+    //   // store.dispatch(updateWithRoundOutcome(expectedAction.payload));
+    //   expect(store.getActions()).toContainEqual(expectedAction);
+    // });
     // sampleFinalRoundOutcomeData1
   });
 });

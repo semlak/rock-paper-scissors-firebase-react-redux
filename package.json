@@ -2,6 +2,7 @@
   "name": "rps-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://semlak.github.io/rock-paper-scissors-firebase-react-redux",
   "dependencies": {
     "@emotion/core": "^10.0.4",
     "@emotion/styled": "^10.0.5",
@@ -22,6 +23,8 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

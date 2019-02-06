@@ -311,7 +311,7 @@ describe('gameReducer', () => {
       expect(player1Actions).toContainEqual('rock');
       // expect(player2Actions).toContainEqual('paper');
       expect(player1Actions.length).toEqual(1);
-      console.log('player2Actions', player2Actions, 'status', newState1.gameStatus);
+      // console.log('player2Actions', player2Actions, 'status', newState1.gameStatus);
       expect(player2Actions.length).toEqual(0);
       expect(player1Actions.length).toBeLessThanOrEqual(round);
       expect(player2Actions.length).toBeLessThanOrEqual(round);
@@ -358,7 +358,7 @@ describe('gameReducer', () => {
       const stateAfterPlayer1Play = GameReducer(activeGameState, samplePlayReceived);
       const stateAfterPlayer2Play = GameReducer(stateAfterPlayer1Play, samplePlayReceived_2);
       const stateAfterRoundWin = GameReducer(stateAfterPlayer2Play, round1WinReceived);
-      console.log('stateAfterRoundWin', stateAfterRoundWin);
+      // console.log('stateAfterRoundWin', stateAfterRoundWin);
       const { player1Wins, player2Wins, round, } = stateAfterRoundWin.gameData;
       const { gameStatus } = stateAfterRoundWin;
       // expect(newState.gameData.player1Actions).toContainEqual('rock');

@@ -4,10 +4,12 @@ import { combineReducers } from "redux";
 import auth from './authReducer';
 import gathering from './gatheringReducer';
 import game from './gameReducer';
+import modals from './modalsReducer';
 
 export default combineReducers({
   // data,
   auth,
   gathering,
   game,
+  modals,
 });
