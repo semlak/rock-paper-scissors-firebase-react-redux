@@ -109,7 +109,7 @@ class AuthenticationModal extends React.Component {
         <Row>
           <Col sm={{ size: 9, offset: 3 }} >
             <Button color="primary" onClick={this.handleRegisterClick}>Register</Button>
-            <Button color="danger" className="ml-2" data-dismiss="modal">Cancel</Button>
+            <Button color="danger" onClick={this.props.closeButtonAction} className="ml-2" data-dismiss="modal">Cancel</Button>
           </Col>
         </Row> 
       </Form>
@@ -145,6 +145,7 @@ AuthenticationModal.propTypes = {
   //   uid: PropTypes.string,
   //   photoURL: PropTypes.string,
   // }),
+  closeButtonAction: PropTypes.func.isRequired,
   registerUserAction: PropTypes.func.isRequired,
   // signOut: PropTypes.func.isRequired,
 };

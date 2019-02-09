@@ -296,29 +296,29 @@ describe('gameReducer', () => {
       expect(newState.gameStatus).toEqual(gameStatuses.OPPONENT_PLAY_WAITING_FOR_USER);
       expect(newState1.gameStatus).toEqual(gameStatuses.DETERMINING_ROUND_WINNER);
     });
-    it('should reject plays received that do not have uid of either player', () => {
-      const activeGameState = GameReducer(initialState, startGameAction);
-      const newState = GameReducer(activeGameState, samplePlayReceived);
-      const newState1 = GameReducer(newState, samplePlayReceived_badUid);
-      // const newState2 = GameReducer(newState, samplePlayReceived_1);
-      // console.log('newState1', newState1);
-      // expect(newState).toContainEqual(activeGameState);
-      // const playerActions = newState.gameData.player1Actions;
-      // const opponentActions = newState.gameData.player2Actions;
-      // const round = 
-      const { player1Actions, player2Actions, round } = newState1.gameData;
-      // expect(newState.gameData.player1Actions).toContainEqual('rock');
-      expect(player1Actions).toContainEqual('rock');
-      // expect(player2Actions).toContainEqual('paper');
-      expect(player1Actions.length).toEqual(1);
-      // console.log('player2Actions', player2Actions, 'status', newState1.gameStatus);
-      expect(player2Actions.length).toEqual(0);
-      expect(player1Actions.length).toBeLessThanOrEqual(round);
-      expect(player2Actions.length).toBeLessThanOrEqual(round);
-      expect(round).toEqual(1);
-      expect(newState.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
-      expect(newState1.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
-    });
+    // it('should reject plays received that do not have uid of either player', () => {
+    //   const activeGameState = GameReducer(initialState, startGameAction);
+    //   const newState = GameReducer(activeGameState, samplePlayReceived);
+    //   const newState1 = GameReducer(newState, samplePlayReceived_badUid);
+    //   // const newState2 = GameReducer(newState, samplePlayReceived_1);
+    //   // console.log('newState1', newState1);
+    //   // expect(newState).toContainEqual(activeGameState);
+    //   // const playerActions = newState.gameData.player1Actions;
+    //   // const opponentActions = newState.gameData.player2Actions;
+    //   // const round = 
+    //   const { player1Actions, player2Actions, round } = newState1.gameData;
+    //   // expect(newState.gameData.player1Actions).toContainEqual('rock');
+    //   expect(player1Actions).toContainEqual('rock');
+    //   // expect(player2Actions).toContainEqual('paper');
+    //   expect(player1Actions.length).toEqual(1);
+    //   // console.log('player2Actions', player2Actions, 'status', newState1.gameStatus);
+    //   expect(player2Actions.length).toEqual(0);
+    //   expect(player1Actions.length).toBeLessThanOrEqual(round);
+    //   expect(player2Actions.length).toBeLessThanOrEqual(round);
+    //   expect(round).toEqual(1);
+    //   expect(newState.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
+    //   expect(newState1.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
+    // });
   });
 
   describe(gameActions.ROUND_OUTCOME, () => {

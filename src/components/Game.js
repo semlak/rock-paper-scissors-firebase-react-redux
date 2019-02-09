@@ -12,7 +12,11 @@ import { connect } from 'react-redux';
 
 // import firebase from '../firebase';
 import LoadingSpinner from './LoadingSpinner';
-import { endGame, makePlay } from '../actions/game';
+import {
+  endGame,
+  makePlay,
+  getRoundOutcome,
+} from '../actions/game';
 import gameStatuses from '../gameStatuses';
 
 
@@ -56,7 +60,14 @@ class Game extends Component {
       playInProgress,
     });
   }
-  
+
+  componentDidUpdate(prevProps) {
+    const { gameStatus } = this.props.game;
+    if (gameStatus === gameStatuses.DETERMINING_ROUND_WINNER && gameStatus !== prevProps.game.gameStatus && prevProps.game.gameStatus.length > 0) {
+      this.props.getRoundOutcome(this.props.gameUID);
+    }
+  }
+
   play = (e) => {
     const { value: playerAction } = e.target;
     // const player = playerid === game.player1 ? "player1" : "player2";
@@ -68,7 +79,8 @@ class Game extends Component {
     // console.log('player1UID', player1UID, 'myUID', myUID, 'player1or2', player1or2, 'playerAction', playerAction);
     if (playerAction.match(/(rock|paper|scissors)/) != null && player1or2 && player1or2.length > 1) {
       const { gameKey } = this.props.game;
-      this.props.makePlay(gameKey, player1or2, playerAction);
+      // this.props.makePlay(gameKey, player1or2, playerAction);
+      this.props.makePlay(gameKey, player1or2, myUID, playerAction);
     }
     else {
       console.log('invalid playerAction or playerinfo', playerAction, player1or2);
@@ -120,7 +132,7 @@ class Game extends Component {
       // fadeIn: true,
       id: "loading-spinner",
     };
-    console.log('spinnerProps', spinnerProps);
+    // console.log('spinnerProps', spinnerProps);
 
 
     const activeCardBody = (
@@ -176,4 +188,4 @@ function mapStateToProps({ auth, gathering, game }) {
 }
 
 
-export default connect(mapStateToProps, { endGame, makePlay })(Game);
+export default connect(mapStateToProps, { endGame, makePlay, getRoundOutcome })(Game);

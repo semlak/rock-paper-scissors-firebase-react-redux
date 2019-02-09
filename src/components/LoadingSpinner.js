@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 // import { css } from 'react-emotion';
 // import { css } from 'react-emotion';
-import { css, jsx } from '@emotion/core';
-import styled from '@emotion/styled';
+// import { css, jsx } from '@emotion/core';
+import { css, } from '@emotion/core';
+// import styled from '@emotion/styled';
 import FadeLoader from 'react-spinners/FadeLoader';
 // import { Modal, ModalBody } from 'reactstrap';
 

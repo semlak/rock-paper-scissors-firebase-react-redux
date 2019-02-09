@@ -28,12 +28,15 @@ const getGameStateAfterPlayReceived = (state, actionPayload) => {
   // const newState = { ...state, gameStatus: newGameStatus, playerPlay: actionPayload.playerAction };
   // const { currentGameData } = state;
   const { player1: player1Uid, player2: player2Uid } = state.gameData;
-  const { playerUid } = actionPayload;
-  // console.log('key', actionPayload.player, 'player1Uid', player1Uid, 'player2Uid', player2Uid);
-  if (playerUid !== player1Uid && playerUid !== player2Uid) {
-    console.log('returning early from getGameStateAfterPlayReceived');
+  const { myUid } = state;
+  const { player: player1or2 } = actionPayload;
+  const playerUid = player1or2 === 'player1' ? player1Uid : player1or2 === 'player2' ? player2Uid : '';
+  // console.log('actionPayload', actionPayload, 'player1Uid', player1Uid, 'player2Uid', player2Uid, playerUid);
+  if ((playerUid !== player1Uid && playerUid !== player2Uid) || playerUid === '') {
+    // console.log('returning early from getGameStateAfterPlayReceived');
     return state;
   }
+  // console.log('not returning early from getGameStateAfterPlayReceived');
   // const 
   // const myUid = 
   // const player1or2 = myUid === player1 ? 'player1' : 'player2';
@@ -41,7 +44,7 @@ const getGameStateAfterPlayReceived = (state, actionPayload) => {
   // console.log('key', key);
   // const { playerUid } = actionPayload;
   // const { myUid, opponentUid } = state;
-  const { myUid, } = state;
+  // const { myUid, } = state;
   const key = `${actionPayload.player}Actions`;
   const playerActions = state.gameData.round >= actionPayload.playerActions.length ? actionPayload.playerActions : state.gameData[key];
   // const gameData = { ...state.gameData, [key]: actionPayload.playerActions };
@@ -62,10 +65,6 @@ const getGameStateAfterPlayReceived = (state, actionPayload) => {
 
 // export default (state = { gameStatus: gameStatuses.GAME_STARTED }, action) => {
 export default (state = { gameStatus: gameStatuses.NO_GAME }, action) => {
-  // if ([GAME_CREATED, GAME_STARTED, GAME_ENDED, MAKE_PLAY, PLAY_RECEIVED].indexOf(action.type) > -1) {
-  // if (Object.keys(gameActions).indexOf(action.type) > -1) {
-  //   console.log('received game action dispatch in gameReducer, state:', state, 'action', action);
-  // }
   // if (Object.keys(gameActions).indexOf(action.type) > -1) {
   //   console.log('received game action dispatch in gameReducer, state:', state, 'action', action);
   // }

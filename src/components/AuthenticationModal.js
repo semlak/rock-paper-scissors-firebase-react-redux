@@ -16,24 +16,25 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { signIn, } from '../actions/user';
+import { toggleAuthenticationModal } from '../actions/modalActions';
 import { LoginForm, RegistrationForm } from '../components';
 
 class AuthenticationModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
+    // this.toggle = this.toggle.bind(this);
     this.toggleTab = this.toggleTab.bind(this);
     this.state = {
-      isOpen: false,
+      // isOpen: false,
       activeTab: '1',
     };
   }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
+  // toggle() {
+  //   this.setState({
+  //     isOpen: !this.state.isOpen
+  //   });
+  // }
 
   toggleTab(tab) {
     if (this.state.activeTab !== tab) {
@@ -42,20 +43,23 @@ class AuthenticationModal extends React.Component {
       });
     }
   }
+
   render() {
     // const { user, login, logout } = this.props;
     // const { props } = this;
     // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
     // const { auth, signIn: googleSignIn, signOut: signOutAction, gathering } = this.props;
-    const { signIn: googleSignIn, } = this.props;
+    console.log('rendingering AuthenticationModal, props:', this.props);
+    const { signIn: googleSignIn, authenticationModalOpen: isOpen, toggleAuthenticationModal: toggle } = this.props;
     // const userSignOut = () => signOutAction(gathering);
     // const userSignOut = () => signOutAction({ auth, gathering });
     // const userSignOut = () => signOutAction(gathering);
     // console.log('auth', auth);
-
+    
 
     return (
-      <Modal isOpen={this.state.isOpen} toggle={this.toggle} size="lg" className={this.props.className}>
+      <Modal isOpen={isOpen} toggle={toggle} size="lg" className={this.props.className}>
+      {/* <Modal isOpen={this.state.isOpen} toggle={this.toggle} size="lg" className={this.props.className}> */}
         <ModalBody>
           <div className="row">
             <div className="col-lg-8 col-md-12 add-right-border">
@@ -81,10 +85,10 @@ class AuthenticationModal extends React.Component {
               </Nav>
               <TabContent activeTab={this.state.activeTab} id="nav-tab-content">
                 <TabPane tabId="1">
-                  <LoginForm />
+                  <LoginForm closeButtonAction={toggle} />
                 </TabPane>
                 <TabPane tabId="2">
-                  <RegistrationForm />
+                  <RegistrationForm closeButtonAction={toggle} />
                 </TabPane>
               </TabContent>
               {/* <!-- Sign in with Google of Github--> */}
@@ -120,8 +124,9 @@ class AuthenticationModal extends React.Component {
 // };
 
 
-function mapStateToProps(props) {
-  return props;
+function mapStateToProps({ modals }) {
+  const { authenticationModalOpen } = modals;
+  return { authenticationModalOpen };
 }
 
 
@@ -138,4 +143,4 @@ AuthenticationModal.propTypes = {
   // signOut: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { signIn, })(AuthenticationModal);
+export default connect(mapStateToProps, { signIn, toggleAuthenticationModal })(AuthenticationModal);

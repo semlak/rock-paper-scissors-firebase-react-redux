@@ -9,10 +9,17 @@ import {
   // CardHeader,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import Avatar from 'react-avatar';
 
-import defaultPlayerImage from '../img/user.png';
+// import defaultPlayerImage from '../img/user.png';
 
 // import { joinGathering } from '../actions/gatheringActions';
+
+const PlayerAvatar = ({ player }) => (
+  player.photoURL && player.photoURL.length > 0 ?
+    <img src={player.photoURL} height="25" alt={player.displayName} /> :
+    <Avatar name={player.displayName} color={Avatar.getRandomColor('sitebase', ['green'])} size="25" textSizeRatio={2} />
+);
 
 const UserList = (props) => {
   // const { selectPlayer } = props;
@@ -35,7 +42,7 @@ const UserList = (props) => {
             className="mr-1"
             outline
             disabled={player.uid === auth.uid}
-          >{ player.uid === auth.uid ? `You (${player.displayName})` : player.displayName} <span> <img src={player.photoURL && player.photoURL.length > 0 ? player.photoURL : defaultPlayerImage} height="25" alt={player.displayName} /></span>
+          >{ player.uid === auth.uid ? `You (${player.displayName})` : player.displayName} <span> <PlayerAvatar player={player} /></span>
           </Button>
         ))}
       </CardBody>

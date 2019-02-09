@@ -4,6 +4,8 @@ import thunk from 'redux-thunk';
 import {
   // fetchUser,
   signOut,
+  loginUserWithEmailPassword,
+  registerUserAction,
   // handleSignOut,
 } from '../../actions/user';
 
@@ -15,6 +17,7 @@ import {
   // JOIN_GATHERING,
   userActions,
   gatheringActions,
+  modalActions,
 } from '../types';
 
 import firebase from '../../firebase';
@@ -46,22 +49,158 @@ const sampleCurrentUserLoggedIn = true;
 //   }
 // });
 
+
+const sampleUserArtie = {
+  displayName: "Artie Kalmes",
+  email: "artie@gmail.com",
+  emailVerified: true,
+  isAnonymous: false,
+  photoURL: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg",
+  u: "rps-game-d93c5.firebaseapp.com",
+  uid: "pJa4qrIO46YoGMXUfvj9VFllz142",
+};
+
+const fakeCredetials = { email: 'artie@gmail.com', password: '12345678', username: 'Artie Kalmes' };
+
+const googleSignInMockResult = {
+  additionalUserInfo: {
+    isNewUser: false,
+    profile: {
+      email: "artie@gmail.com",
+      family_name: "Kalmes",
+      given_name: "Artie",
+      hd: "gmail.com",
+      id: "111058114021360340494",
+      link: "https://plus.google.com/111058114021360340494",
+      locale: "en",
+      name: "Artie Kalmes",
+      picture: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg",
+      verified_email: true,
+    },
+    providerId: "google.com",
+  },
+  operationType: "signIn",
+  user: sampleUserArtie,
+};
+
+const emailPasswordSignInMockResult = {
+  operationType: "signIn",
+  additionalUserInfo: {
+    isNewUser: false,
+    providerId: "password",
+  },
+  credential: null,
+  user: sampleUserArtie,
+};
+
+const emailPasswordRegistrationMockResult = {
+  ...emailPasswordSignInMockResult,
+  additionalUserInfo: {
+    ...emailPasswordSignInMockResult.additionalUserInfo,
+    isNewUser: true,
+  }
+};
+
+
+const mockSignout = () => {
+  // console.log('in mock signout function');
+  if (sampleCurrentUserLoggedIn) {
+    return Promise.resolve(true);
+  }
+  else {
+    // return Promise.reject(false);
+    console.log('error on mocked signout');
+    return Promise.reject(new Error('error on mocked signout'));
+  }
+};
+
+
 const userSignOutMock = jest.fn().mockReturnValue({
   currentUser: sampleCurrentUserLoggedIn,
   // signOut: function() { console.log('in mock signout function'); return true; }
-  signOut: () => {
-    // console.log('in mock signout function');
-    if (sampleCurrentUserLoggedIn) {
+  signOut: mockSignout,
+});
+
+const mockLoginUserWithEmailPasswordError = {
+  // code: "auth/wrong-password",
+  message: "The password is invalid or the user does not have a password.",
+};
+
+
+const mockRegisterUserWithEmailPasswordError = {
+  message: "The email address is already in use by another account.",
+};
+
+
+const loginUserWithEmailPasswordMock = () => jest.fn().mockReturnValue({
+  // signInWithEmailAndPassword: jest.fn((email, password) => Promise.resolve(true)),
+  signInWithEmailAndPassword: jest.fn((email, password) => {
+    // return Promise.resolve(true);
+    // console.log('email', email, 'password', password);
+    if (email === fakeCredetials.email && password === fakeCredetials.password) {
       return Promise.resolve(true);
     }
     else {
-      // return Promise.reject(false);
-      console.log('error on mocked signout');
-      return Promise.reject(new Error('error on mocked signout'));
+      return Promise.reject(new Error(mockLoginUserWithEmailPasswordError.message));
     }
-  }
+  }),
+  createUserWithEmailAndPassword: jest.fn((email, password) => {
+    // return Promise.resolve(true);
+    // console.log('email', email, 'password', password);
+    if (email === fakeCredetials.email && password === fakeCredetials.password) {
+      return Promise.resolve(emailPasswordRegistrationMockResult);
+    }
+    else {
+      return Promise.reject(new Error(mockRegisterUserWithEmailPasswordError.message));
+    }
+  }),
+  // signInWithEmailAndPassword: (email, password) => {
+  //   // return Promise.resolve(emailPasswordSignInMockResult);
+  //   return Promise.resolve(true);
+  // },
+  // currentUser: sampleCurrentUserLoggedIn,
+  onAuthStateChanged: jest.fn(() => {
+    // console.log('running mocked onAuthStateChanged function');
+    return Promise.resolve({
+      user: sampleUserArtie,
+    });
+  }),
+  currentUser: ({
+    updateProfile: jest.fn(() => Promise.resolve(true)),
+  }),
+  signOut: mockSignout,
 });
 
+// const registerUserWithEmailPasswordMock = jest.fn().mockReturnValue({
+//   // signInWithEmailAndPassword: jest.fn((email, password) => Promise.resolve(true)),
+//   createUserWithEmailAndPassword: jest.fn((email, password) => {
+//     // return Promise.resolve(true);
+//     // console.log('email', email, 'password', password);
+//     if (email === fakeCredetials.email && password === fakeCredetials.password) {
+//       return Promise.resolve(true);
+//     }
+//     else {
+//       return Promise.reject(new Error(mockRegisterUserWithEmailPasswordError.message));
+//     }
+//   }),
+//   // signInWithEmailAndPassword: (email, password) => {
+//   //   // return Promise.resolve(emailPasswordSignInMockResult);
+//   //   return Promise.resolve(true);
+//   // },
+//   currentUser: sampleCurrentUserLoggedIn,
+//   signOut: mockSignout,
+// });
+
+
+// const loginUserWithEmailPasswordFailMock = jest.fn().mockReturnValue({
+//   signInWithEmailAndPassword: jest.fn((email, password) => Promise.resolve(mockLoginUserWithEmailPasswordError)),
+//   // signInWithEmailAndPassword: (email, password) => {
+//   //   // return Promise.resolve(emailPasswordSignInMockResult);
+//   //   return Promise.resolve(true);
+//   // },
+//   currentUser: sampleCurrentUserLoggedIn,
+//   signOut: mockSignout,
+// });
 
 const userSignOutMockToFail = jest.fn().mockReturnValue({
   currentUser: !sampleCurrentUserLoggedIn,
@@ -79,7 +218,6 @@ const userSignOutMockToFail = jest.fn().mockReturnValue({
   }
 });
 
-
 describe('authenticate action', () => {
   let store;
   // set up a fake store for all our tests
@@ -89,7 +227,7 @@ describe('authenticate action', () => {
   });
 
   describe('when a user logs out', () => {
-    it('fires a signout request action', () => {
+    it('fires a signOut request action', () => {
       const gathering = { leave: jest.fn(), };
       firebase.auth = userSignOutMock;
       // const gathering = { leave: jest.fn(() => Promise.resolve(true)) };
@@ -158,7 +296,125 @@ describe('authenticate action', () => {
     //   });
     // });
   });
+
+  describe('when a user logs in with email and password', () => {
+    beforeEach(() => {
+      // store = mockStore({ phoneNumbers: [] });
+      firebase.auth = loginUserWithEmailPasswordMock();
+    });
+
+    it('fires EMAIL_PASSWORD_LOGIN_ATTEMPT signal', () => {
+      // firebase.auth = loginUserWithEmailPasswordMock;
+      // const gathering = { leave: jest.fn(() => Promise.resolve(true)) };
+      // const gathering = { leave: jest.fn(() => ({})), };
+      store
+        .dispatch(loginUserWithEmailPassword(fakeCredetials))
+        .then(() => {
+          // console.log('store.getActions()', store.getActions());
+          // expect(store.getActions()).toContainEqual({ type: 'SIGNOUT_REQUEST' });
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_ATTEMPT });
+          // expect(gathering.leave).toHaveBeenCalled();
+          //   expect(next).toHaveBeenCalledWith(action);
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('calls the signInWithEmailAndPassword function of firebase.auth()', () => {
+      // firebase.auth = loginUserWithEmailPasswordMock;
+      store
+        .dispatch(loginUserWithEmailPassword(fakeCredetials))
+        .then(() => {
+          // console.log('store.getActions()', store.getActions());
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_ATTEMPT });
+          expect(firebase.auth().signInWithEmailAndPassword).toHaveBeenCalled();
+          const { email, password } = fakeCredetials;
+          expect(firebase.auth().signInWithEmailAndPassword).toHaveBeenCalledWith(email, password);
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('fires EMAIL_PASSWORD_LOGIN_SUCCESS and modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
+      // firebase.auth = loginUserWithEmailPasswordMock;
+      store
+        .dispatch(loginUserWithEmailPassword(fakeCredetials))
+        .then(() => {
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_SUCCESS });
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL });
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('fires EMAIL_PASSWORD_LOGIN_FAIL for failed login', () => {
+      // firebase.auth = loginUserWithEmailPasswordMock;
+      const badCredentials = { ...fakeCredetials, password: '12345' };
+      // const gathering = { leave: jest.fn(() => Promise.resolve(true)) };
+      // const gathering = { leave: jest.fn(() => ({})), };
+      store
+        .dispatch(loginUserWithEmailPassword(badCredentials))
+        .then(() => {
+          // console.log('store.getActions()!!!', store.getActions());
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_FAIL, payload: { message: mockLoginUserWithEmailPasswordError.message } });
+        });
+    });
+  });
+
+
+  describe('when a user registeres with email and password', () => {
+    beforeEach(() => {
+      firebase.auth = loginUserWithEmailPasswordMock();
+    });
+    it('fires EMAIL_PASSWORD_REGISTRATION_ATTEMPT signal', () => {
+      // const gathering = { leave: jest.fn(() => Promise.resolve(true)) };
+      // const gathering = { leave: jest.fn(() => ({})), };
+      store
+        .dispatch(registerUserAction(fakeCredetials))
+        .then(() => {
+          // console.log('store.getActions()', store.getActions());
+          // expect(store.getActions()).toContainEqual({ type: 'SIGNOUT_REQUEST' });
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_ATTEMPT });
+          // expect(gathering.leave).toHaveBeenCalled();
+          //   expect(next).toHaveBeenCalledWith(action);
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('calls the createUserWithEmailAndPassword function of firebase.auth()', () => {
+      store
+        .dispatch(registerUserAction(fakeCredetials))
+        .then(() => {
+          // console.log('store.getActions()', store.getActions());
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_ATTEMPT });
+          expect(firebase.auth().createUserWithEmailAndPassword).toHaveBeenCalled();
+          const { email, password } = fakeCredetials;
+          expect(firebase.auth().createUserWithEmailAndPassword).toHaveBeenCalledWith(email, password);
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('fires EMAIL_PASSWORD_REGISTRATION_SUCCESS and modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
+      store
+        .dispatch(registerUserAction(fakeCredetials))
+        .then(() => {
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_SUCCESS });
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL });
+          // console.log('firebase.auth().currentUser', firebase.auth().currentUser);
+          expect(firebase.auth().currentUser.updateProfile).toHaveBeenCalled();
+        })
+        .catch(err => expect(err).toBeFalsy());
+    });
+    it('fires EMAIL_PASSWORD_REGISTRATION_FAIL for failed login', () => {
+    //   firebase.auth = loginUserWithEmailPasswordMock;
+      const badCredentials = { ...fakeCredetials, password: '1' };
+      // const gathering = { leave: jest.fn(() => Promise.resolve(true)) };
+      // const gathering = { leave: jest.fn(() => ({})), };
+      store
+        .dispatch(registerUserAction(badCredentials))
+        .then(() => {
+          // console.log('store.getActions()!!!', store.getActions());
+          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL, payload: { message: mockRegisterUserWithEmailPasswordError.message } });
+        });
+    });
+
+
+  });
+
 });
+
 
 // const thunk = ({ dispatch, getState }) => next => action => {
 //   // console.log('in fake thunk middleware');
@@ -194,6 +450,7 @@ describe('authenticate action', () => {
 //   uid: "pJa4qrIO46YoGMXUfvj9VFllz142",
 // };
 
+
 // authRef.onAuthStateChanged = f => {
 //   // console.log('in mocked onAuthStateChanged, returning sampleUser', sampleUser);
 //   return f(sampleUser);
@@ -201,12 +458,7 @@ describe('authenticate action', () => {
 
 
 // const onAuthStateChanged = jest.fn();
-// const onAuthStateChanged = jest.fn(() => {
-//   // console.log('running mocked onAuthStateChanged function');
-//   return Promise.resolve({
-//     user: sampleUser
-//   })
-// });
+
 
 // const getRedirectResult = jest.fn(() => {
 //   return Promise.resolve({
@@ -334,21 +586,36 @@ describe('authenticate action', () => {
 //   expect(store.getState).toHaveBeenCalled();
 // });
 
-describe('user actions', () => {
-  describe('fetch user', () => {
-    it('should run', () => {
-      expect(true);
-    });
-    // it('should handle fetchUser action', () => {
-    //   const { next, invoke } = create();
-    //   // const action = { type: 'FETCH_USER' };
-    //   const action = {
-    //     type: FETCH_USER,
-    //     payload: sampleUser
-    //     // payload: { gameUID: sampleGameKey }
-    //   };
-    //   invoke(action);
-    //   // expect(invoke).toHaveBeenCalledWith(action);
-    //   expect(next).toHaveBeenCalledWith(action);
-  });
-});
+// describe('user actions', () => {
+//   // this doesn't work because fetch user doesn't create an action, it just creates a firebase listener, which when fired creates an action.
+//   let store;
+//   // set up a fake store for all our tests
+//   beforeEach(() => {
+//     // store = mockStore({ phoneNumbers: [] });
+//     store = mockStore({ gathering: {}, auth: {}, game: {} });
+//     firebase.auth = loginUserWithEmailPasswordMock();
+//   });
+//   describe('fetch user', () => {
+//     it('should run', () => {
+//       expect(true);
+//     });
+//     it('should handle fetchUser action', () => {
+//       // const { next, invoke } = create();
+//       // const action = { type: 'FETCH_USER' };
+//       const expectedAction = {
+//         type: userActions.FETCH_USER,
+//         payload: sampleUserArtie,
+//         // payload: { gameUID: sampleGameKey }
+//       };
+//       // invoke(action);
+//       store
+//         .dispatch(fetchUser())
+//         .then(() => {
+//           expect(store.getActions()).toContainEqual(expectedAction);
+//         })
+//         .catch(err => expect(err).toBeFalsy());
+//       // expect(invoke).toHaveBeenCalledWith(action);
+//       // expect(next).toHaveBeenCalledWith(action);
+//     });
+//   });
+// });

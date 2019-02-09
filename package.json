@@ -10,6 +10,7 @@
     "firebase": "^5.7.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
+    "react-avatar": "^3.5.0",
     "react-dom": "^16.6.3",
     "react-emotion": "^10.0.0",
     "react-redux": "^6.0.0",

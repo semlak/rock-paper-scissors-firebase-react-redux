@@ -193,12 +193,25 @@ const sampleRoundOutcomeData1 = { ...sampleGameReceived, player1Actions: ['rock'
 // player 1 wins in 4 rounds
 const sampleFinalRoundOutcomeData1 = {
   ...sampleRoundOutcomeData1,
+
   player1Actions: ['rock', 'paper', 'scissors', 'paper'],
   player2Actions: ['scissors', 'rock', 'rock', 'rock'],
   player1Wins: 3,
   player2Wins: 1,
   round: 4,
-  gameInProgress: true,
+  gameInProgress: false,
+  // player1Actions: {
+  //   '-LYEpWfpl6bClXAOl8Pe': "paper",
+  //   '-LYEphaC9HArDOEoMzaI': "rock",
+  // },
+  // player2Actions: {
+  //   '-LYEpaKCOu4cLsZffbgy': "scissors",
+  //   '-LYEph4PIYxtKc_3QuUs': "paper",
+  // },
+  // player1Wins: 0,
+  // player2Wins: 2,
+  // round: 3,
+  // gameInProgress: true,
 };
 
 
@@ -226,95 +239,181 @@ const sampleFinalRoundOutcomeData3 = {
   gameInProgress: true,
 };
 
+var mockFirebaseRef = (dbRef) => ({
+  signOut: jest.fn(() => Promise.resolve(true)),
+  on: jest.fn(),
+  currentUser: true,
+  push: jest.fn(() => {
+    return new Promise((resolve, reject) => {
+      if (dbRef === refs.games) {
+        resolve({
+          key: sampleGameKey,
+        });
+      }
+      else {
+        // return resolve(true);
+        console.log('failed mock push');
+        reject(new Error('failed mock push'));
+      }
+    });
+  }),
+  remove: jest.fn((ref) => new Promise((resolve, reject) => {
+    console.log('in mockFirebaseRef remove() promise, dbRef', dbRef);
+    if (dbRef === sampleGameKey) {
+      resolve(true);
+    }
+    else {
+      reject(new Error('failed to end game'));
+    }
+  })),
+  once: jest.fn((ref) => {
+    // console.log('in mockOnce function');
+    if (ref === 'value' && dbRef === refs.games) {
+      // console.log('in mockOnce function if branch');
+      return Promise.resolve(sampleRoundOutcomeData1);
+    }
+    return Promise.resolve(false);
+  }),
+  child: jest.fn((ref) => mockFirebaseRef(ref)),
+  // child1: jest.fn((ref) => mockFirebaseRef(ref)),
+  ref: jest.fn((ref) => mockFirebaseRef(ref)),
+});
 
-const createDatabaseSpy = () => jest.spyOn(firebase, 'database')
-  .mockImplementation(() => ({
+const firebaseDatabaseMock = () => {
+  console.log('\n\n\nIn firebaseDatabaseMock!!!');
+  return jest.fn().mockReturnValue({
+    // signInWithEmailAndPassword: jest.fn((email, password) => Promise.resolve(true)),
+
+    on: jest.fn(),
+
     currentUser: true,
+
     signOut: jest.fn(() => Promise.resolve(true)),
-    ref: jest.fn((dbRef) => {
-      return ({
-        // on: jest.fn().mockReturnValue((onRef) => {
-        // on: jest.fn((onRef) => {
-        //   console.log('running firebase.database() ".on" function for onRef', onRef);
-        //   if (dbRef === refs.game && onRef === 'child_added') {
-        //     return Promise.resolve(true);
-        //   }
-        // }),
-        on: jest.fn(),
-        // on: mockOnCreator(dbRef),
-        // push: jest.fn().mockReturnValue((val) => {
+
+    ref: jest.fn((dbRef) => mockFireBaseRef(dbRef)),
+  });
+};
+
+const mockOn = () => jest.fn();
+
+const mockPush = dbRef => val => jest.fn((val) => {
+  console.log('in mock push, val is', val, 'dbRef', dbRef);
+  return new Promise((resolve, reject) => {
+    if (dbRef === refs.games) {
+      // console.log('successful mock push, val', val);
+      console.log('successful mock push, val');
+      resolve({
+        key: sampleGameKey,
+      });
+    }
+    else {
+      console.log('failed mock push');
+      reject(new Error('failed mock push'));
+    }
+  });
+});
+
+const mockOnce = dbRef => (ref) => jest.fn((ref) => {
+  // console.log('in mockOnce function');
+  if (ref === 'value' && dbRef === refs.games) {
+    // console.log('in mockOnce function if branch');
+    return Promise.resolve(sampleRoundOutcomeData1);
+  }
+  return Promise.resolve(false);
+});
+
+const createDatabaseSpy = () => jest.spyOn(firebase, 'database').mockImplementation(() => ({
+  currentUser: true,
+  signOut: jest.fn(() => Promise.resolve(true)),
+  ref: jest.fn((dbRef) => mockFirebaseRef(dbRef)),
+  ref1: jest.fn((dbRef) => ({
+    // on: jest.fn().mockReturnValue((onRef) => {
+    // on: jest.fn((onRef) => {
+    //   console.log('running firebase.database() ".on" function for onRef', onRef);
+    //   if (dbRef === refs.game && onRef === 'child_added') {
+    //     return Promise.resolve(true);
+    //   }
+    // }),
+    on: mockOn(),
+    on1: jest.fn(),
+    // on: mockOnCreator(dbRef),
+    // push: jest.fn().mockReturnValue((val) => {
+    // push: jest.fn((val) => {
+    push: mockPush(dbRef)(),
+    push1: jest.fn(() => {
+      // console.log('in mock push');
+      return new Promise((resolve, reject) => {
+        if (dbRef === refs.games) {
+          // console.log('successful mock push, val', val);
+          // console.log('successful mock push, val');
+          resolve({
+            key: sampleGameKey,
+          });
+        }
+        else {
+          console.log('failed mock push');
+          reject(new Error('failed mock push'));
+        }
+      });
+    }),
+    child: (childRef) => ({
+      remove: () => {
+        // console.log('remove childRef', childRef, 'dbRef:', dbRef);
+        // return Promise.resolve(true);
+        return new Promise((resolve, reject) => {
+          if (childRef === sampleGameKey) {
+            resolve(true);
+          }
+          else {
+            reject(new Error('failed to end game'));
+          }
+        });
+      },
+      push: mockPush(dbRef)(),
+      push1: jest.fn(),
+      // child: jest.fn(),
+      child: jest.fn(() => ({
+        // push: jest.fn(),
         // push: jest.fn((val) => {
-        push: jest.fn(() => {
+        push: mockPush(dbRef)(),
+        push1: jest.fn(() => {
           // console.log('in mock push');
           return new Promise((resolve, reject) => {
             if (dbRef === refs.games) {
               // console.log('successful mock push, val', val);
-              console.log('successful mock push, val');
+              // console.log('successful mock push, val');
               resolve({
                 key: sampleGameKey,
               });
             }
             else {
-              console.log('failed mock push');
+              // console.log('failed mock push');
               reject(new Error('failed mock push'));
             }
           });
         }),
-        child: (childRef) => ({
-          remove: () => {
-            // console.log('remove childRef', childRef, 'dbRef:', dbRef);
-            // return Promise.resolve(true);
-            return new Promise((resolve, reject) => {
-              if (childRef === sampleGameKey) {
-                resolve(true);
-              }
-              else {
-                reject(new Error('failed to end game'));
-              }
-            });
-          },
-          push: jest.fn(),
-          // child: jest.fn(),
-          child: jest.fn(() => ({
-            // push: jest.fn(),
-            // push: jest.fn((val) => {
-            push: jest.fn(() => {
-              // console.log('in mock push');
-              return new Promise((resolve, reject) => {
-                if (dbRef === refs.games) {
-                  // console.log('successful mock push, val', val);
-                  console.log('successful mock push, val');
-                  resolve({
-                    key: sampleGameKey,
-                  });
-                }
-                else {
-                  console.log('failed mock push');
-                  reject(new Error('failed mock push'));
-                }
-              });
-            }),
-          })),
-          once: jest.fn((ref) => {
-            console.log('in mockOnce function');
-            if (ref === 'value' && dbRef === refs.games) {
-              console.log('in mockOnce function if branch');
-              return Promise.resolve(sampleRoundOutcomeData1);
-            }
-            return Promise.resolve(false);
-          }),
-          on: jest.fn(),
-          // on: jest.fn((onRef) => {
-          //   console.log('running firebase.database() ".on" function for onRef', onRef);
-          //   if (dbRef === refs.game && onRef === 'child_added') {
-          //     return Promise.resolve(true);
-          //   }
-          // }),
+      })),
+      once2: mockOnce(dbRef)(),
+      once1: jest.fn((ref) => {
+        // console.log('in mockOnce function');
+        if (ref === 'value' && dbRef === refs.games) {
+          // console.log('in mockOnce function if branch');
+          return Promise.resolve(sampleRoundOutcomeData1);
+        }
+        return Promise.resolve(false);
+      }),
+      on: mockOn(),
+      on1: jest.fn(),
+      // on: jest.fn((onRef) => {
+      //   console.log('running firebase.database() ".on" function for onRef', onRef);
+      //   if (dbRef === refs.game && onRef === 'child_added') {
+      //     return Promise.resolve(true);
+      //   }
+      // }),
 
-        }),
-      });
     }),
-  }));
+  }))
+}));
 
 // const firebaseMock = jest.fn().mockReturnValue({
 //   currentUser: true,
@@ -398,6 +497,7 @@ describe('game actions', () => {
           // console.log('storeActions', storeActions.includes(element => element.type === gameActions.GAME_ENDED));
           // expect(storeActions.includes(element => element.type === gameActions.GAME_ENDED)).toBeTruthy();
           expect(store.getActions()).toContainEqual(expectedAction);
+          // console.log('store.getState()', store.getState());
         })
         .catch(err => expect(err).toBeFalsy());
       // expect(endGame(sampleGameKey)).toEqual(expectedAction);
@@ -415,6 +515,7 @@ describe('game actions', () => {
           // console.log('storeActions', storeActions, storeActions.includes(element => element.type === gameActions.GAME_ENDED));
           // console.log('storeActions', storeActions, storeActions.includes(element => element.type === expectedAction.type));
           expect(store.getActions()).toContainEqual(expectedAction);
+          // console.log('store.getState()', store.getState());
         })
         .catch(err => expect(err).toBeFalsy());
       // .catch(err => console.log('error from dispatch of endGame with badGameKey'));
@@ -434,6 +535,7 @@ describe('game actions', () => {
         .then(() => {
           // console.log('requestGame dispatch result:', result);
           expect(store.getActions()).toContainEqual(expectedAction);
+          // console.log('store.getState()', store.getState());
         })
         .catch(err => expect(err).toBeFalsy());
     });
@@ -451,6 +553,7 @@ describe('game actions', () => {
         .then(() => {
           // console.log('requestGame dispatch result:', result);
           expect(store.getActions()).toContainEqual(expectedAction);
+          // console.log('store.getState()', store.getState());
           // expect(
           // expect(ref.push).toHaveBeenCalled();
 
@@ -496,6 +599,7 @@ describe('game actions', () => {
 
       // console.log('store.getActions()', store.getActions());
       expect(store.getActions()).toContainEqual(expectedAction);
+      // console.log('store.getState()', store.getState());
       // expect(createEndGameListener).toHaveBeenCalled();
       // store.dispatch(requestGame(user, otherPlayer))
       //   .then((result) => {
@@ -510,8 +614,10 @@ describe('game actions', () => {
 
   describe('makePlay', () => {
     it('should dispatch a MAKE_PLAY action', () => {
+      // firebase.database = firebaseDatabaseMock;
       const player1or2 = "player1";
       const playerAction = "scissors";
+      const playerUid = sampleUser.uid;
       const expectedAction = {
         type: gameActions.MAKE_PLAY,
         payload: { player1or2, playerAction }
@@ -520,35 +626,36 @@ describe('game actions', () => {
       };
       // const ref = GamesRef();
       // const gameListener = createNewGameListener(user.uid);
-      store.dispatch(makePlay(sampleGameKey, player1or2, playerAction));
+      store.dispatch(makePlay(sampleGameKey, player1or2, playerUid, playerAction));
 
       // console.log('store.getActions()', store.getActions());
       expect(store.getActions()).toContainEqual(expectedAction);
+      // console.log('store.getState()', store.getState());
     });
   });
 
-  describe('receiveRoundOutcome', () => {
-    it('should dispatch a ROUND_OUTCOME action containing updated gameData', () => {
-      const expectedAction = {
-        type: gameActions.ROUND_OUTCOME,
-        payload: sampleFinalRoundOutcomeData1,
-      };
-      // console.log('expectedAction.payload', expectedAction.payload);
-      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
-      store.dispatch(updateWithRoundOutcome(expectedAction.payload));
-      expect(store.getActions()).toContainEqual(expectedAction);
-    });
+  // describe('receiveRoundOutcome', () => {
+  //   it('should dispatch a ROUND_OUTCOME action containing updated gameData', () => {
+  //     const expectedAction = {
+  //       type: gameActions.ROUND_OUTCOME,
+  //       payload: sampleFinalRoundOutcomeData1,
+  //     };
+  //     // console.log('expectedAction.payload', expectedAction.payload);
+  //     // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+  //     store.dispatch(updateWithRoundOutcome(expectedAction.payload));
+  //     expect(store.getActions()).toContainEqual(expectedAction);
+  //   });
 
-    // it('should endGame if player has sufficient number of wins', () => {
-    //   const expectedAction = {
-    //     type: gameActions.ROUND_OUTCOME,
-    //     payload: sampleFinalRoundOutcomeData1,
-    //   };
-    //   console.log('expectedAction.payload', expectedAction.payload);
-    //   store.dispatch(updateWithRoundOutcome(sampleGameKey));
-    //   // store.dispatch(updateWithRoundOutcome(expectedAction.payload));
-    //   expect(store.getActions()).toContainEqual(expectedAction);
-    // });
-    // sampleFinalRoundOutcomeData1
-  });
+  //   // it('should endGame if player has sufficient number of wins', () => {
+  //   //   const expectedAction = {
+  //   //     type: gameActions.ROUND_OUTCOME,
+  //   //     payload: sampleFinalRoundOutcomeData1,
+  //   //   };
+  //   //   console.log('expectedAction.payload', expectedAction.payload);
+  //   //   store.dispatch(updateWithRoundOutcome(sampleGameKey));
+  //   //   // store.dispatch(updateWithRoundOutcome(expectedAction.payload));
+  //   //   expect(store.getActions()).toContainEqual(expectedAction);
+  //   // });
+  //   // sampleFinalRoundOutcomeData1
+  // });
 });

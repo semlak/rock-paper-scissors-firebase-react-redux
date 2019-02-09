@@ -13,6 +13,7 @@ export const GamesRefChild = (childRef) => firebase.database().ref(`${refs.games
 export const endGame = gameUID => dispatch => {
   // console.log('GamesRef', GamesRef && GamesRef().toString());
   // Object.keys(GamesRef()).forEach(key => console.log('GamesRef key:', key, 'value:', GamesRef()[key] && GamesRef()[key].toString()));
+  // console.log('GamesRef()', GamesRef());
   return GamesRef().child(gameUID).remove()
     .then(() => {
       // console.log('removed game, ref:', gameUID);
@@ -32,7 +33,7 @@ export const endGame = gameUID => dispatch => {
 };
 
 export const createEndGameListener = gameRef => dispatch => {
-  console.log('in createEndGameListener');
+  // console.log('in createEndGameListener');
   return gameRef.child('gameInProgress').on('value', (snapshot) => {
     console.log('received endGame indicator from firebase, snapshot.val()', snapshot.val());
     if (snapshot.val() == null || !snapshot.val()) {
@@ -68,13 +69,14 @@ const createPlayerActionListener = (gameRef, player) => dispatch => {
   // this is where the app checks for (or waits for) a player action
   // player is string that says 'player1' or 'player2'
   const refString = `${player}Actions`;
-  console.log('creating player action listener', refString);
+  // console.log('creating player action listener', refString);
   return gameRef.child(refString).on('value', (snapshot) => {
     console.log('received updated on player action, snapshot.val()', snapshot.val());
     const plays = snapshot.val();
     const playerActions = plays && Object.keys(plays).length > 0 ? Object.keys(plays).map(key => plays[key]) : [];
     // if (play && Object.keys(play).length === 1) {
     if (playerActions.length > 0) {
+      console.log('playerActions for player', player, playerActions);
       dispatch({
         type: gameActions.PLAY_RECEIVED,
         payload: { player, playerActions }
@@ -89,7 +91,7 @@ export const newGameListenerEvent = (myUid, snapshotKey, snapshotVal) => dispatc
   const game = snapshotVal;
   // console.log('detected new game added to GamesRef, myUid:', myUid, 'game:', game);
   if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1) {
-    console.log('new game is my game');
+    // console.log('new game is my game');
     // would like to add a check here or somewhere that prevents me from starting a game if I'm in an existing one.
     const player1Actions = game.player1Actions ? Object.keys(game.player1Actions).map(key => game.player1Actions[key]) : [];
     const player2Actions = game.player2Actions ? Object.keys(game.player2Actions).map(key => game.player2Actions[key]) : [];
@@ -114,17 +116,17 @@ export const newGameListenerEvent = (myUid, snapshotKey, snapshotVal) => dispatc
     dispatch(createPlayerActionListener(gameRef, player1or2));
   }
   else {
-    console.log('new game is not my game');
+    // console.log('new game is not my game');
   }
   // });
 };
 
 
 export const createNewGameListener = myUid => dispatch => {
-  console.log('creating newGame listener, myUid', myUid);
+  // console.log('creating newGame listener, myUid', myUid);
   // return dispatch(newGameListenerEvent(myUid
   return GamesRef().on('child_added', (snapshot) => {
-    console.log('newGameListener fired, myUid:', myUid);
+    // console.log('newGameListener fired, myUid:', myUid);
     return dispatch(newGameListenerEvent(myUid, snapshot.key, snapshot.val()));
   });
   // return GamesRef().on("child_added", (snapshot) => {
@@ -168,7 +170,10 @@ export const updateWithRoundOutcome = (gameData) => (dispatch) => {
    
   // const refString = `${player}Actions`;
   // console.log('creating player action listener', refString);
-  // console.log('in updateWithRoundOutcome, gameData:', gameData);
+  console.log('in updateWithRoundOutcome, gameData:', gameData);
+  const { player1Actions, player2Actions } = gameData;
+  // const player1Actions = gameData.player1Actions.map
+  console.log('player1Actions', player1Actions, 'player2Actions', player2Actions); 
   return dispatch({
     type: gameActions.ROUND_OUTCOME,
     payload: gameData
@@ -183,20 +188,23 @@ export const getRoundOutcome = (GameKey) => (dispatch) => {
   return GameRef.once('value', (snapshot) => {
     console.log('received updated gameData from updateWithOutcome, snapshot.val()', snapshot.val());
     const gameData = snapshot.val();
+    return dispatch(updateWithRoundOutcome(gameData));
     // const playerActions = plays && Object.keys(plays).length > 0 ? Object.keys(plays).map(key => plays[key]) : [];
     // if (play && Object.keys(play).length === 1) {
     // if (playerActions.length > 0) {
-    return dispatch({
-      type: gameActions.ROUND_OUTCOME,
-      payload: { gameData }
-    });
+    // return dispatch({
+    //   type: gameActions.ROUND_OUTCOME,
+    //   payload: { gameData }
+    // });
   });
 };
 
-export const makePlay = (GameKey, player1or2, playerAction) => dispatch => {
-  console.log('in makePlay, gameRef:', GameKey, 'player1or2', player1or2, 'playerAction', playerAction);
+export const makePlay = (GameKey, player1or2, playerUid, playerAction) => dispatch => {
+  // console.log('in makePlay, gameRef:', GameKey, 'player1or2', player1or2, 'playerUid', playerUid, 'playerAction', playerAction);
   const gameValRef = `${player1or2}Actions`;
-  console.log('player1or2:', player1or2, 'gameValRef', gameValRef);
+
+  console.log('GamesRef', GamesRef);
+  console.log('player1or2:', player1or2, 'gameValRef', gameValRef, 'playerAction', playerAction);
   if (player1or2 && playerAction) {
     dispatch({
       type: gameActions.MAKE_PLAY,
@@ -209,8 +217,9 @@ export const makePlay = (GameKey, player1or2, playerAction) => dispatch => {
     // return GameRef.child(gameValRef).
 
     return GameRef.child(gameValRef).push(playerAction)
-      .then(ref => {
-        console.log('added player action, playerAction:', playerAction, 'gameValRef', gameValRef, 'ref:', ref);
+      .then(() => {
+      // .then(ref => {
+        // console.log('added player action, playerAction:', playerAction, 'gameValRef', gameValRef, 'ref:', ref);
       });
   }
   else {

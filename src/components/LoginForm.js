@@ -44,7 +44,6 @@ class AuthenticationModal extends React.Component {
     else {
       console.error('password needs to be at least 6 characters');
     }
-
   }
 
   render() {
@@ -79,7 +78,7 @@ class AuthenticationModal extends React.Component {
         <Row>
           <Col sm={{ size: 9, offset: 3 }} >
             <Button color="primary" onClick={this.handleLoginClick}>Submit</Button>
-            <Button color="danger" className="ml-2" data-dismiss="modal">Cancel</Button>
+            <Button color="danger" onClick={this.props.closeButtonAction} className="ml-2" data-dismiss="modal">Cancel</Button>
           </Col>
         </Row>
       </Form>
@@ -112,6 +111,7 @@ AuthenticationModal.propTypes = {
   //   uid: PropTypes.string,
   //   photoURL: PropTypes.string,
   // }),
+  closeButtonAction: PropTypes.func.isRequired,
   loginUserWithEmailPassword: PropTypes.func.isRequired,
   // signOut: PropTypes.func.isRequired,
 };
