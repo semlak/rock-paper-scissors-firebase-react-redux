@@ -13,7 +13,6 @@ import { connect } from 'react-redux';
 
 import { joinGathering, } from '../actions/gatheringActions';
 import { requestGame } from '../actions/game';
-// import UserList from '../components/UserList';
 import { PlayerList, Game } from '../components';
 
 class Main extends Component {
@@ -25,21 +24,21 @@ class Main extends Component {
 
   componentDidMount() {
     const { props: nextProps } = this;
-    console.log('in componentWillUpdate for \'Main\', nextProps', nextProps);
+    // console.log('in componentWillUpdate for \'Main\', nextProps', nextProps);
     if (nextProps.auth && !(nextProps.gathering && Object.keys(nextProps.gathering).length > 0)) {
-      console.log('sending joinGathering request');
+      // console.log('sending joinGathering request');
       this.props.joinGathering(nextProps.auth);
       // this.context.router.history.push("/app");
     }
     else {
-      console.log('not joining gathering');
+      // console.log('not joining gathering');
     }
   }
 
 
   selectPlayer = (uid) => {
     const { auth: user, players } = this.props;
-    console.log('creating action request for user, who selected to play against player uid', uid);
+    // console.log('creating action request for user, who selected to play against player uid', uid);
     return this.props.requestGame(user, players.find(player => player.uid === uid));
   }
 
@@ -47,7 +46,7 @@ class Main extends Component {
   render() {
     const { appStatus, appHeaderText, game } = this.props;
     const players = this.props.players && Array.isArray(this.props.players) ? this.props.players : [];
-    console.log('rendering main');
+    // console.log('rendering main');
 
     // console.log('players', players, 'this.props', this.props);
     return (

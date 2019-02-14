@@ -59,7 +59,6 @@ class AuthenticationModal extends React.Component {
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" className={this.props.className}>
-      {/* <Modal isOpen={this.state.isOpen} toggle={this.toggle} size="lg" className={this.props.className}> */}
         <ModalBody>
           <div className="row">
             <div className="col-lg-8 col-md-12 add-right-border">
@@ -83,7 +82,7 @@ class AuthenticationModal extends React.Component {
                   </NavLink>
                 </NavItem>
               </Nav>
-              <TabContent activeTab={this.state.activeTab} id="nav-tab-content">
+              <TabContent activeTab={this.state.activeTab} className="mt-2" id="nav-tab-content">
                 <TabPane tabId="1">
                   <LoginForm closeButtonAction={toggle} />
                 </TabPane>

@@ -13,6 +13,7 @@ import {
   // createNewGameListener,
   newGameListenerEvent,
   updateWithRoundOutcome,
+  GamesRefChild
 } from '../../actions/game';
 
 import {
@@ -36,122 +37,7 @@ const mockStore = configureMockStore(middlewares);
 const sampleGameKey = '-LVEt37BYdH4eSgrRlPG';
 const badGameKey = '-lkajdsfkljasdkflj';
 
-// jest.mock('../../firebase', () => ({
 
-// }));
-
-
-// firebase.database = jest.fn().mockReturnValue({
-//   currentUser: true,
-//   // signOut: function() { console.log('in mock signout function'); return true; }
-//   signOut: () => {
-//     // console.log('in mock signout function');
-//     return Promise.resolve(true);
-//   },
-//   ref: jest.fn((dbRef) => {
-//   // ref: () => {
-//     // console.log('dbRef', dbRef);
-//     return ({
-//       // on: (onRef) => console.log('onRef:', onRef),
-//       // console.log('onRef:', onRef);
-//       on: jest.fn().mockReturnValue((onRef) => {
-//         if (dbRef === refs.games && onRef === 'child_added') {
-//           return Promise.resolve(true);
-//         }
-//       }),
-//       // child: (childRef) => console.log('childRef', childRef),
-//       push: jest.fn((val) => {
-//         console.log('in mock push')
-//         if (dbRef === refs.games) {
-//           // return Promise.resolve(true);
-//           return Promise.resolve({
-//             key: sampleGameKey,
-//           });
-//         }
-//         else {
-//           return Promise.resolve(false);
-//         }
-//         // return new Promise((resolve, reject) => {
-//         //   resolve(val);
-//         // })
-//       }),
-//       // push: jest.fn(),
-//       child: (childRef) => ({
-//         remove: () => {
-//           // console.log('remove childRef', childRef, 'dbRef:', dbRef);
-//           // return Promise.resolve(true);
-//           return new Promise((resolve, reject) => {
-//             if (childRef === sampleGameKey) {
-//               resolve(true);
-//             }
-//             else {
-//               reject(new Error('failed to end game'));
-//             }
-//           });
-//         },
-//       }),
-//     });
-//   }),
-// });
-
-// const {
-//   endGame,
-//   requestGame,
-// } = require('../../actions/game');
-
-// const mockPush = val => jest.fn((val) => {
-//   // console.log('in mock push');
-//   return new Promise((resolve, reject) => {
-//     if (dbRef === refs.games) {
-//       // console.log('successful mock push, val', val);
-//       console.log('successful mock push, val');
-//       resolve({
-//         key: sampleGameKey,
-//       });
-//     }
-//     else {
-//       console.log('failed mock push');
-//       reject(new Error('failed mock push'));
-//     }
-//   });
-// });
-
-// const mockOnCreator = dbRef => onRef => jest.fn(() => {
-//   console.log('running firebase.database() ".on" function for onRef', onRef);
-//   if (dbRef === refs.game && onRef === 'child_added') {
-//     return Promise.resolve(true);
-//   }
-// });
-
-// const mockChildCreator = dbRef => childRef => jest.fn(() => ({
-//   remove: () => {
-//     console.log('remove childRef', childRef, 'dbRef:', dbRef);
-//     // return Promise.resolve(true);
-//     return new Promise((resolve, reject) => {
-//       if (childRef === sampleGameKey) {
-//         resolve(true);
-//       }
-//       else {
-//         reject(new Error('failed to end game'));
-//       }
-//     });
-//   },
-// }));
-
-
-// const mockRef = dbRef => jest.fn(() => ({
-//   on: onVal => mockOn(onVal),
-//   push: val => mockPush(val),
-//   child: onRef => mockChild(onRef),
-// }));
-
-
-// const createDatabaseSpy = () => jest.spyOn(firebase, 'database')
-//   .mockImplementation(() => ({
-//     currentUser: true,
-//     signOut: jest.fn(() => Promise.resolve(true)),
-//     ref: dbRef => mockRef(dbRef),
-//     }));
 
 const sampleUser = {
   displayName: "Artie",
@@ -183,41 +69,273 @@ const sampleGameReceived = {
   player2Actions: [],
   round: 1,
   ties: 0,
+  gameClosed: false,
+  winner: 0,
 };
 
 
-const sampleRoundOutcomeData1 = { ...sampleGameReceived, player1Actions: ['rock'], player2Actions: ['paper'], player1Wins: 1, round: 2 };
-// const sampleRoundOutcomeData1 = { ...sampleRoundOutcomeData1, player1Wins: 2, round: 3 }
+// for the input, the data has plays for one round, and it hasn't been evaluated, so it is still listed as round 1
+const sampleRoundOutcomeData1Input = {
+  ...sampleGameReceived,
+  // player1Actions: ['rock'],
+  // player2Actions: ['paper'],
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "paper",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "rock",
+  },
+  round: 2
+};
 
+// player1 wins the round, and so player1Wins and round number are incremented
+const sampleRoundOutcomeData1Result = {
+  ...sampleRoundOutcomeData1Input,
+  // player1Actions: ['paper'],
+  // player2Actions: ['rock'],
+  player1Wins: 1,
+  player2Wins: 0,
+  round: 2
+};
+
+
+// for the input, the data has plays for one round, and it hasn't been evaluated, so it is still listed as round 1
+const sampleRoundOutcomeData2Input = {
+  ...sampleGameReceived,
+  // player1Actions: ['rock'],
+  // player2Actions: ['paper'],
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "paper",
+  },
+  round: 2
+};
+
+// player2 wins the round, and so player2Wins and round numbers are incremented
+const sampleRoundOutcomeData2Result = {
+  ...sampleRoundOutcomeData2Input,
+  // player1Actions: ['rock'],
+  // player2Actions: ['paper'],
+  player1Wins: 0,
+  player2Wins: 1,
+  round: 2,
+};
+
+
+// for the input, the data has plays for one round, and it hasn't been evaluated, so it is still listed as round 1
+const sampleRoundOutcomeData3Input = {
+  ...sampleGameReceived,
+  // player1Actions: ['rock'],
+  // player2Actions: ['paper'],
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "rock",
+  },
+  round: 2
+};
+
+// round is a tie, and so ties and round number are incremented
+const sampleRoundOutcomeData3Result = {
+  ...sampleRoundOutcomeData3Input,
+  // player1Actions: ['rock'],
+  // player2Actions: ['rock'],
+  player1Wins: 0,
+  player2Wins: 0,
+  ties: 1,
+  round: 2,
+};
+
+
+// for the input, the data has plays for four rounds, but the fourth round hasn't been evaluated
+// For the first three games, Player 1 won two of these (round 1 and 2), and since there was no game winner, it moved to round 4,
+const sampleFinalRoundOutcomeData1Input = {
+  ...sampleGameReceived,
+  // player1Actions: ['rock', 'paper', 'scissors', 'paper'],
+  // player2Actions: ['scissors', 'rock', 'rock', 'rock'],
+  // player1Wins: 3,
+  // player2Wins: 1,
+  // round: 4,
+  // gameInProgress: false,
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+    '-LYEpjaC9HArDOEoMzaI': "paper",
+    '-LYEpkbF9HArDOEoMzaJ': "scissors",
+    '-LYEpatJ9HArDOEoMzaK': "paper",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "scissors",
+    '-LYEph4PIYxtKc_3QuUs': "rock",
+    '-LYEph4PIYxtKc_3QuUt': "rock",
+    '-LYEph4PIYxtKc_3QuUu': "rock",
+  },
+  player1Wins: 2,
+  player2Wins: 1,
+  round: 4,
+  gameInProgress: true,
+  winner: 0,
+};
 
 // player 1 wins in 4 rounds
-const sampleFinalRoundOutcomeData1 = {
-  ...sampleRoundOutcomeData1,
-
-  player1Actions: ['rock', 'paper', 'scissors', 'paper'],
-  player2Actions: ['scissors', 'rock', 'rock', 'rock'],
+// because one of the player wins, the round does not advance to round 5.
+const sampleFinalRoundOutcomeData1Result = {
+  ...sampleFinalRoundOutcomeData1Input,
   player1Wins: 3,
   player2Wins: 1,
   round: 4,
   gameInProgress: false,
-  // player1Actions: {
-  //   '-LYEpWfpl6bClXAOl8Pe': "paper",
-  //   '-LYEphaC9HArDOEoMzaI': "rock",
-  // },
-  // player2Actions: {
-  //   '-LYEpaKCOu4cLsZffbgy': "scissors",
-  //   '-LYEph4PIYxtKc_3QuUs': "paper",
-  // },
-  // player1Wins: 0,
-  // player2Wins: 2,
-  // round: 3,
-  // gameInProgress: true,
+  winner: 1,
 };
+
+
+// for the input, the data has plays for seven rounds, but the 7th round hasn't been evaluated
+// For the six games games, Player 1 won two of these (round 1 and 5), player2 has won 2 (roundes 2 and 3) and rounds 4 and 6 were ties
+// Since there was no game winner, it moved to round 7 (this round),
+const sampleFinalRoundOutcomeData7Input = {
+  ...sampleGameReceived,
+  // player1Actions: ['rock', 'paper', 'scissors', 'paper'],
+  // player2Actions: ['scissors', 'rock', 'rock', 'rock'],
+  // player1Wins: 3,
+  // player2Wins: 1,
+  // round: 4,
+  // gameInProgress: false,
+  // player1Actions: ['rock',      'paper',    'scissors', 'rock', 'rock',     'paper', 'scissors'],
+  // player2Actions: ['scissors',  'scissors', 'rock',     'rock', 'scissors', 'paper',  'paper'],
+  //                // 1            2          2           0       1           0         1
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+    '-LYEpjaC9HArDOEoMzaI': "paper",
+    '-LYEpkbF9HArDOEoMzaJ': "scissors",
+    '-LYEpatJ9HAxDOEoMzaK': "rock",
+    '-LYEpWfpl6bylXAOl8Pe': "rock",
+    '-LYEpjaC9HAzDOEoMzaI': "paper",
+    '-LYEpkbF9HAtDOEoMzaJ': "scissors",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "scissors",
+    '-LYEpaKCOu4dLaZffbgy': "scissors",
+    '-LYEph4PIYxrKc_3QuUs': "rock",
+    '-LYEph4PIYxaKc_3QuUt': "rock",
+    '-LYEpaKCOu4sLsZffbgy': "scissors",
+    '-LYEph4PIYxhKc_3QuUu': "paper",
+    '-LYEpaKCOu4zLsZffbgy': "paper",
+  },
+  player1Wins: 2,
+  player2Wins: 2,
+  ties: 2,
+  round: 7,
+  gameInProgress: true,
+};
+
+// player 1 wins in 7 rounds, with two ties
+// because one of the player wins, the round does not advance to round 8.
+const sampleFinalRoundOutcomeData7Result = {
+  ...sampleFinalRoundOutcomeData7Input,
+  // player1Actions: ['rock', 'paper', 'scissors', 'paper'],
+  // player2Actions: ['scissors', 'rock', 'rock', 'rock'],
+  player1Wins: 3,
+  player2Wins: 2,
+  ties: 2,
+  round: 7,
+  gameInProgress: false,
+  winner: 1,
+};
+
+
+// Same as previous test, except match winner is player 2
+// for the input, the data has plays for seven rounds, but the 7th round hasn't been evaluated
+// For the six games games, Player 1 won two of these (round 1 and 5), player2 has won 2 (roundes 2 and 3) and rounds 4 and 6 were ties
+// Since there was no game winner, it moved to round 7 (this round),
+const sampleFinalRoundOutcomeData8Input = {
+  ...sampleGameReceived,
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+    '-LYEpjaC9HArDOEoMzaI': "paper",
+    '-LYEpkbF9HArDOEoMzaJ': "scissors",
+    '-LYEpatJ9HAxDOEoMzaK': "rock",
+    '-LYEpWfpl6bylXAOl8Pe': "rock",
+    '-LYEpjaC9HAzDOEoMzaI': "paper",
+    '-LYEpkbF9HAtDOEoMzaJ': "scissors",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "scissors",
+    '-LYEpaKCOu4dLaZffbgy': "scissors",
+    '-LYEph4PIYxrKc_3QuUs': "rock",
+    '-LYEph4PIYxaKc_3QuUt': "rock",
+    '-LYEpaKCOu4sLsZffbgy': "scissors",
+    '-LYEph4PIYxhKc_3QuUu': "paper",
+    '-LYEpaKCOu4zLsZffbgy': "rock",
+  },
+  player1Wins: 2,
+  player2Wins: 2,
+  ties: 2,
+  round: 7,
+  gameInProgress: true,
+};
+
+// player 2 wins in 7 rounds, with two ties
+// because one of the player wins, the round does not advance to round 8.
+const sampleFinalRoundOutcomeData8Result = {
+  ...sampleFinalRoundOutcomeData8Input,
+  player1Wins: 2,
+  player2Wins: 3,
+  ties: 2,
+  round: 7,
+  gameInProgress: false,
+  winner: 2,
+};
+
+
+// for the input, the data has plays for seven rounds, but the 7th round hasn't been evaluated
+// For the six games games, Player 1 won two of these (round 1 and 5), player2 has won 2 (roundes 2 and 3) and rounds 4 and 6 were ties
+// Since there was no game winner, it moved to round 7 (this round),
+const sampleTieRoundOutcomeData1Input = {
+  ...sampleGameReceived,
+  player1Actions: {
+    '-LYEpWfpl6bClXAOl8Pe': "rock",
+    '-LYEpjaC9HArDOEoMzaI': "paper",
+    '-LYEpkbF9HArDOEoMzaJ': "scissors",
+    '-LYEpatJ9HAxDOEoMzaK': "rock",
+    '-LYEpWfpl6bylXAOl8Pe': "rock",
+    '-LYEpjaC9HAzDOEoMzaI': "paper",
+    '-LYEpkbF9HAtDOEoMzaJ': "scissors",
+  },
+  player2Actions: {
+    '-LYEpaKCOu4cLsZffbgy': "scissors",
+    '-LYEpaKCOu4dLaZffbgy': "scissors",
+    '-LYEph4PIYxrKc_3QuUs': "rock",
+    '-LYEph4PIYxaKc_3QuUt': "rock",
+    '-LYEpaKCOu4sLsZffbgy': "scissors",
+    '-LYEph4PIYxhKc_3QuUu': "paper",
+    '-LYEpaKCOu4zLsZffbgy': "scissors",
+  },
+  player1Wins: 2,
+  player2Wins: 2,
+  ties: 2,
+  round: 7,
+  gameInProgress: true,
+};
+
+// round ties
+// because neither player wins match, the round advances to round 8.
+const sampleTieRoundOutcomeData1Result = {
+  ...sampleTieRoundOutcomeData1Input,
+  player1Wins: 2,
+  player2Wins: 2,
+  ties: 3,
+  round: 8,
+  gameInProgress: true,
+};
+
+
 
 
 // player 1 wins in 3 rounds
 const sampleFinalRoundOutcomeData2 = {
-  ...sampleRoundOutcomeData1,
+  ...sampleGameReceived,
   player1Actions: ['rock', 'paper', 'scissors'],
   player2Actions: ['scissors', 'rock', 'paper'],
   player1Wins: 3,
@@ -227,9 +345,9 @@ const sampleFinalRoundOutcomeData2 = {
 };
 
 
-// player 2 wins in 7 rounds
+// player 1 wins in 7 rounds
 const sampleFinalRoundOutcomeData3 = {
-  ...sampleRoundOutcomeData1,
+  ...sampleGameReceived,
   player1Actions: ['rock', 'paper', 'scissors', 'rock', 'rock', 'paper', 'scissors'],
   player2Actions: ['scissors', 'scissors', 'rock', 'rock', 'scissors', 'rock', 'paper'],
   player1Wins: 2,
@@ -243,22 +361,21 @@ var mockFirebaseRef = (dbRef) => ({
   signOut: jest.fn(() => Promise.resolve(true)),
   on: jest.fn(),
   currentUser: true,
-  push: jest.fn(() => {
-    return new Promise((resolve, reject) => {
-      if (dbRef === refs.games) {
-        resolve({
-          key: sampleGameKey,
-        });
-      }
-      else {
-        // return resolve(true);
-        console.log('failed mock push');
-        reject(new Error('failed mock push'));
-      }
-    });
-  }),
+  push: jest.fn(() => new Promise((resolve, reject) => {
+    // if (dbRef === refs.games) {
+    if ([refs.games, 'player1Actions', 'player2Actions'].indexOf(dbRef) > -1) {
+      resolve({
+        key: sampleGameKey,
+      });
+    }
+    else {
+      // return resolve(true);
+      console.log('failed mock push');
+      reject(new Error(`failed mock push, dbRef: ${dbRef}`));
+    }
+  })),
   remove: jest.fn((ref) => new Promise((resolve, reject) => {
-    console.log('in mockFirebaseRef remove() promise, dbRef', dbRef);
+    // console.log('in mockFirebaseRef remove() promise, dbRef', dbRef);
     if (dbRef === sampleGameKey) {
       resolve(true);
     }
@@ -275,24 +392,20 @@ var mockFirebaseRef = (dbRef) => ({
     return Promise.resolve(false);
   }),
   child: jest.fn((ref) => mockFirebaseRef(ref)),
+  update: jest.fn((obj) => {
+    // console.log('called mockFirebasRef.update, obj:', obj, 'dbRef:', dbRef);
+  }),
   // child1: jest.fn((ref) => mockFirebaseRef(ref)),
   ref: jest.fn((ref) => mockFirebaseRef(ref)),
 });
 
-const firebaseDatabaseMock = () => {
-  console.log('\n\n\nIn firebaseDatabaseMock!!!');
-  return jest.fn().mockReturnValue({
-    // signInWithEmailAndPassword: jest.fn((email, password) => Promise.resolve(true)),
-
-    on: jest.fn(),
-
-    currentUser: true,
-
-    signOut: jest.fn(() => Promise.resolve(true)),
-
-    ref: jest.fn((dbRef) => mockFireBaseRef(dbRef)),
-  });
-};
+const firebaseDatabaseMock = () => jest.fn().mockReturnValue({
+  on: jest.fn(),
+  currentUser: true,
+  signOut: jest.fn(() => Promise.resolve(true)),
+  // recurrsive ref
+  ref: jest.fn((dbRef) => mockFireBaseRef(dbRef)),
+});
 
 const mockOn = () => jest.fn();
 
@@ -326,150 +439,94 @@ const createDatabaseSpy = () => jest.spyOn(firebase, 'database').mockImplementat
   currentUser: true,
   signOut: jest.fn(() => Promise.resolve(true)),
   ref: jest.fn((dbRef) => mockFirebaseRef(dbRef)),
-  ref1: jest.fn((dbRef) => ({
-    // on: jest.fn().mockReturnValue((onRef) => {
-    // on: jest.fn((onRef) => {
-    //   console.log('running firebase.database() ".on" function for onRef', onRef);
-    //   if (dbRef === refs.game && onRef === 'child_added') {
-    //     return Promise.resolve(true);
-    //   }
-    // }),
-    on: mockOn(),
-    on1: jest.fn(),
-    // on: mockOnCreator(dbRef),
-    // push: jest.fn().mockReturnValue((val) => {
-    // push: jest.fn((val) => {
-    push: mockPush(dbRef)(),
-    push1: jest.fn(() => {
-      // console.log('in mock push');
-      return new Promise((resolve, reject) => {
-        if (dbRef === refs.games) {
-          // console.log('successful mock push, val', val);
-          // console.log('successful mock push, val');
-          resolve({
-            key: sampleGameKey,
-          });
-        }
-        else {
-          console.log('failed mock push');
-          reject(new Error('failed mock push'));
-        }
-      });
-    }),
-    child: (childRef) => ({
-      remove: () => {
-        // console.log('remove childRef', childRef, 'dbRef:', dbRef);
-        // return Promise.resolve(true);
-        return new Promise((resolve, reject) => {
-          if (childRef === sampleGameKey) {
-            resolve(true);
-          }
-          else {
-            reject(new Error('failed to end game'));
-          }
-        });
-      },
-      push: mockPush(dbRef)(),
-      push1: jest.fn(),
-      // child: jest.fn(),
-      child: jest.fn(() => ({
-        // push: jest.fn(),
-        // push: jest.fn((val) => {
-        push: mockPush(dbRef)(),
-        push1: jest.fn(() => {
-          // console.log('in mock push');
-          return new Promise((resolve, reject) => {
-            if (dbRef === refs.games) {
-              // console.log('successful mock push, val', val);
-              // console.log('successful mock push, val');
-              resolve({
-                key: sampleGameKey,
-              });
-            }
-            else {
-              // console.log('failed mock push');
-              reject(new Error('failed mock push'));
-            }
-          });
-        }),
-      })),
-      once2: mockOnce(dbRef)(),
-      once1: jest.fn((ref) => {
-        // console.log('in mockOnce function');
-        if (ref === 'value' && dbRef === refs.games) {
-          // console.log('in mockOnce function if branch');
-          return Promise.resolve(sampleRoundOutcomeData1);
-        }
-        return Promise.resolve(false);
-      }),
-      on: mockOn(),
-      on1: jest.fn(),
-      // on: jest.fn((onRef) => {
-      //   console.log('running firebase.database() ".on" function for onRef', onRef);
-      //   if (dbRef === refs.game && onRef === 'child_added') {
-      //     return Promise.resolve(true);
-      //   }
-      // }),
+  // ref1: jest.fn((dbRef) => ({
+  //   // on: jest.fn().mockReturnValue((onRef) => {
+  //   // on: jest.fn((onRef) => {
+  //   //   console.log('running firebase.database() ".on" function for onRef', onRef);
+  //   //   if (dbRef === refs.game && onRef === 'child_added') {
+  //   //     return Promise.resolve(true);
+  //   //   }
+  //   // }),
+  //   on: mockOn(),
+  //   on1: jest.fn(),
+  //   // on: mockOnCreator(dbRef),
+  //   // push: jest.fn().mockReturnValue((val) => {
+  //   // push: jest.fn((val) => {
+  //   push: mockPush(dbRef)(),
+  //   push1: jest.fn(() => {
+  //     // console.log('in mock push');
+  //     return new Promise((resolve, reject) => {
+  //       if (dbRef === refs.games) {
+  //         // console.log('successful mock push, val', val);
+  //         // console.log('successful mock push, val');
+  //         resolve({
+  //           key: sampleGameKey,
+  //         });
+  //       }
+  //       else {
+  //         console.log('failed mock push');
+  //         reject(new Error('failed mock push'));
+  //       }
+  //     });
+  //   }),
+  //   child: (childRef) => ({
+  //     remove: () => {
+  //       // console.log('remove childRef', childRef, 'dbRef:', dbRef);
+  //       // return Promise.resolve(true);
+  //       return new Promise((resolve, reject) => {
+  //         if (childRef === sampleGameKey) {
+  //           resolve(true);
+  //         }
+  //         else {
+  //           reject(new Error('failed to end game'));
+  //         }
+  //       });
+  //     },
+  //     push: mockPush(dbRef)(),
+  //     push1: jest.fn(),
+  //     // child: jest.fn(),
+  //     child: jest.fn(() => ({
+  //       // push: jest.fn(),
+  //       // push: jest.fn((val) => {
+  //       push: mockPush(dbRef)(),
+  //       push1: jest.fn(() => {
+  //         // console.log('in mock push');
+  //         return new Promise((resolve, reject) => {
+  //           if (dbRef === refs.games) {
+  //             // console.log('successful mock push, val', val);
+  //             // console.log('successful mock push, val');
+  //             resolve({
+  //               key: sampleGameKey,
+  //             });
+  //           }
+  //           else {
+  //             // console.log('failed mock push');
+  //             reject(new Error('failed mock push'));
+  //           }
+  //         });
+  //       }),
+  //     })),
+  //     once2: mockOnce(dbRef)(),
+  //     once1: jest.fn((ref) => {
+  //       // console.log('in mockOnce function');
+  //       if (ref === 'value' && dbRef === refs.games) {
+  //         // console.log('in mockOnce function if branch');
+  //         return Promise.resolve(sampleRoundOutcomeData1);
+  //       }
+  //       return Promise.resolve(false);
+  //     }),
+  //     on: mockOn(),
+  //     on1: jest.fn(),
+  //     // on: jest.fn((onRef) => {
+  //     //   console.log('running firebase.database() ".on" function for onRef', onRef);
+  //     //   if (dbRef === refs.game && onRef === 'child_added') {
+  //     //     return Promise.resolve(true);
+  //     //   }
+  //     // }),
 
-    }),
-  }))
+  //   }),
+  // }))
 }));
-
-// const firebaseMock = jest.fn().mockReturnValue({
-//   currentUser: true,
-//   // signOut: function() { console.log('in mock signout function'); return true; }
-//   signOut: jest.fn(() => Promise.resolve(true)),
-//   // signOut: () => {
-//   //   // console.log('in mock signout function');
-//   //   return Promise.resolve(true);
-//   // },
-//   ref: jest.fn((dbRef) => {
-//   // ref: () => {
-//     // console.log('dbRef', dbRef);
-//     return ({
-//       // on: (onRef) => console.log('onRef:', onRef),
-//       // console.log('onRef:', onRef);
-//       on: jest.fn().mockReturnValue((onRef) => {
-//         if (dbRef === refs.games && onRef === 'child_added') {
-//           return Promise.resolve(true);
-//         }
-//       }),
-//       // child: (childRef) => console.log('childRef', childRef),
-//       push: jest.fn((val) => {
-//         console.log('in mock push');
-//         if (dbRef === refs.games) {
-//           // return Promise.resolve(true);
-//           return Promise.resolve({
-//             key: sampleGameKey,
-//           });
-//         }
-//         else {
-//           return Promise.resolve(false);
-//         }
-//         // return new Promise((resolve, reject) => {
-//         //   resolve(val);
-//         // })
-//       }),
-//       // push: jest.fn(),
-//       child: (childRef) => ({
-//         remove: () => {
-//           // console.log('remove childRef', childRef, 'dbRef:', dbRef);
-//           // return Promise.resolve(true);
-//           return new Promise((resolve, reject) => {
-//             if (childRef === sampleGameKey) {
-//               resolve(true);
-//             }
-//             else {
-//               reject(new Error('failed to end game'));
-//             }
-//           });
-//         },
-//       }),
-//     });
-//   }),
-// });
-
-// firebase.database = firebaseMock;
 
 
 describe('game actions', () => {
@@ -492,15 +549,9 @@ describe('game actions', () => {
       // expect(1).toEqual(1);
       store.dispatch(endGame(sampleGameKey))
         .then(() => {
-          // console.log('store.getActions()', store.getActions());
-          // const storeActions = store.getActions();
-          // console.log('storeActions', storeActions.includes(element => element.type === gameActions.GAME_ENDED));
-          // expect(storeActions.includes(element => element.type === gameActions.GAME_ENDED)).toBeTruthy();
           expect(store.getActions()).toContainEqual(expectedAction);
-          // console.log('store.getState()', store.getState());
         })
         .catch(err => expect(err).toBeFalsy());
-      // expect(endGame(sampleGameKey)).toEqual(expectedAction);
     });
 
     it('should not create action to end game if proper game key is not passed', () => {
@@ -511,11 +562,7 @@ describe('game actions', () => {
       };
       store.dispatch(endGame(badGameKey))
         .then(() => {
-          // const storeActions = store.getActions();
-          // console.log('storeActions', storeActions, storeActions.includes(element => element.type === gameActions.GAME_ENDED));
-          // console.log('storeActions', storeActions, storeActions.includes(element => element.type === expectedAction.type));
           expect(store.getActions()).toContainEqual(expectedAction);
-          // console.log('store.getState()', store.getState());
         })
         .catch(err => expect(err).toBeFalsy());
       // .catch(err => console.log('error from dispatch of endGame with badGameKey'));
@@ -634,28 +681,182 @@ describe('game actions', () => {
     });
   });
 
-  // describe('receiveRoundOutcome', () => {
-  //   it('should dispatch a ROUND_OUTCOME action containing updated gameData', () => {
-  //     const expectedAction = {
-  //       type: gameActions.ROUND_OUTCOME,
-  //       payload: sampleFinalRoundOutcomeData1,
-  //     };
-  //     // console.log('expectedAction.payload', expectedAction.payload);
-  //     // store.dispatch(updateWithRoundOutcome(sampleGameKey));
-  //     store.dispatch(updateWithRoundOutcome(expectedAction.payload));
-  //     expect(store.getActions()).toContainEqual(expectedAction);
-  //   });
+  describe('receiveRoundOutcome', () => {
+    let gameRef;
+    beforeEach(() => {
+      gameRef = GamesRefChild(sampleGameKey);
+    });
+    it('should dispatch a ROUND_OUTCOME action containing updated gameData, player1 winning first round', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleRoundOutcomeData1Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      // console.log('gameRef', gameRef);
+      store.dispatch(updateWithRoundOutcome(sampleRoundOutcomeData1Input, sampleGameKey, gameRef));
+      // console.log('store.getActions()', store.getActions());
+      // const gameRef = firebase.database().ref("Games").child(sampleGameKey);
+      // console.log('sampleGameKey', sampleGameKey);
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // expect(store.getActions()[0].payload.player1Actions).toEqual(expect.arrayContaining(expectedAction.payload.player1Actions));
+      // expect(store.getActions()[0].payload.player2Actions).toEqual(expect.arrayContaining(expectedAction.payload.player2Actions));
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
 
-  //   // it('should endGame if player has sufficient number of wins', () => {
-  //   //   const expectedAction = {
-  //   //     type: gameActions.ROUND_OUTCOME,
-  //   //     payload: sampleFinalRoundOutcomeData1,
-  //   //   };
-  //   //   console.log('expectedAction.payload', expectedAction.payload);
-  //   //   store.dispatch(updateWithRoundOutcome(sampleGameKey));
-  //   //   // store.dispatch(updateWithRoundOutcome(expectedAction.payload));
-  //   //   expect(store.getActions()).toContainEqual(expectedAction);
-  //   // });
-  //   // sampleFinalRoundOutcomeData1
-  // });
+    it('should dispatch a ROUND_OUTCOME action containing updated gameData, player2 winning first round', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleRoundOutcomeData2Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleRoundOutcomeData2Input, sampleGameKey, gameRef));
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      // expect(store.getActions()[0].payload.player1Actions).toEqual(expect.arrayContaining(expectedAction.payload.player1Actions));
+      // expect(store.getActions()[0].payload.player2Actions).toEqual(expect.arrayContaining(expectedAction.payload.player2Actions));
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+
+
+    it('should dispatch a ROUND_OUTCOME action containing updated gameData, with first round being a tie', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleRoundOutcomeData3Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleRoundOutcomeData3Input, sampleGameKey, gameRef));
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      // expect(store.getActions()[0].payload.player1Actions).toEqual(expect.arrayContaining(expectedAction.payload.player1Actions));
+      // expect(store.getActions()[0].payload.player2Actions).toEqual(expect.arrayContaining(expectedAction.payload.player2Actions));
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+
+    // it('should dispatch a ROUND_OUTCOME action containing updated gameData', () => {
+    //   const expectedAction = {
+    //     type: gameActions.ROUND_OUTCOME,
+    //     payload: sampleFinalRoundOutcomeData1Result,
+    //   };
+    //   // console.log('expectedAction.payload', expectedAction.payload);
+    //   // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+    //   store.dispatch(updateWithRoundOutcome(sampleFinalRoundOutcomeData1Input));
+    //   // console.log('store.getActions()', store.getActions());
+    //   expect(store.getActions()).toContainEqual(expectedAction);
+    //   // expect(store.getActions()[0].payload.player1Actions).toEqual(expect.arrayContaining(expectedAction.payload.player1Actions));
+    //   // expect(store.getActions()[0].payload.player2Actions).toEqual(expect.arrayContaining(expectedAction.payload.player2Actions));
+    //   // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+    //   // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+    //   // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+    //   // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    // });
+
+    it('should endGame if player has sufficient number of wins, player1 wins after 4 rounds', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleFinalRoundOutcomeData1Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleFinalRoundOutcomeData1Input, sampleGameKey, gameRef));
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // expect(store.getActions()[0].payload.player1Actions).toEqual(expect.arrayContaining(expectedAction.payload.player1Actions));
+      // expect(store.getActions()[0].payload.player2Actions).toEqual(expect.arrayContaining(expectedAction.payload.player2Actions));
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+    it('should endGame if player has sufficient number of wins, player1 wins after 7 rounds', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleFinalRoundOutcomeData7Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleFinalRoundOutcomeData7Input, sampleGameKey, gameRef));
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      // expect(store.getActions()[0].payload.player1Actions).toMatchObject(expectedAction.payload.player1Actions);
+      // expect(store.getActions()[0].payload.player2Actions).toMatchObject(expectedAction.payload.player2Actions);
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+    it('should endGame if player has sufficient number of wins, player2 wins after 7 rounds', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleFinalRoundOutcomeData8Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleFinalRoundOutcomeData8Input, sampleGameKey, gameRef));
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      // expect(store.getActions()[0].payload.player1Actions).toMatchObject(expectedAction.payload.player1Actions);
+      // expect(store.getActions()[0].payload.player2Actions).toMatchObject(expectedAction.payload.player2Actions);
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+    it('should continue match even after after 7 rounds if round 6 is a tie', () => {
+      const expectedAction = {
+        type: gameActions.ROUND_OUTCOME,
+        payload: sampleTieRoundOutcomeData1Result,
+      };
+      // console.log('expectedAction.payload', expectedAction.payload);
+      // store.dispatch(updateWithRoundOutcome(sampleGameKey));
+      store.dispatch(updateWithRoundOutcome(sampleTieRoundOutcomeData1Input, sampleGameKey, gameRef));
+      expect(gameRef.update).toHaveBeenCalled();
+      const { player1Wins, player2Wins, ties, gameInProgress, round, winner, } = expectedAction.payload;
+      const obj = { player1Wins, player2Wins, ties, gameInProgress, round, winner, };
+      expect(gameRef.update).toHaveBeenCalledWith(obj);
+      // console.log('store.getActions()', store.getActions());
+      // expect(store.getActions()).toContainEqual(expectedAction);
+      // expect(store.getActions()[0].payload.player1Actions).toMatchObject(expectedAction.payload.player1Actions);
+      // expect(store.getActions()[0].payload.player2Actions).toMatchObject(expectedAction.payload.player2Actions);
+      // expect(store.getActions()[0].payload.player1Wins).toEqual(expectedAction.payload.player1Wins);
+      // expect(store.getActions()[0].payload.player2Wins).toEqual(expectedAction.payload.player2Wins);
+      // expect(store.getActions()[0].payload.round).toEqual(expectedAction.payload.round);
+      // expect(store.getActions()[0].payload.gameInProgress).toEqual(expectedAction.payload.gameInProgress);
+    });
+  });
 });

@@ -34,9 +34,26 @@ export const endGame = gameUID => dispatch => {
 
 export const createEndGameListener = gameRef => dispatch => {
   // console.log('in createEndGameListener');
-  return gameRef.child('gameInProgress').on('value', (snapshot) => {
+  // return gameRef.child('gameInProgress').on('value', (snapshot) => {
+  gameRef.child('gameInProgress').on('value', (snapshot) => {
+    console.log('received gameInProgress change indicator');
+    // dispatch({
+    //   type: gameActions.GAME_IN_PROGRESS,
+    //   payload: snapshot.val(),
+    // });
+    gameRef.once('value', (snapshot) => {
+      const gameData1 = snapshot.val();
+      dispatch({
+        type: gameActions.GAME_UPDATE,
+        payload: gameData1,
+      });
+    });
+  });
+
+  return gameRef.child('gameClosed').on('value', (snapshot) => {
     console.log('received endGame indicator from firebase, snapshot.val()', snapshot.val());
-    if (snapshot.val() == null || !snapshot.val()) {
+    // if (snapshot.val() == null || !snapshot.val()) {
+    if (snapshot.val() == null || snapshot.val() === true) {
       const gameUID = gameRef.key;
       dispatch({
         type: gameActions.GAME_ENDED,
@@ -85,13 +102,31 @@ const createPlayerActionListener = (gameRef, player) => dispatch => {
   });
 };
 
+const createRoundUpdateListener = (gameRef) => dispatch => {
+
+  // console.log('creating player action listener', refString);
+  return gameRef.child('round').on('value', () => {
+    console.log('createRoundUpdateListener listener triggered');
+    return gameRef.once('value', (snapshot) => {
+      console.log('createRoundUpdateListener game snapshot', snapshot.val());
+      const gameData = snapshot.val();
+      dispatch({
+        type: gameActions.GAME_UPDATE,
+        // payload: { gameKey: snapshotKey, gameData: game }
+        payload: gameData
+      });
+    });
+  });
+};
+
 export const newGameListenerEvent = (myUid, snapshotKey, snapshotVal) => dispatch => {
   // console.log('in newGameListenerEvent, myUid', myUid, 'snapshotVal', snapshotVal);
   // return GamesRef().on("child_added", (snapshot) => {
   const game = snapshotVal;
-  // console.log('detected new game added to GamesRef, myUid:', myUid, 'game:', game);
-  if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1) {
-    // console.log('new game is my game');
+  console.log('detected new game added to GamesRef, myUid:', myUid, 'game:', game);
+  // if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1 && game.gameInProgress) {
+  if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1 && !game.gameClosed) {
+    console.log('new game is my game');
     // would like to add a check here or somewhere that prevents me from starting a game if I'm in an existing one.
     const player1Actions = game.player1Actions ? Object.keys(game.player1Actions).map(key => game.player1Actions[key]) : [];
     const player2Actions = game.player2Actions ? Object.keys(game.player2Actions).map(key => game.player2Actions[key]) : [];
@@ -110,6 +145,7 @@ export const newGameListenerEvent = (myUid, snapshotKey, snapshotVal) => dispatc
 
     // createGameListener(GamesRef().child(snapshot.key), player1or2);
     // createOpponentActionListener(dispatch, opponent);
+    dispatch(createRoundUpdateListener(gameRef));
     dispatch(createEndGameListener(gameRef));
     // dispatch(createOpponentActionListener(gameRef, opponent));
     dispatch(createPlayerActionListener(gameRef, opponent));
@@ -166,29 +202,94 @@ export const createNewGameListener = myUid => dispatch => {
 // };
 
 
-export const updateWithRoundOutcome = (gameData) => (dispatch) => {
-   
+export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => (dispatch) => {
   // const refString = `${player}Actions`;
   // console.log('creating player action listener', refString);
-  console.log('in updateWithRoundOutcome, gameData:', gameData);
-  const { player1Actions, player2Actions } = gameData;
-  // const player1Actions = gameData.player1Actions.map
-  console.log('player1Actions', player1Actions, 'player2Actions', player2Actions); 
-  return dispatch({
-    type: gameActions.ROUND_OUTCOME,
-    payload: gameData
+  // console.log('in updateWithRoundOutcome, gameData:', gameData);
+  const { maxNumberOfGames } = gameData;
+  const minNumberOfWins = Math.ceil(maxNumberOfGames / 2);
+  // const { player1Actions, player2Actions } = gameData;
+  const player1Actions = Object.values(gameData.player1Actions);
+  const player2Actions = Object.values(gameData.player2Actions);
+  // console.log('player1Actions', player1Actions, 'player2Actions', player2Actions); 
+  const wins = player1Actions.map((player1Action, i) => {
+    const player2Action = player2Actions[i];
+    // console.log('player1Action', player1Action, 'player2Action', player2Action);
+    // go through all scenarios where player 1 loses. 
+    // If one of them hits, return 2 (for player 2 wins).
+    // otherwise, they either tie (return 0) or player 1 wins (return 1)
+    if (player1Action === 'rock' && player2Action === 'paper') {
+      return 2;
+    }
+    else if (player1Action === 'paper' && player2Action === 'scissors') {
+      return 2;
+    }
+    else if (player1Action === 'scissors' && player2Action === 'rock') {
+      return 2;
+    }
+    else if (player1Action === player2Action) {
+      // tie
+      return 0;
+    }
+    else {
+      // player 1 wins
+      return 1;
+    }
   });
+  console.log('wins:', wins);
+  const player1Wins = wins.reduce((acc, outcome) => (outcome === 1 ? 1 : 0) + acc, 0);
+  const player2Wins = wins.reduce((acc, outcome) => (outcome === 2 ? 1 : 0) + acc, 0);
+  const ties = wins.reduce((acc, outcome) => (outcome === 0 ? 1 : 0) + acc, 0);
+  // set overall winner equal to the player number, or 0 if game is not over
+  const winner = player1Wins >= minNumberOfWins ? 1 : player2Wins >= minNumberOfWins ? 2 : 0;
+  const gameInProgress = (winner === 0);
+  // increment round unless game is over. Get current round from number of player actions
+  const round = player1Actions.length + (winner === 0 ? 1 : 0);
+  // console.log('ties', ties, 'winner', winner, 'gameInProgress', gameInProgress, 'minNumberOfWins', minNumberOfWins);
+  // const gameRef = GamesRef().child(gameKey);
+  if (typeof gameRef === 'undefined') {
+    gameRef = GamesRefChild(gameKey);
+  }
+  // console.log('gameRef', gameRef);
+  // console.log('gameKey', gameKey);
+  gameRef.update({
+    player1Wins, player2Wins, ties, gameInProgress, round, winner,
+  });
+  // }).then(() => {
+  //   if (winner > 0) {
+  //     gameRef.once('value', (snapshot) => {
+  //       const gameData1 = snapshot.val();
+  //       dispatch({
+  //         type: gameActions.GAME_UPDATE,
+  //         payload: gameData1,
+  //       });
+  //     });
+  //   }
+  // });
+
+  // return dispatch({
+  //   type: gameActions.ROUND_OUTCOME,
+  //   payload: {
+  //     ...gameData,
+  //     // player1Actions,
+  //     // player2Actions,
+  //     player1Wins,
+  //     player2Wins,
+  //     ties,
+  //     gameInProgress,
+  //     round,
+  //   },
+  // });
 };
 
 export const getRoundOutcome = (GameKey) => (dispatch) => {
-   
   // const refString = `${player}Actions`;
   // console.log('creating player action listener', refString);
   const GameRef = GamesRef().child(GameKey);
   return GameRef.once('value', (snapshot) => {
-    console.log('received updated gameData from updateWithOutcome, snapshot.val()', snapshot.val());
+    console.log('received updated gameData from getRoundOutcome, snapshot.val()', snapshot.val());
     const gameData = snapshot.val();
-    return dispatch(updateWithRoundOutcome(gameData));
+    return dispatch(updateWithRoundOutcome(gameData, GameKey));
     // const playerActions = plays && Object.keys(plays).length > 0 ? Object.keys(plays).map(key => plays[key]) : [];
     // if (play && Object.keys(play).length === 1) {
     // if (playerActions.length > 0) {
@@ -203,8 +304,8 @@ export const makePlay = (GameKey, player1or2, playerUid, playerAction) => dispat
   // console.log('in makePlay, gameRef:', GameKey, 'player1or2', player1or2, 'playerUid', playerUid, 'playerAction', playerAction);
   const gameValRef = `${player1or2}Actions`;
 
-  console.log('GamesRef', GamesRef);
-  console.log('player1or2:', player1or2, 'gameValRef', gameValRef, 'playerAction', playerAction);
+  // console.log('GamesRef', GamesRef);
+  // console.log('player1or2:', player1or2, 'gameValRef', gameValRef, 'playerAction', playerAction);
   if (player1or2 && playerAction) {
     dispatch({
       type: gameActions.MAKE_PLAY,
@@ -220,7 +321,9 @@ export const makePlay = (GameKey, player1or2, playerUid, playerAction) => dispat
       .then(() => {
       // .then(ref => {
         // console.log('added player action, playerAction:', playerAction, 'gameValRef', gameValRef, 'ref:', ref);
-      });
+      })
+      // });
+      .catch(err => console.error('error on makePlay function', err));
   }
   else {
     return Promise.reject(new Error('unable to make play'));
@@ -260,6 +363,8 @@ export const requestGame = (user, otherPlayer) => dispatch => {
       ties: 0,
       maxNumberOfGames,
       gameInProgress: true,
+      gameClosed: false,
+      winner: 0,
       round: 1,
     };
     // console.log('GamesRef():', GamesRef().toString());

@@ -7,23 +7,49 @@ import {
   CardText,
   CardFooter,
   CardHeader,
+  Row,
+  Col,
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
 // import firebase from '../firebase';
-import LoadingSpinner from './LoadingSpinner';
+// import LoadingSpinner from './LoadingSpinner';
 import {
   endGame,
   makePlay,
   getRoundOutcome,
 } from '../actions/game';
+
+import {
+  changePlayerStatus,
+} from '../actions/gatheringActions';
+
 import gameStatuses from '../gameStatuses';
 
 
 class Game extends Component {
-  state = this.getInitialState();
+  // state = this.getStat();
 
-  getInitialState() {
+  componentDidMount() {
+    console.log('in componentDidMount');
+    const { user, gathering, } = this.props;
+    const inGame = true;
+    const player = this.props.players.find(player1 => player1.uid === user.uid);
+    const player1 = { ...player, inGame };
+    this.props.changePlayerStatus(player1, gathering);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { gameStatus, myUid, } = this.props.game;
+    // console.log('myUid', myUid, 'this.props.game.gameData', this.props.game.gameData.player1);
+    if (gameStatus === gameStatuses.DETERMINING_ROUND_WINNER && gameStatus !== prevProps.game.gameStatus && prevProps.game.gameStatus.length > 0 && myUid === this.props.game.gameData.player1) {
+      this.props.getRoundOutcome(this.props.gameUID);
+    }
+    // const { player1Wins, player2Wins, ties, round, playInProgress } = gameData;
+  }
+
+  getStat() {
+    console.log('running getStat');
     const { user } = this.props;
     const {
       // gameInProgress,
@@ -35,7 +61,7 @@ class Game extends Component {
       player1Name,
       player2Name,
       ties,
-      playInProgress,
+      // playInProgress,
     } = this.props.game.gameData;
     // const { uid: myUID, displayName: myName } = user;
     const { uid: myUID, } = user;
@@ -57,16 +83,10 @@ class Game extends Component {
       // maxNumberOfGames,
       // gameInProgress,
       // player1or2,
-      playInProgress,
+      // playInProgress,
     });
   }
 
-  componentDidUpdate(prevProps) {
-    const { gameStatus } = this.props.game;
-    if (gameStatus === gameStatuses.DETERMINING_ROUND_WINNER && gameStatus !== prevProps.game.gameStatus && prevProps.game.gameStatus.length > 0) {
-      this.props.getRoundOutcome(this.props.gameUID);
-    }
-  }
 
   play = (e) => {
     const { value: playerAction } = e.target;
@@ -107,55 +127,70 @@ class Game extends Component {
       // maxNumberOfGames,
       // gameInProgress,
       // playInProgress,
-    } = this.state; 
+    } = this.getStat();
+    // } = this.state; 
 
-    const { gameStatus } = this.props.game;
-    // const playEnabled = gameStatus !== gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT && gameStatus !== gameStatuses.DETERMINING_ROUND_WINNER;
-    const playEnabled = true;
+    const { gameStatus, } = this.props.game;
+    const { gameInProgress, round } = this.props.game.gameData;
+    const playEnabled = gameInProgress && gameStatus !== gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT && gameStatus !== gameStatuses.DETERMINING_ROUND_WINNER;
+    console.log('gameInProgress', gameInProgress, 'gameStatus', gameStatus);
+    // const playEnabled = true;
 
 
     // const loadingMessage = 'You played ...';
     const loadingMessage = gameStatus;
 
     // const loadingMessageClass = '
-    const loadingMessageStyle = { textAlign: 'center', marginTop: '1em', size: '22px' };
+    // const loadingMessageStyle = { textAlign: 'center', marginTop: '1em', size: '22px' };
     // const { loading, file } = this.state;
-    const playInProgress = !playEnabled;
+    // const playInProgress = !playEnabled;
     // playInProgress = false;
-    const loading = playInProgress;
-    const spinnerProps = {
-      // loadingMessage,
-      loadingMessageStyle,
-      loading,
-      className: 'loading-viewer',
-      // delay: 500,
-      // fadeIn: true,
-      id: "loading-spinner",
-    };
+    // const loading = playInProgress;
+    // const spinnerProps = {
+    //   // loadingMessage,
+    //   loadingMessageStyle,
+    //   loading,
+    //   className: 'loading-viewer',
+    //   // delay: 500,
+    //   // fadeIn: true,
+    //   id: "loading-spinner",
+    // };
     // console.log('spinnerProps', spinnerProps);
 
 
     const activeCardBody = (
       <CardBody className="">
-        <p> Your Opponent: <span id="opponent-display-name">{opponentName || "Loading..."}</span></p>
-        <p>
-          Your score: <span id="your-score">{myWins}</span>
-        </p>
-        <p>
-          Opponent Score: <span id="opponent-score">{opponentWins}</span>
-        </p>
-        <p>
-          Ties: <span id="ties">{ties}</span>
-        </p>
-        { playInProgress ? <LoadingSpinner {...spinnerProps} /> :
-            <>
-              <Button color="primary" className="mr-2 game-action" onClick={this.play} value="rock" disabled={!playEnabled}> Rock </Button>
-              <Button color="primary" className="mr-2 game-action" onClick={this.play} value="paper" disabled={!playEnabled}> Paper </Button>
-              <Button color="primary" className="mr-2 game-action" onClick={this.play} value="scissors" disabled={!playEnabled}> Scissors </Button>
-              <br />
-              <br />
-            </>
-        }
+        <Row>
+          <Col className="text-right">Round Number:</Col>
+          <Col className="text-left">{round}</Col>
+        </Row>
+
+        <Row>
+          <Col className="text-right">Your Opponent:</Col>
+          <Col className="text-left">{opponentName}</Col>
+        </Row>
+        <Row>
+          <Col className="text-right">Your Wins:</Col>
+          <Col className="text-left">{myWins}</Col>
+        </Row>
+        <Row>
+          <Col className="text-right">Opponent Wins:</Col>
+          <Col className="text-left">{opponentWins}</Col>
+        </Row>
+        <Row className="mb-2">
+          <Col className="text-right">Ties:</Col>
+          <Col className="text-left">{ties}</Col>
+        </Row>
+
+        {/* { playInProgress ? <LoadingSpinner {...spinnerProps} /> : */}
+        {/*     <>                                                    */}
+        <Button color="primary" className="mr-2 game-action" onClick={this.play} value="rock" disabled={!playEnabled}> Rock </Button>
+        <Button color="primary" className="mr-2 game-action" onClick={this.play} value="paper" disabled={!playEnabled}> Paper </Button>
+        <Button color="primary" className="mr-2 game-action" onClick={this.play} value="scissors" disabled={!playEnabled}> Scissors </Button>
+        <br />
+        <br />
+        {/*     </> */}
+        {/* }       */}
         <Button color="danger" onClick={this.endCurrentGame} id="end-game">End Game</Button>
       </CardBody>
     );
@@ -188,4 +223,4 @@ function mapStateToProps({ auth, gathering, game }) {
 }
 
 
-export default connect(mapStateToProps, { endGame, makePlay, getRoundOutcome })(Game);
+export default connect(mapStateToProps, { endGame, makePlay, getRoundOutcome, changePlayerStatus })(Game);

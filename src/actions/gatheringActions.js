@@ -90,6 +90,16 @@ export const leaveGathering1 = (user, gathering) => dispatch => {
   });
 };
 
+export const changePlayerStatus = (user, gathering) => dispatch => {
+  console.log('running changePlayerStatus, user:', user, 'gathering', gathering);
+  gathering.updateStatus(user.uid, user);
+  dispatch({
+    type: gatheringActions.UPDATE_STATUS,
+    payload: user,
+  });
+};
+// app.gathering.updateStatus(authUser.uid, {displayName: authUser.displayName, inGame: false})
+
 
 // export const leaveGathering = () => {
 export const leaveGathering = (gathering) => dispatch => {

@@ -3,9 +3,9 @@ import {
 } from "../../actions/types";
 import ModalsReducer from '../../reducers/modalsReducer';
 
-import {
-  openAuthenticationModal,
-} from '../../actions/modalActions';
+// import {
+//   openAuthenticationModal,
+// } from '../../actions/modalActions';
 
 const initialState = undefined;
 
@@ -21,6 +21,39 @@ const closeModalAction = {
 const toggleModalAction = {
   type: modalActions.TOGGLE_AUTHENTICATION_MODAL,
 };
+
+const loginSuccessAction = {
+  type: modalActions.MODAL_MESSAGE,
+  payload: {
+    loginError: false,
+    message: 'Login was successful!',
+  }
+};
+
+const loginFailAction = {
+  type: modalActions.MODAL_MESSAGE,
+  payload: {
+    loginError: true,
+    message: 'The password is invalid or the user does not have a password.',
+  }
+};
+
+const registrationSuccessAction = {
+  type: modalActions.MODAL_MESSAGE,
+  payload: {
+    registrationError: false,
+    message: 'Registration was successful!',
+  }
+};
+
+const registrationFailAction = {
+  type: modalActions.MODAL_MESSAGE,
+  payload: {
+    registrationError: true,
+    message: 'The email address is already in use by another account.',
+  }
+};
+
 
 describe('modalsReducer', () => {
   describe('initial state', () => {
@@ -57,6 +90,21 @@ describe('modalsReducer', () => {
       const newState1 = ModalsReducer(newState, toggleModalAction);
       expect(newState.authenticationModalOpen).toBeFalsy();
       expect(newState1.authenticationModalOpen).toBeTruthy();
+    });
+  });
+
+  describe(modalActions.MODAL_MESSAGE, () => {
+    it('should handle received messages for login or registrations', () => {
+      const openState = ModalsReducer(initialState, openModalAction);
+      const loginSuccessState = ModalsReducer(openState, loginSuccessAction);
+      const loginFailState = ModalsReducer(openState, loginFailAction);
+      const registrationSuccessState = ModalsReducer(openState, registrationSuccessAction);
+      const registrationFailState = ModalsReducer(openState, registrationFailAction);
+
+      expect(loginSuccessState.loginError).toBe(false);
+      expect(loginFailState.loginError).toBe(true);
+      expect(registrationSuccessState.registrationError).toBe(false);
+      expect(registrationFailState.registrationError).toBe(true);
     });
   });
 });

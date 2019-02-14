@@ -58,23 +58,28 @@ class AuthenticationModal extends React.Component {
     // const userSignOut = () => signOutAction(gathering);
     // console.log('auth', auth);
     const { handleInputChange } = this;
-
+    console.log('this.props', this.props);
+    const { loginError: modalError, message } = this.props.modals;
+    const valid = !modalError && typeof modalError !== 'undefined' ? true : undefined;
+    const invalid = !!modalError && typeof modalError !== 'undefined' ? true : undefined;
+    // console.log('invalid:', invalid);
 
     return (
       <Form >
         <FormGroup row >
           <Label for="email" sm={3} >Email</Label>
           <Col sm={9}>
-            <Input type="email" name="email" value={email} placeholder="Email" onChange={handleInputChange} />
+            <Input valid={valid} invalid={invalid} type="email" name="email" value={email} placeholder="Email" onChange={handleInputChange} />
           </Col>
         </FormGroup>
         <FormGroup row >
           <Label for="password" sm={3} >Password</Label>
           <Col sm={9}>
-            <Input type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} />
+            <Input valid={valid} invalid={invalid} type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} />
+            <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback>
           </Col>
+          {/* <FormFeedback valid={modalError}>Logging in. Please wait...</FormFeedback> */}
         </FormGroup>
-        <FormFeedback>Logging in. Please wait...</FormFeedback>
         <Row>
           <Col sm={{ size: 9, offset: 3 }} >
             <Button color="primary" onClick={this.handleLoginClick}>Submit</Button>
@@ -96,8 +101,8 @@ class AuthenticationModal extends React.Component {
 // };
 
 
-function mapStateToProps({ auth, gathering }) {
-  return { auth, gathering };
+function mapStateToProps({ auth, gathering, modals }) {
+  return { auth, gathering, modals };
 }
 
 

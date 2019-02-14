@@ -45,7 +45,7 @@ class AppNavbar extends React.Component {
     // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
     // const { auth, signIn: userSignIn, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = this.props; 
     const { auth, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = this.props;
-    console.log('gathering in Navbar component:', gathering);
+    // console.log('gathering in Navbar component:', gathering);
     // const userSignOut = () => signOutAction(gathering);
     const userSignOut = () => signOutAction({ auth, gathering });
     // const userSignOut = () => signOutAction(gathering);

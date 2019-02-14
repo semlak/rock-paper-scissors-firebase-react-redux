@@ -75,37 +75,42 @@ class AuthenticationModal extends React.Component {
     // console.log('auth', auth);
     const { handleInputChange } = this;
 
+    console.log('this.props', this.props);
+    const { registrationError: modalError, message } = this.props.modals;
+    const valid = !modalError && typeof modalError !== 'undefined' ? true : undefined;
+    const invalid = !!modalError && typeof modalError !== 'undefined' ? true : undefined;
+
     return (
       <Form autoComplete="off">
         <FormGroup row >
           <Label for="name" sm={3} >Name</Label>
           <Col sm={9}>
-            <Input type="text" name="username" value={username} placeholder="Name" onChange={handleInputChange} />
-            <FormFeedback>Please choose a display name.</FormFeedback>
+            <Input valid={valid} invalid={invalid} type="text" name="username" value={username} placeholder="Name" onChange={handleInputChange} />
+            {/* <FormFeedback>Please choose a display name.</FormFeedback> */}
           </Col>
         </FormGroup>
         <FormGroup row >
           <Label for="email" sm={3} >Email</Label>
           <Col sm={9}>
-            <Input type="email" name="email" value={email} placeholder="Email" onChange={handleInputChange} />
-            <FormFeedback>Please use a valid-looking email.</FormFeedback>
+            <Input valid={valid} invalid={invalid} type="email" name="email" value={email} placeholder="Email" onChange={handleInputChange} />
+            {/* <FormFeedback>Please use a valid-looking email.</FormFeedback> */}
           </Col>
         </FormGroup>
         <FormGroup row >
           <Label for="password" sm={3} >Password</Label>
           <Col sm={9}>
-            <Input type="password" name="password" value={password} placeholder="Password (6-character minimum)" onChange={handleInputChange} autoComplete="off" />
-            <FormFeedback>Please choose a password of at least 6 characters.</FormFeedback>
+            <Input valid={valid} invalid={invalid} type="password" name="password" value={password} placeholder="Password (6-character minimum)" onChange={handleInputChange} autoComplete="off" />
+            {/* <FormFeedback>Please choose a password of at least 6 characters.</FormFeedback> */}
           </Col>
         </FormGroup>
         <FormGroup row >
           <Label for="passwordConfirm" sm={3} >Confirm</Label>
           <Col sm={9}>
-            <Input type="password" name="passwordConfirm" value={passwordConfirm} placeholder="Confirm Password" onChange={handleInputChange} />
-            <FormFeedback>Password and Password Confirmation must match.</FormFeedback>
+            <Input valid={valid} invalid={invalid} type="password" name="passwordConfirm" value={passwordConfirm} placeholder="Confirm Password" onChange={handleInputChange} />
+            {/* <FormFeedback>Password and Password Confirmation must match.</FormFeedback> */}
+            <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback>
           </Col>
         </FormGroup>
-        <FormFeedback>Registering New User. Please wait...</FormFeedback>
         <Row>
           <Col sm={{ size: 9, offset: 3 }} >
             <Button color="primary" onClick={this.handleRegisterClick}>Register</Button>
@@ -131,8 +136,8 @@ class AuthenticationModal extends React.Component {
 //   return { auth, gathering };
 // }
 
-function mapStateToProps(props) {
-  return props;
+function mapStateToProps({ modals }) {
+  return { modals };
 }
 
 // AuthenticationModal.defaultProps = {

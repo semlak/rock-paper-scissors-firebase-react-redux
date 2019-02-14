@@ -60,6 +60,29 @@ const startGameAction = {
   payload: dispatchPayload,
 };
 
+const updateGameAction = {
+  type: gameActions.GAME_UPDATE,
+  payload: {
+    ...dispatchPayload,
+    player1Actions: ['rock'],
+    player2Actions: ['scissors'],
+    player1Wins: 1,
+    player2Wins: 0,
+    round: 1,
+  }
+};
+
+
+const updateGameInProgress1 = {
+  type: gameActions.GAME_IN_PROGRESS,
+  payload: false
+};
+
+const updateGameInProgress2 = {
+  type: gameActions.GAME_IN_PROGRESS,
+  payload: true
+};
+
 const { player1: player1Uid, player2: player2Uid } = dispatchPayload.gameData;
 const samplePlayAttemptAction = {
   type: gameActions.MAKE_PLAY,
@@ -319,6 +342,31 @@ describe('gameReducer', () => {
     //   expect(newState.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
     //   expect(newState1.gameStatus).toEqual(gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT);
     // });
+  });
+
+  describe(gameActions.GAME_UPDATE, () => {
+    it('should update game data', () => {
+      const newState = GameReducer(initialState, startGameAction);
+      expect(newState.gameKey).toEqual(gameKey);
+      expect(newState.gameStatus).toEqual(gameStatuses.GAME_STARTED);
+      const updatedState = GameReducer(newState, updateGameAction);
+      expect(updatedState.gameData.player1Wins).toBe(1);
+      expect(updatedState.gameData.player2Wins).toBe(0);
+      expect(updatedState.gameData.round).toBe(1);
+    });
+  });
+
+  describe(gameActions.GAME_IN_PROGRESS, () => {
+    it('should update GAME_IN_PROGRESS field', () => {
+      const newState = GameReducer(initialState, startGameAction);
+      expect(newState.gameKey).toEqual(gameKey);
+      expect(newState.gameStatus).toEqual(gameStatuses.GAME_STARTED);
+      const updatedState = GameReducer(newState, updateGameInProgress1);
+      const updatedState1 = GameReducer(updatedState, updateGameInProgress2);
+      // console.log('updatedState.gameData', updatedState.gameData);
+      expect(updatedState.gameData.gameInProgress).toBe(false);
+      expect(updatedState1.gameData.gameInProgress).toBe(true);
+    });
   });
 
   describe(gameActions.ROUND_OUTCOME, () => {

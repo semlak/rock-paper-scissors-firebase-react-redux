@@ -31,6 +31,7 @@ const mockStore = configureMockStore(middlewares);
 //     setTimeout(() => (succeeds ? resolve(body) : reject(body)), 10);
 //   });
 
+const flushAllPromises = () => new Promise(resolve => setImmediate(resolve));
 
 const sampleCurrentUserLoggedIn = true;
 
@@ -51,43 +52,43 @@ const sampleCurrentUserLoggedIn = true;
 
 
 const sampleUserArtie = {
-  displayName: "Artie Kalmes",
-  email: "artie@gmail.com",
+  displayName: 'Artie Kalmes',
+  email: 'artie@gmail.com',
   emailVerified: true,
   isAnonymous: false,
-  photoURL: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg",
-  u: "rps-game-d93c5.firebaseapp.com",
-  uid: "pJa4qrIO46YoGMXUfvj9VFllz142",
+  photoURL: 'https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg',
+  u: 'rps-game-d93c5.firebaseapp.com',
+  uid: 'pJa4qrIO46YoGMXUfvj9VFllz142',
 };
 
 const fakeCredetials = { email: 'artie@gmail.com', password: '12345678', username: 'Artie Kalmes' };
 
-const googleSignInMockResult = {
-  additionalUserInfo: {
-    isNewUser: false,
-    profile: {
-      email: "artie@gmail.com",
-      family_name: "Kalmes",
-      given_name: "Artie",
-      hd: "gmail.com",
-      id: "111058114021360340494",
-      link: "https://plus.google.com/111058114021360340494",
-      locale: "en",
-      name: "Artie Kalmes",
-      picture: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg",
-      verified_email: true,
-    },
-    providerId: "google.com",
-  },
-  operationType: "signIn",
-  user: sampleUserArtie,
-};
+// const googleSignInMockResult = {
+//   additionalUserInfo: {
+//     isNewUser: false,
+//     profile: {
+//       email: "artie@gmail.com",
+//       family_name: "Kalmes",
+//       given_name: "Artie",
+//       hd: "gmail.com",
+//       id: "111058114021360340494",
+//       link: "https://plus.google.com/111058114021360340494",
+//       locale: "en",
+//       name: "Artie Kalmes",
+//       picture: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/ACevoQNXBcWTnhNUiEIZy6h_xNPoZbNC9Q/mo/photo.jpg",
+//       verified_email: true,
+//     },
+//     providerId: "google.com",
+//   },
+//   operationType: "signIn",
+//   user: sampleUserArtie,
+// };
 
 const emailPasswordSignInMockResult = {
-  operationType: "signIn",
+  operationType: 'signIn',
   additionalUserInfo: {
     isNewUser: false,
-    providerId: "password",
+    providerId: 'password',
   },
   credential: null,
   user: sampleUserArtie,
@@ -115,6 +116,8 @@ const mockSignout = () => {
 };
 
 
+jest.useFakeTimers();
+
 const userSignOutMock = jest.fn().mockReturnValue({
   currentUser: sampleCurrentUserLoggedIn,
   // signOut: function() { console.log('in mock signout function'); return true; }
@@ -123,12 +126,12 @@ const userSignOutMock = jest.fn().mockReturnValue({
 
 const mockLoginUserWithEmailPasswordError = {
   // code: "auth/wrong-password",
-  message: "The password is invalid or the user does not have a password.",
+  message: 'The password is invalid or the user does not have a password.',
 };
 
 
 const mockRegisterUserWithEmailPasswordError = {
-  message: "The email address is already in use by another account.",
+  message: 'The email address is already in use by another account.',
 };
 
 
@@ -331,13 +334,23 @@ describe('authenticate action', () => {
         })
         .catch(err => expect(err).toBeFalsy());
     });
-    it('fires EMAIL_PASSWORD_LOGIN_SUCCESS and modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
+    it('fires EMAIL_PASSWORD_LOGIN_SUCCESS and (after delay) modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
       // firebase.auth = loginUserWithEmailPasswordMock;
       store
         .dispatch(loginUserWithEmailPassword(fakeCredetials))
         .then(() => {
+          flushAllPromises();
           expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_SUCCESS });
-          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL });
+          expect(store.getActions()).not.toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL });
+          expect(store.getActions()).toContainEqual({
+            type: modalActions.MODAL_MESSAGE,
+            payload: {
+              loginError: false,
+              message: 'Login was successful!',
+            }
+          });
+          jest.runAllTimers();
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { loginError: undefined } });
         })
         .catch(err => expect(err).toBeFalsy());
     });
@@ -350,13 +363,20 @@ describe('authenticate action', () => {
         .dispatch(loginUserWithEmailPassword(badCredentials))
         .then(() => {
           // console.log('store.getActions()!!!', store.getActions());
-          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_FAIL, payload: { message: mockLoginUserWithEmailPasswordError.message } });
+          expect(store.getActions()).not.toContainEqual({ type: userActions.EMAIL_PASSWORD_LOGIN_FAIL, payload: { message: mockLoginUserWithEmailPasswordError.message } });
+          expect(store.getActions()).toContainEqual({
+            type: modalActions.MODAL_MESSAGE,
+            payload: {
+              loginError: true,
+              message: mockLoginUserWithEmailPasswordError.message,
+            }
+          });
         });
     });
   });
 
 
-  describe('when a user registeres with email and password', () => {
+  describe('when a user registers with email and password', () => {
     beforeEach(() => {
       firebase.auth = loginUserWithEmailPasswordMock();
     });
@@ -386,14 +406,25 @@ describe('authenticate action', () => {
         })
         .catch(err => expect(err).toBeFalsy());
     });
-    it('fires EMAIL_PASSWORD_REGISTRATION_SUCCESS and modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
+    it('fires EMAIL_PASSWORD_REGISTRATION_SUCCESS and (after delay) modalActions.CLOSE_AUTHENTICATION_MODAL for successful login', () => {
       store
         .dispatch(registerUserAction(fakeCredetials))
         .then(() => {
           expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_SUCCESS });
-          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL });
+          expect(store.getActions()).not.toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+          expect(store.getActions()).toContainEqual({
+            type: modalActions.MODAL_MESSAGE,
+            payload: {
+              registrationError: false,
+              message: 'Registration was successful!',
+            }
+          });
           // console.log('firebase.auth().currentUser', firebase.auth().currentUser);
           expect(firebase.auth().currentUser.updateProfile).toHaveBeenCalled();
+
+          jest.runAllTimers();
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+
         })
         .catch(err => expect(err).toBeFalsy());
     });
@@ -406,7 +437,14 @@ describe('authenticate action', () => {
         .dispatch(registerUserAction(badCredentials))
         .then(() => {
           // console.log('store.getActions()!!!', store.getActions());
-          expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL, payload: { message: mockRegisterUserWithEmailPasswordError.message } });
+          expect(store.getActions()).not.toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL, payload: { message: mockRegisterUserWithEmailPasswordError.message } });
+          expect(store.getActions()).toContainEqual({
+            type: modalActions.MODAL_MESSAGE,
+            payload: {
+              registrationError: true,
+              message: mockRegisterUserWithEmailPasswordError.message,
+            }
+          });
         });
     });
 
@@ -441,13 +479,13 @@ describe('authenticate action', () => {
 // };
 
 // const sampleUser = {
-//   displayName: "Joseph Semlak",
-//   email: "seml@blah.edu",
+//   displayName: 'Joseph Semlak',
+//   email: 'seml@blah.edu',
 //   emailVerified: true,
 //   isAnonymous: false,
-//   photoURL: "https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/AGDgw-hV44bGwICl_R0v9U_uCYDfZzgaWA/mo/photo.jpg",
-//   u: "rps-game-d93c5.firebaseapp.com",
-//   uid: "pJa4qrIO46YoGMXUfvj9VFllz142",
+//   photoURL: 'https://lh5.googleusercontent.com/-_w_poSLrAaE/AAAAAAAAAAI/AAAAAAAAAAA/AGDgw-hV44bGwICl_R0v9U_uCYDfZzgaWA/mo/photo.jpg',
+//   u: 'rps-game-d93c5.firebaseapp.com',
+//   uid: 'pJa4qrIO46YoGMXUfvj9VFllz142',
 // };
 
 

@@ -16,12 +16,6 @@ export const fetchUser = () => dispatch => firebase.auth().onAuthStateChanged(us
       type: userActions.FETCH_USER,
       payload: user
     });
-    dispatch({
-      type: modalActions.CLOSE_AUTHENTICATION_MODAL,
-      payload: {
-        loginError: undefined,
-      }
-    });
   }
   else {
     dispatch({
@@ -133,37 +127,20 @@ export const registerUserAction = ({ username, email, password }) => dispatch =>
         // console.log('updateProfile result', result)
         setTimeout(() => dispatch({
           type: modalActions.CLOSE_AUTHENTICATION_MODAL,
-          payload: {
-            registrationError: undefined,
-          }
         }), 2000);
         dispatch({
           type: userActions.FETCH_USER,
           payload: firebase.auth().currentUser
-        });
-        dispatch({
-          type: modalActions.MODAL_MESSAGE,
-          payload: {
-            registrationError: false,
-            message: "Registration was successful!",
-          }
         });
       });
       // });
     })
     .catch(err => {
       // console.log('error on registerUserAction', err);
-      // dispatch({
-      //   type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL,
-      //   payload: { message: err.message },
-      //   // payload: { username, email, password },
-      // });
       dispatch({
-        type: modalActions.MODAL_MESSAGE,
-        payload: {
-          registrationError: true,
-          message: err.message,
-        }
+        type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL,
+        payload: { message: err.message },
+        // payload: { username, email, password },
       });
     });
 };
@@ -181,34 +158,17 @@ export const loginUserWithEmailPassword = ({ email, password }) => dispatch => {
       dispatch({
         type: userActions.EMAIL_PASSWORD_LOGIN_SUCCESS,
       });
-      dispatch({
-        type: modalActions.MODAL_MESSAGE,
-        payload: {
-          loginError: false,
-          message: 'Login was successful!',
-        }
-      });
       setTimeout(() => dispatch({
         type: modalActions.CLOSE_AUTHENTICATION_MODAL,
-        payload: {
-          loginError: undefined,
-        }
       }), 1600);
     })
     .catch((err) => {
       // console.log('error on loginUserWithEmailPassword', err);
       // console.log(err);
-      // dispatch({
-      //   type: userActions.EMAIL_PASSWORD_LOGIN_FAIL,
-      //   // payload: err,
-      //   payload: { message: err.message },
-      // });
       dispatch({
-        type: modalActions.MODAL_MESSAGE,
-        payload: {
-          loginError: true,
-          message: err.message,
-        }
+        type: userActions.EMAIL_PASSWORD_LOGIN_FAIL,
+        // payload: err,
+        payload: { message: err.message },
       });
       // console.log('dispatched userActions.EMAIL_PASSWORD_LOGIN_FAIL in loginUserWithEmailPassword', userActions.EMAIL_PASSWORD_LOGIN_FAIL);
     });
