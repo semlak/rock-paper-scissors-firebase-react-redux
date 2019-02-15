@@ -83,9 +83,9 @@ class AuthenticationModal extends React.Component {
     return (
       <Form autoComplete="off">
         <FormGroup row >
-          <Label for="name" sm={3} >Name</Label>
+          <Label for="name" sm={3} className="pr-0" >Display Name</Label>
           <Col sm={9}>
-            <Input valid={valid} invalid={invalid} type="text" name="username" value={username} placeholder="Name" onChange={handleInputChange} />
+            <Input valid={valid} invalid={invalid} type="text" name="username" value={username} placeholder="Display Name" onChange={handleInputChange} />
             {/* <FormFeedback>Please choose a display name.</FormFeedback> */}
           </Col>
         </FormGroup>

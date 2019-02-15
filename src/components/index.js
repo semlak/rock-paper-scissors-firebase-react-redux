@@ -5,7 +5,8 @@ import SignIn from './SignIn';
 import PlayerList from './PlayerList';
 import AuthenticationModal from './AuthenticationModal';
 import LoginForm from './LoginForm';
-import RegistrationForm from './RegistrationForm.js';
+import RegistrationForm from './RegistrationForm';
+import Landing from './Landing';
 
 export {
   Game,
@@ -16,4 +17,5 @@ export {
   AuthenticationModal,
   LoginForm,
   RegistrationForm,
+  Landing,
 };

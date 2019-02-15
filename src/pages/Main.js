@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   // Button,
-  Card,
+  // Card,
   CardBody,
   // CardTitle,
   // CardText,
@@ -50,15 +50,17 @@ class Main extends Component {
 
     // console.log('players', players, 'this.props', this.props);
     return (
-      <Card className="border-info " id="main" style={{ display: "block" }} >
-        <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader>
+      <div id="main" style={{ display: "block" }} >
+        {/* <Card className="border-info " id="main" style={{ display: "block" }} > */}
+        {/* <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader> */}
         <CardBody className="">
           { game && Object.keys(game).length > 1 && game.gameKey && game.gameKey.length > 1 ?
             <Game gameUID={game.key} /> :
             !players || players.length < 0 ? <div>Loading</div> : <PlayerList players="players" selectPlayer={this.selectPlayer} /> }
         </CardBody>
-        <CardFooter className="card-footer">{appStatus || ' '}</CardFooter>
-      </Card>
+        {/* <CardFooter className="card-footer">{appStatus || ' '}</CardFooter> */}
+        {/* </Card> */}
+      </div>
     );
   }
 }

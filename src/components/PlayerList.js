@@ -82,7 +82,7 @@ class UserList extends Component {
           Other Available Users
         </CardHeader> */}
         <CardBody className="">
-          { players.map(player => (
+          { players.length < 1 ? 'Loading players...' : players.map(player => (
             <Button
               key={player.uid}
               onClick={() => selectPlayer(player.uid)}

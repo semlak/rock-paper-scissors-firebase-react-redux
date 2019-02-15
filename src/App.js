@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import './App.css';
 import Main from './pages/Main';
-import { Navbar, SignIn, requireAuth, AuthenticationModal } from './components';
+// import { Navbar, SignIn, requireAuth, AuthenticationModal } from './components';
+import { Navbar, Landing, requireAuth, AuthenticationModal } from './components';
 
 import { fetchUser } from './actions/user';
 
@@ -23,7 +24,8 @@ export class UnconnectedApp extends Component {
           <Navbar />
           <AuthenticationModal />
           <div className="container main">
-            <Route exact path="/" component={SignIn} />
+            {/* <Route exact path="/" component={SignIn} /> */}
+            <Route exact path="/" component={Landing} />
             <Route path="/app" component={requireAuth(Main)} />
           </div>
         </div>

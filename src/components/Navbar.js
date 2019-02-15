@@ -6,7 +6,7 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  // NavLink,
+  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -53,14 +53,14 @@ class AppNavbar extends React.Component {
     // console.log('auth', auth);
 
     const userMenu = auth ? (
-      <UncontrolledDropdown nav inNavbar>
+      <UncontrolledDropdown nav className="" inNavbar>
         <DropdownToggle nav caret>
 
           {/* <img src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="" /> */}
           {/* <img src={auth.photoURL } width="40" height="40" alt={auth.displayName} /> */}
           { auth.photoURL ?
-            <img src={auth.photoURL} width="40" height="40" alt={auth.displayName} /> :
-            <Avatar name={auth.displayName} color={Avatar.getRandomColor('sitebase', ['green'])} size="40" />
+            <Avatar src={auth.photoURL} alt={auth.displayName} className="" size="25" /> :
+            <Avatar name={auth.displayName} color={Avatar.getRandomColor('sitebase', ['green'])} className="" size="25" />
           }
         </DropdownToggle>
         <DropdownMenu right>
@@ -89,22 +89,24 @@ class AppNavbar extends React.Component {
 
     return (
       // <Navbar color="dark" light expand="md" user={user} dark>
-      <div>
-        <Navbar color="dark" light expand="md" dark >
-          <NavbarBrand href="/">
-            <img src={rpsLogo} height="45" alt="Rock Paper Scissors" />
-          </NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
-          <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav className="ml-auto" navbar>
-              {/* <NavItem>
-                <NavLink href="/components/">Components</NavLink>
-              </NavItem> */}
-              {userMenu}
-            </Nav>
-          </Collapse>
-        </Navbar>
-      </div>
+      <Navbar color="dark" light expand="md" dark >
+        <NavbarBrand href="/">
+          <img src={rpsLogo} height="45" alt="Rock Paper Scissors" />
+        </NavbarBrand>
+        <NavbarToggler onClick={this.toggle} />
+        <Collapse isOpen={this.state.isOpen} navbar>
+          <Nav className="ml-auto" navbar>
+            <NavItem className="ml-auto" >
+              <NavLink target="_blank" href="https://github.com/semlak/rock-paper-scissors-firebase-react-redux/">Github</NavLink>
+            </NavItem>
+            <NavItem className="ml-auto" >
+              <Nav>
+                {userMenu}
+              </Nav>
+            </NavItem>
+          </Nav>
+        </Collapse>
+      </Navbar>
     );
   }
 }

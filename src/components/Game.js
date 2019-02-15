@@ -31,7 +31,7 @@ class Game extends Component {
   // state = this.getStat();
 
   componentDidMount() {
-    console.log('in componentDidMount');
+    // console.log('in componentDidMount');
     const { user, gathering, } = this.props;
     const inGame = true;
     const player = this.props.players.find(player1 => player1.uid === user.uid);
@@ -61,6 +61,7 @@ class Game extends Component {
       player1Name,
       player2Name,
       ties,
+      winner,
       // playInProgress,
     } = this.props.game.gameData;
     // const { uid: myUID, displayName: myName } = user;
@@ -80,6 +81,7 @@ class Game extends Component {
       myWins,
       opponentWins,
       ties,
+      winner,
       // maxNumberOfGames,
       // gameInProgress,
       // player1or2,
@@ -123,6 +125,7 @@ class Game extends Component {
       myWins,
       opponentWins,
       ties,
+      winner,
       // messages,
       // maxNumberOfGames,
       // gameInProgress,
@@ -138,7 +141,12 @@ class Game extends Component {
 
 
     // const loadingMessage = 'You played ...';
-    const loadingMessage = gameStatus;
+    // const loadingMessage = gameStatus;
+    const loadingMessage = gameStatus === gameStatuses.GAME_ENDED && winner > 0 ?
+      myWins > opponentWins ?
+        'You Won!' :
+        'You lost.' :
+      gameStatus;
 
     // const loadingMessageClass = '
     // const loadingMessageStyle = { textAlign: 'center', marginTop: '1em', size: '22px' };
@@ -191,7 +199,7 @@ class Game extends Component {
         <br />
         {/*     </> */}
         {/* }       */}
-        <Button color="danger" onClick={this.endCurrentGame} id="end-game">End Game</Button>
+        <Button color="danger" onClick={this.endCurrentGame} id="end-game">End Match</Button>
       </CardBody>
     );
     // return <LoadingSpinner loading/>
