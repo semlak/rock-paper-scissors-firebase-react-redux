@@ -2,12 +2,12 @@
 An online multiplayer Rock-Paper-Scissors game built with Firebase, React.js, and Redux.js
 ## Table of Contents
 * [View Live Site](#view-live-site)
-* [Contributors](#contributors)
+* [Developer](#developer)
 * [About this project](#about-this-project)
 
 ## View Live Site
 [https://semlak.github.io/rock-paper-scissors-firebase-react-redux/](https://semlak.github.io/rock-paper-scissors-firebase-react-redux/)
-![ScreenShot](readme_img/Landing.png)
+<!-- ![ScreenShot](readme_img/Landing.png) -->
 
 ## Developer
 FireRPS was solely developed by [Joseph Semlak](https://github.com/semlak).
@@ -17,28 +17,28 @@ You can play an online Rock-Paper-Scissors match against another real online pla
 
 * [Technologies Used](#technologies-used)
 * [How It Works](#how-it-works)
-* [Structure of Project](#structure)
+<!-- * [Structure of Project](#structure) -->
 * [Start Locally](#start-locally)
 
 ## Technologies Used
 * **Frontend**
     * React.js/Redux.js
-    * Javascript
+    * JavaScript
     * Bootstrap/react-strap 
     * HTML
     * CSS
 
 * **Backend**
-    * Firebase Realtime database
+    * Firebase Real-time database
         * Google and Github OAuth authentication via Firebase
 * **Testing**
     * Jest/Mocha
         
-## <a name="how-it-works"></a> How It Works
+## How It Works
 <!-- ![ScreenShot](readme_img/Landing.png) -->
 1. Create Profile
-  * Click the "Log In/Sign Up" button in far right of the top Navbar  A modal should open that allows login/registration via email/password or Github/Google SignIn.
-    * Register by selecting the registration tab and providing displayname/email/password details OR and entering a "Display Name", and email address, and password.
+  * Click the "Log In/Sign Up" button in far right of the top Navbar  A modal should open that allows login/registration via email/password or Github/Google Sign In.
+    * Register by selecting the registration tab and providing displayName/email/password details.
     * Register/Sign in with Github or Google OAuth service.
 
     * #### For the registration form:
@@ -55,7 +55,7 @@ You can play an online Rock-Paper-Scissors match against another real online pla
 <!-- Create a user profile with details of your home location and internship locations such as city, country and currency code.  -->
 
 2. Opponent Selection: Select another online player to play game
-![ScreenShot](readme_img/Journal.png)
+<!-- ![ScreenShot](readme_img/Journal.png) -->
  You are shown a list of players currently online. Note that since this is just a demo application, you might be the only one available.
   * You can create a second user to try out the game, using another fake email in a separate browsing session (such as incognito in Chrome).
  Only the online players who are not currently in a game should be selectable. Select an available player to start a game.
@@ -69,16 +69,16 @@ You can play an online Rock-Paper-Scissors match against another real online pla
   * You just continue the match with the same procedures until one of the players wins 3 rounds.
 
 4. End Game
-  * Right now, the match ends farily unceremoniously. You are just told whether you won or lost.
+  * Right now, the match ends fairly unceremoniously. You are just told whether you won or lost.
   * The match screen will remain visible until one of the players hits the "End Match" button, at which point the application will return to the opponent selection screen.
 
 5. In-Game Chat (to be implemented)
 
 <!-- ## Structure of Project                                                                                                                                                                                                                  -->
-<!-- After you clone the reposity, navigate to the root directory (project-three). The project directory structure is set up as follows:                                                                                                      -->
+<!-- After you clone the repository, navigate to the root directory (project-three). The project directory structure is set up as follows:                                                                                                      -->
 
 <!-- * Server.js: This file:                                                                                                                                                                                                                  -->
-<!--     * Defines and requiers the dependencies, including axios, express, body-parser, morgan logger, mongoose, passport                                                                                                                    -->
+<!--     * Defines and requires the dependencies, including axios, express, body-parser, morgan logger, mongoose, passport                                                                                                                    -->
 <!--     * Sets up the Express server                                                                                                                                                                                                         -->
 <!--     * Sets up the Express server to handle data parsing use body-parser                                                                                                                                                                  -->
 <!--     * Sets up the logger                                                                                                                                                                                                                 -->
@@ -86,7 +86,7 @@ You can play an online Rock-Paper-Scissors match against another real online pla
 <!--     * Points the server to the API routes                                                                                                                                                                                                -->
 <!--     * Defines the port the server is listening on                                                                                                                                                                                        -->
 <!--     * Starts the server                                                                                                                                                                                                                  -->
-<!--     * Allows the app to serve static conten from the public directory                                                                                                                                                                    -->
+<!--     * Allows the app to serve static content from the public directory                                                                                                                                                                    -->
 
 <!-- * models: Contains chapter.js, expense.js, index.js, needs.js and user.js files which contain the information for the application to set up the database                                                                                 -->
 
@@ -98,11 +98,11 @@ You can play an online Rock-Paper-Scissors match against another real online pla
 
 <!-- * scripts: Contains the build.js, seedDB.js and start-client.js generated by create-react-app                                                                                                                                            -->
 
-<!-- * client: Containts public and src folders                                                                                                                                                                                               -->
+<!-- * client: Contains public and src folders                                                                                                                                                                                               -->
 <!--     * public: Contains generated documents from create-react-app                                                                                                                                                                         -->
 <!--     * src: Contains components file, pages file, utils file, App.js, index.js, index.css, country_codes.json, currencycodes.json, city-list.json                                                                                         -->
 <!--         * Components : Contains folders for each React component including, Forms, Sidebar, Login, TopNav and Users                                                                                                                      -->
-<!--         * Pages: Contains folders with files for each page of the application including Journal, Expences, Location, Requirements and NoMatch                                                                                            -->
+<!--         * Pages: Contains folders with files for each page of the application including Journal, Expenses, Location, Requirements and NoMatch                                                                                            -->
 <!--         * Utils: Contains API.js, util.js                                                                                                                                                                                                -->
 <!--             * API.js: Contains API calls the database for each page, API calls for images and NYTimes search                                                                                                                             -->
 <!--             * util.js: Contains API calls for OpenWeather API                                                                                                                                                                            -->
@@ -120,12 +120,12 @@ You can play an online Rock-Paper-Scissors match against another real online pla
 
 <!-- * yarn.lock: Contains the dependency tree for this project.                                                                                                                                                                              -->
 
-<!-- * .gitignore: Contains the files to be ignored by GitHub when commiting                                                                                                                                                                  -->
+<!-- * .gitignore: Contains the files to be ignored by GitHub when committing                                                                                                                                                                  -->
 
 ## Start Locally
 This section will walk you through some of the steps to set up this application to run locally on your computer.
 
-If you don't want to set up this project locally and are looking for the deployed application, go to [View Live Site](#view-live-site)
+If you just want to try out the game, you have to set up this project locally; you can just [View the Live Site](#view-live-site).
 
  
 1. Clone the repository
