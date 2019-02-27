@@ -26,6 +26,12 @@ class Landing extends Component {
     this.props.signIn();
   }
 
+  toggleModal = (e) => {
+    console.log('toggleModal');
+    e.preventDefault();
+    this.props.toggleAuthenticationModal();
+  }
+
   render() {
     return (
       <div className="row social-signin-container">
@@ -37,7 +43,7 @@ class Landing extends Component {
           <br />
           <br />
           {/* <h4 id="sign-in-header">Sign In to start</h4> */}
-          <a href="/#" className="social-signin" onClick={this.props.toggleAuthenticationModal}>
+          <a href="/#" className="social-signin" onClick={this.toggleModal}>
             <i className="fa fa-google social-signin-icon" />
             Sign in to start
           </a>
