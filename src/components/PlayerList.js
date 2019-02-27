@@ -90,7 +90,7 @@ class UserList extends Component {
               className="mr-1 mb-1"
               outline
               disabled={player.uid === auth.uid || player.inGame}
-              title={`${player.displayName}${player.inGame ? ' is currently in a game' : ''}`}
+              title={`${player.displayName}${player.inGame ? ' (currently in a game)' : player.uid === auth.uid ? ' (You cannot play against yourself)' : ''}`}
             >{ player.uid === auth.uid ? `You (${player.displayName})` : player.displayName} <span> <PlayerAvatar player={player} /></span>
             </Button>
           ))}

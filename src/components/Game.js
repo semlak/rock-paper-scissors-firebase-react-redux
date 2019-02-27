@@ -142,11 +142,22 @@ class Game extends Component {
 
     // const loadingMessage = 'You played ...';
     // const loadingMessage = gameStatus;
+    const messages = {
+      [gameStatuses.DETERMINING_ROUND_WINNER]: 'Determining Round Winner...',
+      [gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT]: 'You have played, and we are waiting on your opponent...',
+      [gameStatuses.WAITING_FOR_BOTH_PLAYERS]: 'Waiting for both players to make a play...',
+      [gameStatuses.OPPONENT_PLAY_WAITING_FOR_USER]: 'Your opponent has played and is waiting for you to play...',
+      [gameStatuses.GAME_STARTED]: 'Game started...',
+      [gameStatuses.GAME_ENDED]: 'Game is over...',
+      [gameStatuses.NO_GAME]: 'No Game currently in progress...',
+    };
+
     const loadingMessage = gameStatus === gameStatuses.GAME_ENDED && winner > 0 ?
       myWins > opponentWins ?
         'You Won!' :
         'You lost.' :
-      gameStatus;
+      messages[gameStatus];
+      // gameStatus;
 
     // const loadingMessageClass = '
     // const loadingMessageStyle = { textAlign: 'center', marginTop: '1em', size: '22px' };
