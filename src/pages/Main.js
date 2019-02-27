@@ -5,8 +5,8 @@ import {
   CardBody,
   // CardTitle,
   // CardText,
-  CardFooter,
-  CardHeader,
+  // CardFooter,
+  // CardHeader,
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -44,7 +44,8 @@ class Main extends Component {
 
 
   render() {
-    const { appStatus, appHeaderText, game } = this.props;
+    // const { appStatus, appHeaderText, game } = this.props;
+    const { game } = this.props;
     const players = this.props.players && Array.isArray(this.props.players) ? this.props.players : [];
     // console.log('rendering main');
 

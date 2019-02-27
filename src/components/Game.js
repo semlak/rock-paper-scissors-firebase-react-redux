@@ -9,7 +9,9 @@ import {
   CardHeader,
   Row,
   Col,
+  Badge,
 } from 'reactstrap';
+// import Bounce from 'react-reveal/Bounce';
 import { connect } from 'react-redux';
 
 // import firebase from '../firebase';
@@ -28,7 +30,6 @@ import gameStatuses from '../gameStatuses';
 
 
 class Game extends Component {
-  // state = this.getStat();
 
   componentDidMount() {
     // console.log('in componentDidMount');
@@ -45,11 +46,11 @@ class Game extends Component {
     if (gameStatus === gameStatuses.DETERMINING_ROUND_WINNER && gameStatus !== prevProps.game.gameStatus && prevProps.game.gameStatus.length > 0 && myUid === this.props.game.gameData.player1) {
       this.props.getRoundOutcome(this.props.gameUID);
     }
-    // const { player1Wins, player2Wins, ties, round, playInProgress } = gameData;
   }
 
-  getStat() {
-    console.log('running getStat');
+  getState() {
+    // this isn't really the state it is getting, it is just transforming props to needed stuff for render
+    // console.log('running getState');
     const { user } = this.props;
     const {
       // gameInProgress,
@@ -130,7 +131,7 @@ class Game extends Component {
       // maxNumberOfGames,
       // gameInProgress,
       // playInProgress,
-    } = this.getStat();
+    } = this.getState();
     // } = this.state; 
 
     const { gameStatus, } = this.props.game;
@@ -159,46 +160,30 @@ class Game extends Component {
       messages[gameStatus];
       // gameStatus;
 
-    // const loadingMessageClass = '
-    // const loadingMessageStyle = { textAlign: 'center', marginTop: '1em', size: '22px' };
-    // const { loading, file } = this.state;
-    // const playInProgress = !playEnabled;
-    // playInProgress = false;
-    // const loading = playInProgress;
-    // const spinnerProps = {
-    //   // loadingMessage,
-    //   loadingMessageStyle,
-    //   loading,
-    //   className: 'loading-viewer',
-    //   // delay: 500,
-    //   // fadeIn: true,
-    //   id: "loading-spinner",
-    // };
-    // console.log('spinnerProps', spinnerProps);
-
-
     const activeCardBody = (
       <CardBody className="">
-        <Row>
-          <Col className="text-right">Round Number:</Col>
-          <Col className="text-left">{round}</Col>
-        </Row>
-
         <Row>
           <Col className="text-right">Your Opponent:</Col>
           <Col className="text-left">{opponentName}</Col>
         </Row>
         <Row>
+          <Col className="text-right">Round Number:</Col>
+          <Col className="text-left "><Badge color="secondary">{round}</Badge></Col>
+        </Row>
+
+        <Row>
           <Col className="text-right">Your Wins:</Col>
-          <Col className="text-left">{myWins}</Col>
+          {/* <Col className="text-left">{loadingMessage === 'You Won!' ? <Bounce>{myWins}</Bounce> : myWins}</Col> */}
+          <Col className="text-left"><Badge>{myWins}</Badge></Col>
+          {/* <Col className="text-left"><Bounce><Badge>{myWins}</Badge></Bounce></Col> */}
         </Row>
         <Row>
           <Col className="text-right">Opponent Wins:</Col>
-          <Col className="text-left">{opponentWins}</Col>
+          <Col className="text-left"><Badge>{opponentWins}</Badge></Col>
         </Row>
         <Row className="mb-2">
           <Col className="text-right">Ties:</Col>
-          <Col className="text-left">{ties}</Col>
+          <Col className="text-left"><Badge>{ties}</Badge></Col>
         </Row>
 
         {/* { playInProgress ? <LoadingSpinner {...spinnerProps} /> : */}
