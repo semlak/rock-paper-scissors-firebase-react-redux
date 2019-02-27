@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "d536becf7903d253638f",
+    "revision": "4fdb5b1336462ad470dd",
     "url": "/rock-paper-scissors-firebase-react-redux/static/css/main.073823bb.chunk.css"
   },
   {
-    "revision": "d536becf7903d253638f",
-    "url": "/rock-paper-scissors-firebase-react-redux/static/js/main.d536becf.chunk.js"
+    "revision": "4fdb5b1336462ad470dd",
+    "url": "/rock-paper-scissors-firebase-react-redux/static/js/main.4fdb5b13.chunk.js"
   },
   {
     "revision": "9306b6da46fbe48bacbd",
@@ -32,7 +32,7 @@ self.__precacheManifest = [
     "url": "/rock-paper-scissors-firebase-react-redux/static/media/landing-rps.7015b724.jpg"
   },
   {
-    "revision": "0ee950a14e6e0db3974cf5d1a5608cb2",
+    "revision": "e88ccbd2a5961ed870c35ecd985d60ef",
     "url": "/rock-paper-scissors-firebase-react-redux/index.html"
   }
 ];
