@@ -1,10 +1,10 @@
 {
   "main.css": "/rock-paper-scissors-firebase-react-redux/static/css/main.073823bb.chunk.css",
-  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.061dda53.chunk.js",
-  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.061dda53.chunk.js.map",
+  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.20e62a0d.chunk.js",
+  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.20e62a0d.chunk.js.map",
   "static/css/1.d13470c3.chunk.css": "/rock-paper-scissors-firebase-react-redux/static/css/1.d13470c3.chunk.css",
-  "static/js/1.81da4442.chunk.js": "/rock-paper-scissors-firebase-react-redux/static/js/1.81da4442.chunk.js",
-  "static/js/1.81da4442.chunk.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/1.81da4442.chunk.js.map",
+  "static/js/1.350a40d8.chunk.js": "/rock-paper-scissors-firebase-react-redux/static/js/1.350a40d8.chunk.js",
+  "static/js/1.350a40d8.chunk.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/1.350a40d8.chunk.js.map",
   "runtime~main.js": "/rock-paper-scissors-firebase-react-redux/static/js/runtime~main.7c9c244b.js",
   "runtime~main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/runtime~main.7c9c244b.js.map",
   "static/media/rpsLogo.png": "/rock-paper-scissors-firebase-react-redux/static/media/rpsLogo.94b40bc8.png",
@@ -13,6 +13,6 @@
   "static/css/main.073823bb.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/main.073823bb.chunk.css.map",
   "static/css/1.d13470c3.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/1.d13470c3.chunk.css.map",
   "index.html": "/rock-paper-scissors-firebase-react-redux/index.html",
-  "precache-manifest.0bb06a00eb4816586a3a9412cb98c0e7.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.0bb06a00eb4816586a3a9412cb98c0e7.js",
+  "precache-manifest.773c71a7027f3a425348b50a30655272.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.773c71a7027f3a425348b50a30655272.js",
   "service-worker.js": "/rock-paper-scissors-firebase-react-redux/service-worker.js"
 }

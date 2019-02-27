@@ -1,19 +1,19 @@
 self.__precacheManifest = [
   {
-    "revision": "061dda53677f95cb2a97",
+    "revision": "20e62a0da77895707c84",
     "url": "/rock-paper-scissors-firebase-react-redux/static/css/main.073823bb.chunk.css"
   },
   {
-    "revision": "061dda53677f95cb2a97",
-    "url": "/rock-paper-scissors-firebase-react-redux/static/js/main.061dda53.chunk.js"
+    "revision": "20e62a0da77895707c84",
+    "url": "/rock-paper-scissors-firebase-react-redux/static/js/main.20e62a0d.chunk.js"
   },
   {
-    "revision": "81da4442c70bca27ec5a",
+    "revision": "350a40d8669e10e70caa",
     "url": "/rock-paper-scissors-firebase-react-redux/static/css/1.d13470c3.chunk.css"
   },
   {
-    "revision": "81da4442c70bca27ec5a",
-    "url": "/rock-paper-scissors-firebase-react-redux/static/js/1.81da4442.chunk.js"
+    "revision": "350a40d8669e10e70caa",
+    "url": "/rock-paper-scissors-firebase-react-redux/static/js/1.350a40d8.chunk.js"
   },
   {
     "revision": "7c9c244b809b1d0ac1c5",
@@ -32,7 +32,7 @@ self.__precacheManifest = [
     "url": "/rock-paper-scissors-firebase-react-redux/static/media/landing-rps.7015b724.jpg"
   },
   {
-    "revision": "93d7e305d02e7c6f0fdfa8c411d712a1",
+    "revision": "72880439d868744b1ccb29b9635157b9",
     "url": "/rock-paper-scissors-firebase-react-redux/index.html"
   }
 ];
