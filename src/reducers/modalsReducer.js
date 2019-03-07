@@ -1,8 +1,8 @@
 // import { FETCH_USER } from '../actions/types';
 import { modalActions } from '../actions/types';
 
-// export default (state = false, action) => {
-export default (state = { authenticationModalOpen: false }, action) => {
+const authenticationModalOpenDefault = true;
+export default (state = { authenticationModalOpen: authenticationModalOpenDefault }, action) => {
   // console.log('in modals reducer, state:', state, 'action:', action);
   // if (Object.keys(modalActions).indexOf(action.type) > -1) {
   //   console.log('in auth reducer, state:', state, 'action:', action);

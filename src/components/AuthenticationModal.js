@@ -10,31 +10,25 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Row,
+  Col,
+  ButtonGroup,
 
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signIn, } from '../actions/user';
+import { signIn, signInWithGithub } from '../actions/user';
 import { toggleAuthenticationModal } from '../actions/modalActions';
 import { LoginForm, RegistrationForm } from '../components';
 
 class AuthenticationModal extends React.Component {
   constructor(props) {
     super(props);
-
-    // this.toggle = this.toggle.bind(this);
-    this.toggleTab = this.toggleTab.bind(this);
     this.state = {
-      // isOpen: false,
       activeTab: '1',
     };
   }
-  // toggle() {
-  //   this.setState({
-  //     isOpen: !this.state.isOpen
-  //   });
-  // }
 
   toggleTab(tab) {
     if (this.state.activeTab !== tab) {
@@ -45,23 +39,15 @@ class AuthenticationModal extends React.Component {
   }
 
   render() {
-    // const { user, login, logout } = this.props;
-    // const { props } = this;
-    // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
-    // const { auth, signIn: googleSignIn, signOut: signOutAction, gathering } = this.props;
-    console.log('rendingering AuthenticationModal, props:', this.props);
-    const { signIn: googleSignIn, authenticationModalOpen: isOpen, toggleAuthenticationModal: toggle } = this.props;
-    // const userSignOut = () => signOutAction(gathering);
-    // const userSignOut = () => signOutAction({ auth, gathering });
-    // const userSignOut = () => signOutAction(gathering);
-    // console.log('auth', auth);
-    
+    // console.log('rendingering AuthenticationModal, props:', this.props);
+    const { signIn: googleSignIn, signInWithGithub: githubSignIn, authenticationModalOpen: isOpen, toggleAuthenticationModal: toggle } = this.props;
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" className={this.props.className}>
         <ModalBody>
-          <div className="row">
-            <div className="col-lg-8 col-md-12 add-right-border">
+          <Row className="row">
+            {/* <div className="col-lg-8 col-md-12 add-right-border"> */}
+            <Col lg={8} md={12} className="add-right-border">
               {/* <!-- Nav tabs --> */}
               {/* <!-- modified from https://bootsnipp.com/snippets/VElzQ --> */}
               <Nav tabs>
@@ -92,35 +78,28 @@ class AuthenticationModal extends React.Component {
               </TabContent>
               {/* <!-- Sign in with Google of Github--> */}
               <div id="OR" className="">OR</div>
-            </div>
-            <div className="hidden-lg-down col-sm-12 col-md-12 col-lg-4">
-              <div className="row text-center sign-with">
-                <div className="col-md-12">
+            </Col>
+            {/* <div className="hidden-lg-down col-sm-12 col-md-12 col-lg-4"> */}
+            <Col sm={12} md={12} lg={4} className="hidden-lg-down">
+              <Row className="text-center sign-with">
+                <Col md={12}>
                   <h5>Sign in with</h5>
-                </div>
-                <div className="col-md-12">
-                  <div className="btn-group btn-group-justified">
-                    <Button id="github-signin">Github</Button>
+                </Col>
+                <Col md={12}>
+                  {/* <div className="btn-group btn-group-justified"> */}
+                  <ButtonGroup>
+                    <Button id="github-signin" onClick={githubSignIn}>Github</Button>
                     <Button color="danger" id="google-signin" onClick={googleSignIn}>Google</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </ButtonGroup>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </ModalBody>
       </Modal>
     );
   }
 }
-
-// function mapStateToProps({ auth }) {
-//   return { auth };
-// }
-
-
-// AppNavbar.defaultProps = {
-//   auth: {},
-// };
 
 
 function mapStateToProps({ modals }) {
@@ -142,4 +121,4 @@ AuthenticationModal.propTypes = {
   // signOut: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { signIn, toggleAuthenticationModal })(AuthenticationModal);
+export default connect(mapStateToProps, { signIn, signInWithGithub, toggleAuthenticationModal })(AuthenticationModal);

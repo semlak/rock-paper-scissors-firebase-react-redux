@@ -1,6 +1,6 @@
 // import firebase, { authRef, provider, } from '../firebase';
 // import firebase, { provider, } from '../firebase';
-import firebase, { googleProvider, } from '../firebase';
+import firebase, { googleProvider, githubProvider } from '../firebase';
 // import { authRef, provider, } from '../firebase';
 import { leaveGathering } from './gatheringActions';
 // import { FETCH_USER } from './types';
@@ -31,11 +31,8 @@ export const fetchUser = () => dispatch => firebase.auth().onAuthStateChanged(us
   }
 });
 
-// export const signIn = () => () => firebase.auth()
-// export const signIn = () => dispatch => {
-// export const signIn = () => () => authRef
-export const signIn = () => dispatch => firebase.auth()
-  .signInWithPopup(googleProvider)
+const signInMain = (providerName) => dispatch => firebase.auth()
+  .signInWithPopup(providerName === 'github' ? githubProvider : providerName === 'google' ? googleProvider : googleProvider)
   .then(result => {
   // .then(() => {
     console.log('singIn result', result);
@@ -46,6 +43,22 @@ export const signIn = () => dispatch => firebase.auth()
     dispatch({ type: userActions.SIGNIN_ERROR, payload: error });
     console.log('signIn action error', error);
   });
+
+// export const signIn = () => dispatch => firebase.auth()
+//   .signInWithPopup(googleProvider)
+//   .then(result => {
+//   // .then(() => {
+//     console.log('singIn result', result);
+//     // no need to dispatch auth signer, because then is done using the onAuthStateChanged event listener
+//     dispatch({ type: userActions.SIGNIN_SUCCESSFUL });
+//   })
+//   .catch(error => {
+//     dispatch({ type: userActions.SIGNIN_ERROR, payload: error });
+//     console.log('signIn action error', error);
+//   });
+
+export const signIn = () => dispatch => dispatch(signInMain('google'));
+export const signInWithGithub = () => dispatch => dispatch(signInMain('github'));
 
 
 // testable signOut function

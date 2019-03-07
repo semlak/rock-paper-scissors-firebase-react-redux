@@ -40,7 +40,6 @@ class AppNavbar extends React.Component {
     });
   }
   render() {
-    // const { user, login, logout } = this.props;
     const { props } = this;
     // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
     // const { auth, signIn: userSignIn, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = this.props; 
@@ -97,7 +96,7 @@ class AppNavbar extends React.Component {
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
             <NavItem className="ml-auto" >
-              <NavLink target="_blank" href="https://github.com/semlak/rock-paper-scissors-firebase-react-redux/">Github</NavLink>
+              <NavLink target="_blank" href="https://github.com/semlak/rock-paper-scissors-firebase-react-redux/">On Github</NavLink>
             </NavItem>
             <NavItem className="ml-auto" >
               <Nav>

@@ -39,14 +39,13 @@ class Landing extends Component {
         <Row className="row social-signin-container">
           <Col className="col s10 offset-s1 center-align">
             {/* <img alt="Sign in" id="sign-in" src="/img/user.png" /> */}
-            <img alt="Sign in" id="sign-in" src={landingImage} />
+            <img alt="Sign in" id="sign-in" width="100%" src={landingImage} />
             <br />
             <br />
             <br />
             <br />
             {/* <h4 id="sign-in-header">Sign In to start</h4> */}
             <a href="/#" className="social-signin" onClick={this.toggleModal}>
-              <i className="fa fa-google social-signin-icon" />
               Sign in to start
             </a>
           </Col>

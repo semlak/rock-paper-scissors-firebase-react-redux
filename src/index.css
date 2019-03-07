@@ -13,8 +13,13 @@ code {
     monospace;
 }
 
+.App {
+  text-align: center;
+}
 
 
+
+/* for Authentication Modal, splitting between the forms and the social sign in */
 @media only screen and (min-width: 992px) {
   .add-right-border {
     border-right: 1px dotted #C2C2C2;
@@ -70,6 +75,7 @@ code {
 }
 
 
+/* Github button */
 .btn#github-signin {
     color: #fff;
     background-color: #444;
@@ -88,4 +94,9 @@ code {
     /* background-color: #1a252f; */
     box-shadow: 0 0 0 0.2rem rgba(76, 91, 106, 0.5);
     border-color: #151e27;
+}
+
+/* Authentication Modal login and registration forms */
+#nav-tab-content .col-form-label {
+  font-size: 80%;
 }

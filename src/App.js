@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import './App.css';
 import Main from './pages/Main';
 // import { Navbar, SignIn, requireAuth, AuthenticationModal } from './components';
 import { Navbar, Landing, requireAuth, AuthenticationModal } from './components';
