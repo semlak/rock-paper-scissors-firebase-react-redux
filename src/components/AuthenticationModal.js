@@ -18,8 +18,8 @@ import {
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signIn, signInWithGithub } from '../actions/user';
-import { toggleAuthenticationModal } from '../actions/modalActions';
+import { signIn, signInWithGithub, loginUserWithEmailPassword, registerUserAction } from '../actions/user';
+import { toggleAuthenticationModal, modalMessage } from '../actions/modalActions';
 import { LoginForm, RegistrationForm } from '../components';
 
 class AuthenticationModal extends React.Component {
@@ -70,10 +70,10 @@ class AuthenticationModal extends React.Component {
               </Nav>
               <TabContent activeTab={this.state.activeTab} className="mt-2" id="nav-tab-content">
                 <TabPane tabId="1">
-                  <LoginForm closeButtonAction={toggle} />
+                  <LoginForm closeButtonAction={toggle} {...this.props} />
                 </TabPane>
                 <TabPane tabId="2">
-                  <RegistrationForm closeButtonAction={toggle} />
+                  <RegistrationForm closeButtonAction={toggle} {...this.props} />
                 </TabPane>
               </TabContent>
               {/* <!-- Sign in with Google of Github--> */}
@@ -104,7 +104,7 @@ class AuthenticationModal extends React.Component {
 
 function mapStateToProps({ modals }) {
   const { authenticationModalOpen } = modals;
-  return { authenticationModalOpen };
+  return { authenticationModalOpen, modals };
 }
 
 
@@ -121,4 +121,4 @@ AuthenticationModal.propTypes = {
   // signOut: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, { signIn, signInWithGithub, toggleAuthenticationModal })(AuthenticationModal);
+export default connect(mapStateToProps, { signIn, signInWithGithub, toggleAuthenticationModal, loginUserWithEmailPassword, registerUserAction, modalMessage })(AuthenticationModal);

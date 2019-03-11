@@ -1,56 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Row, Col, Card, } from 'reactstrap';
+import { Row, Col, Card, Button } from 'reactstrap';
 
-// import { signIn } from '../actions/user';
 import { toggleAuthenticationModal } from '../actions/modalActions';
-import "./SignIn.css";
+import "./Landing.css";
 
-// import defaultUserImage from '../img/user.png';
 import landingImage from '../img/landing-rps.jpg';
 
-class Landing extends Component {
+export class Landing extends Component {
   static contextTypes = {
     router: PropTypes.object
   };
 
   componentWillUpdate(nextProps) {
-    // console.log('in componentWillUpdate for \'SignIn\', nextProps', nextProps);
     if (nextProps.auth) {
       this.context.router.history.push("/app");
     }
   }
 
-  signIn(e) {
-    e.preventDefault();
-    this.props.signIn();
-  }
-
   toggleModal = (e) => {
-    console.log('toggleModal');
     e.preventDefault();
     this.props.toggleAuthenticationModal();
   }
 
   render() {
     return (
-      <>
-        <Row className="row social-signin-container">
-          <Col className="col s10 offset-s1 center-align">
+      <div>
+        <Row className="social-signin-container">
+          <Col>
             {/* <img alt="Sign in" id="sign-in" src="/img/user.png" /> */}
-            <img alt="Sign in" id="sign-in" width="100%" src={landingImage} />
+            <img alt="Rock Paper Scissors" id="sign-in" width="100%" src={landingImage} />
             <br />
             <br />
             <br />
             <br />
             {/* <h4 id="sign-in-header">Sign In to start</h4> */}
-            <a href="/#" className="social-signin" onClick={this.toggleModal}>
+            <Button href="/#" className="social-signin" onClick={this.toggleModal}>
               Sign in to start
-            </a>
+            </Button>
+            {/* <a href="/#" className="social-signin" onClick={this.toggleModal}> */}
+            {/*   Sign in to start                                                 */}
+            {/* </a>                                                               */}
           </Col>
         </Row>
-        <Row className="mt-4 text-left">
+        <Row className="mt-4 mb-4 text-left">
           <Col >
             <Card body outline color="danger">
               <p>For trying out the game with multiple players, you can use separate logins in separate browsing sessions.</p>
@@ -63,7 +57,7 @@ class Landing extends Component {
             </Card>
           </Col>
         </Row>
-      </>
+      </div>
     );
   }
 }

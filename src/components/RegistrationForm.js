@@ -12,16 +12,11 @@ import {
   FormFeedback,
   Label,
 } from 'reactstrap';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-// import { signIn, signOut } from '../actions/user';
-import { registerUserAction } from '../actions/user';
+export const validateEmail = email => !!email.match("[a-zA-Z]+.*@.*[a-zA-Z]+.*[.][a-zA-Z]+");
 
-
-const validateEmail = email => !!email.match("[a-zA-Z]+.*@.*[a-zA-Z]+.*[.][a-zA-Z]+");
-
-class AuthenticationModal extends React.Component {
+class RegistrationForm extends React.Component {
   constructor(props) {
     super(props);
     // this.handleInputChange = this.handleInputChange.bind(this);
@@ -40,7 +35,6 @@ class AuthenticationModal extends React.Component {
   handleRegisterClick = event => {
     event.preventDefault();
     // const { registerUserAction } = this.props;
-    console.log('in handleRegisterClick');
     // const { props } = this;
     const { username, email, password, passwordConfirm } = this.state;
     // if (username.length > 0 && validateEmail(email) && password.length >= 6 && password === passwordConfirm) {
@@ -63,20 +57,12 @@ class AuthenticationModal extends React.Component {
   }
 
   render() {
-    // const { user, login, logout } = this.props;
-    // const { props } = this;
-    // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
-    // const { auth, signIn: googleSignIn, signOut: signOutAction, gathering } = this.props;
     const { username, email, password, passwordConfirm } = this.state;
-    // console.log('gathering in Navbar component:', gathering);
-    // const userSignOut = () => signOutAction(gathering);
-    // const userSignOut = () => signOutAction({ auth, gathering });
-    // const userSignOut = () => signOutAction(gathering);
-    // console.log('auth', auth);
-    const { handleInputChange } = this;
+    const { handleInputChange, handleRegisterClick } = this;
 
-    console.log('this.props', this.props);
+    // console.log('this.props', this.props);
     const { registrationError: modalError, message } = this.props.modals;
+    const { closeButtonAction } = this.props;
     const valid = !modalError && typeof modalError !== 'undefined' ? true : undefined;
     const invalid = !!modalError && typeof modalError !== 'undefined' ? true : undefined;
 
@@ -113,8 +99,8 @@ class AuthenticationModal extends React.Component {
         </FormGroup>
         <Row>
           <Col sm={{ size: 9, offset: 3 }} >
-            <Button color="primary" onClick={this.handleRegisterClick}>Register</Button>
-            <Button color="danger" onClick={this.props.closeButtonAction} className="ml-2" data-dismiss="modal">Cancel</Button>
+            <Button color="primary" onClick={handleRegisterClick}>Register</Button>
+            <Button color="danger" onClick={closeButtonAction} className="ml-2" data-dismiss="modal">Cancel</Button>
           </Col>
         </Row> 
       </Form>
@@ -122,38 +108,14 @@ class AuthenticationModal extends React.Component {
   }
 }
 
-// function mapStateToProps({ auth }) {
-//   return { auth };
-// }
-
-
-// AppNavbar.defaultProps = {
-//   auth: {},
-// };
-
-
-// function mapStateToProps({ auth, gathering }) {
-//   return { auth, gathering };
-// }
-
-function mapStateToProps({ modals }) {
-  return { modals };
-}
-
-// AuthenticationModal.defaultProps = {
-//   auth: {},
-// };
-
-AuthenticationModal.propTypes = {
-  // auth: PropTypes.shape({
-  //   displayName: PropTypes.string,
-  //   uid: PropTypes.string,
-  //   photoURL: PropTypes.string,
-  // }),
+RegistrationForm.propTypes = {
+  modals: PropTypes.shape({
+    registrationError: PropTypes.bool,
+    message: PropTypes.string,
+    // authenticationModalOpen: PropTypes.bool.isRequired,
+  }).isRequired,
   closeButtonAction: PropTypes.func.isRequired,
   registerUserAction: PropTypes.func.isRequired,
-  // signOut: PropTypes.func.isRequired,
 };
 
-// export default connect(mapStateToProps, { signIn, signOut })(AuthenticationModal);
-export default connect(mapStateToProps, { registerUserAction, })(AuthenticationModal);
+export default RegistrationForm;

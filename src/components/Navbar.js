@@ -13,116 +13,72 @@ import {
   DropdownItem,
   Button,
 } from 'reactstrap';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Avatar from 'react-avatar';
 
-// import { signIn, signOut } from '../actions/user'; 
-import { signOut } from '../actions/user'; 
-import { toggleAuthenticationModal } from '../actions/modalActions';
 
+const AppNavbar = (props) => {
+  const { auth, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = props;
+  const userSignOut = () => signOutAction({ auth, gathering });
 
-import rpsLogo from '../rpsLogo.png';
-// import userImage from '../img/user.png';
+  const userMenu = auth ? (
+    <UncontrolledDropdown nav className="" inNavbar>
+      <DropdownToggle nav caret>
 
-class AppNavbar extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
-  }
-  toggle() {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  }
-  render() {
-    const { props } = this;
-    // const { auth, signIn: userSignIn, signOut: userSignOut } = this.props;
-    // const { auth, signIn: userSignIn, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = this.props; 
-    const { auth, signOut: signOutAction, gathering, toggleAuthenticationModal: toggleModal } = this.props;
-    // console.log('gathering in Navbar component:', gathering);
-    // const userSignOut = () => signOutAction(gathering);
-    const userSignOut = () => signOutAction({ auth, gathering });
-    // const userSignOut = () => signOutAction(gathering);
-    // const avatar = <Avatar name={auth ? auth.displayName : "xena"} unstyled="true" />;
-    // console.log('auth', auth);
-
-    const userMenu = auth ? (
-      <UncontrolledDropdown nav className="" inNavbar>
-        <DropdownToggle nav caret>
-
-          {/* <img src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="" /> */}
-          {/* <img src={auth.photoURL } width="40" height="40" alt={auth.displayName} /> */}
-          { auth.photoURL ?
-            <Avatar src={auth.photoURL} alt={auth.displayName} className="" size="25" /> :
-            <Avatar name={auth.displayName} color={Avatar.getRandomColor('sitebase', ['green'])} className="" size="25" />
-          }
-        </DropdownToggle>
-        <DropdownMenu right>
-          <DropdownItem onClick={userSignOut}>Log Out {auth.displayName}
-          </DropdownItem>
-          <DropdownItem divider />
-          <DropdownItem disabled>
-            Option 2
-          </DropdownItem>
-          <DropdownItem divider />
-          <DropdownItem disabled>
-            Reset
-          </DropdownItem>
-        </DropdownMenu>
-      </UncontrolledDropdown>
-    ) : (
-      <NavItem>
-        {/* <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink> */}
-        {props.auth ?
-          <Button outline onClick={userSignOut}>Log Out {auth.displayName}</Button>
-          :
-          <Button outline onClick={toggleModal}>Log In/Sign Up</Button>
+        {/* <img src="https://getbootstrap.com/docs/4.1/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="" /> */}
+        {/* <img src={auth.photoURL } width="40" height="40" alt={auth.displayName} /> */}
+        { auth.photoURL ?
+          <Avatar src={auth.photoURL} alt={auth.displayName} className="" size="25" /> :
+          <Avatar name={auth.displayName} color={Avatar.getRandomColor('sitebase', ['green'])} className="" size="25" />
         }
-      </NavItem>
-    );
-
-    return (
-      // <Navbar color="dark" light expand="md" user={user} dark>
-      <Navbar color="dark" light expand="md" dark >
-        <NavbarBrand href="/">
-          <img src={rpsLogo} height="45" alt="Rock Paper Scissors" />
-        </NavbarBrand>
-        <NavbarToggler onClick={this.toggle} />
-        <Collapse isOpen={this.state.isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem className="ml-auto" >
-              <NavLink target="_blank" href="https://github.com/semlak/rock-paper-scissors-firebase-react-redux/">On Github</NavLink>
-            </NavItem>
-            <NavItem className="ml-auto" >
-              <Nav>
-                {userMenu}
-              </Nav>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
-    );
-  }
-}
-
-// function mapStateToProps({ auth }) {
-//   return { auth };
-// }
-
-
-// AppNavbar.defaultProps = {
-//   auth: {},
-// };
-
-
-function mapStateToProps({ auth, gathering }) {
-  return { auth, gathering };
-}
+      </DropdownToggle>
+      <DropdownMenu right>
+        <DropdownItem onClick={userSignOut}>Log Out {auth.displayName}
+        </DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem disabled>
+          Option 2
+        </DropdownItem>
+        <DropdownItem divider />
+        <DropdownItem disabled>
+          Reset
+        </DropdownItem>
+      </DropdownMenu>
+    </UncontrolledDropdown>
+  ) : (
+    <NavItem>
+      {/* <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink> */}
+      {props.auth ?
+        <Button outline onClick={userSignOut}>Log Out {auth.displayName}</Button>
+        :
+        <Button outline onClick={toggleModal}>Log In/Sign Up</Button>
+      }
+    </NavItem>
+  );
+  
+  return (
+    // <Navbar color="dark" light expand="md" user={user} dark>
+    <Navbar color="dark" light expand="md" dark >
+      <NavbarBrand href="/">
+        <img src={props.logo} height="45" alt="Rock Paper Scissors" />
+      </NavbarBrand>
+      <NavbarToggler onClick={props.toggle} />
+      {/* <Collapse isOpen={this.state.isOpen} navbar> */}
+      <Collapse isOpen={props.isOpen} navbar>
+        <Nav className="ml-auto" navbar>
+          <NavItem className="ml-auto" >
+            <NavLink target="_blank" href="https://github.com/semlak/rock-paper-scissors-firebase-react-redux/">On Github</NavLink>
+          </NavItem>
+          <NavItem className="ml-auto" >
+            <Nav>
+              {userMenu}
+            </Nav>
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </Navbar>
+  );
+};
 
 
 AppNavbar.defaultProps = {
@@ -140,5 +96,4 @@ AppNavbar.propTypes = {
   signOut: PropTypes.func.isRequired,
 };
 
-// export default connect(mapStateToProps, { signIn, signOut, toggleAuthenticationModal })(AppNavbar);
-export default connect(mapStateToProps, { signOut, toggleAuthenticationModal })(AppNavbar);
+export default AppNavbar;

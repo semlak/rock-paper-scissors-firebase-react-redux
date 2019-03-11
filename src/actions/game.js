@@ -35,7 +35,8 @@ export const endGame = gameUID => dispatch => {
 export const createEndGameListener = gameRef => dispatch => {
   // console.log('in createEndGameListener');
   // return gameRef.child('gameInProgress').on('value', (snapshot) => {
-  gameRef.child('gameInProgress').on('value', (snapshot) => {
+  // gameRef.child('gameInProgress').on('value', (snapshot) => {
+  gameRef.child('gameInProgress').on('value', () => {
     console.log('received gameInProgress change indicator');
     // dispatch({
     //   type: gameActions.GAME_IN_PROGRESS,
@@ -123,10 +124,10 @@ export const newGameListenerEvent = (myUid, snapshotKey, snapshotVal) => dispatc
   // console.log('in newGameListenerEvent, myUid', myUid, 'snapshotVal', snapshotVal);
   // return GamesRef().on("child_added", (snapshot) => {
   const game = snapshotVal;
-  console.log('detected new game added to GamesRef, myUid:', myUid, 'game:', game);
+  // console.log('detected new game added to GamesRef, myUid:', myUid, 'game:', game);
   // if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1 && game.gameInProgress) {
   if ((game.player1 === myUid || game.player2 === myUid) && myUid.length > 1 && !game.gameClosed) {
-    console.log('new game is my game');
+    // console.log('new game is my game');
     // would like to add a check here or somewhere that prevents me from starting a game if I'm in an existing one.
     const player1Actions = game.player1Actions ? Object.keys(game.player1Actions).map(key => game.player1Actions[key]) : [];
     const player2Actions = game.player2Actions ? Object.keys(game.player2Actions).map(key => game.player2Actions[key]) : [];
@@ -202,7 +203,8 @@ export const createNewGameListener = myUid => dispatch => {
 // };
 
 
-export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => (dispatch) => {
+// export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => (dispatch) => {
+export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => () => {
   // const refString = `${player}Actions`;
   // console.log('creating player action listener', refString);
   // console.log('in updateWithRoundOutcome, gameData:', gameData);
@@ -236,7 +238,7 @@ export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => (dispatch)
       return 1;
     }
   });
-  console.log('wins:', wins);
+  // console.log('wins:', wins);
   const player1Wins = wins.reduce((acc, outcome) => (outcome === 1 ? 1 : 0) + acc, 0);
   const player2Wins = wins.reduce((acc, outcome) => (outcome === 2 ? 1 : 0) + acc, 0);
   const ties = wins.reduce((acc, outcome) => (outcome === 0 ? 1 : 0) + acc, 0);
@@ -247,39 +249,17 @@ export const updateWithRoundOutcome = (gameData, gameKey, gameRef) => (dispatch)
   const round = player1Actions.length + (winner === 0 ? 1 : 0);
   // console.log('ties', ties, 'winner', winner, 'gameInProgress', gameInProgress, 'minNumberOfWins', minNumberOfWins);
   // const gameRef = GamesRef().child(gameKey);
-  if (typeof gameRef === 'undefined') {
-    gameRef = GamesRefChild(gameKey);
-  }
+
+  const gameRefToUse = typeof gameRef === 'undefined' ? GamesRefChild(gameKey) : gameRef;
+  // if (typeof gameRef === 'undefined') {
+  //   gameRef = GamesRefChild(gameKey);
+  // }
   // console.log('gameRef', gameRef);
   // console.log('gameKey', gameKey);
-  gameRef.update({
+  gameRefToUse.update({
     player1Wins, player2Wins, ties, gameInProgress, round, winner,
   });
-  // }).then(() => {
-  //   if (winner > 0) {
-  //     gameRef.once('value', (snapshot) => {
-  //       const gameData1 = snapshot.val();
-  //       dispatch({
-  //         type: gameActions.GAME_UPDATE,
-  //         payload: gameData1,
-  //       });
-  //     });
-  //   }
-  // });
 
-  // return dispatch({
-  //   type: gameActions.ROUND_OUTCOME,
-  //   payload: {
-  //     ...gameData,
-  //     // player1Actions,
-  //     // player2Actions,
-  //     player1Wins,
-  //     player2Wins,
-  //     ties,
-  //     gameInProgress,
-  //     round,
-  //   },
-  // });
 };
 
 export const getRoundOutcome = (GameKey) => (dispatch) => {

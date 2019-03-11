@@ -44,51 +44,21 @@ const signInMain = (providerName) => dispatch => firebase.auth()
     console.log('signIn action error', error);
   });
 
-// export const signIn = () => dispatch => firebase.auth()
-//   .signInWithPopup(googleProvider)
-//   .then(result => {
-//   // .then(() => {
-//     console.log('singIn result', result);
-//     // no need to dispatch auth signer, because then is done using the onAuthStateChanged event listener
-//     dispatch({ type: userActions.SIGNIN_SUCCESSFUL });
-//   })
-//   .catch(error => {
-//     dispatch({ type: userActions.SIGNIN_ERROR, payload: error });
-//     console.log('signIn action error', error);
-//   });
 
 export const signIn = () => dispatch => dispatch(signInMain('google'));
 export const signInWithGithub = () => dispatch => dispatch(signInMain('github'));
 
 
-// testable signOut function
-// handleSignOut() {
-//   if (firebase.auth().currentUser) {
-//     firebase.auth().signOut();
 export const handleSignOut = () => dispatch => {
-// export const handleSignOut = () => {
-  // console.log('running handleSignOut action');
-  // console.log('authref', authRef.toString());
-  // Object.keys(authRef).forEach(key => console.log('authRef key:', key, 'value:', authRef[key] && authRef[key].toString()));
   const authRef = firebase.auth();
-  // console.log('authref', authRef.toString());
-  // Object.keys(authRef).forEach(key => console.log('authRef key:', key, 'value:', authRef[key] && authRef[key].toString()));
-  // if (firebase.auth().currentUser) {
-  //   firebase.auth().signOut();
   if (authRef.currentUser) {
     authRef.signOut()
       .then(() => {
-        // console.log('sign-out successful');
-        // return true;
-        // dispatch({ type: 'SIGNOUT_SUCCESSFUL' });
         dispatch({ type: userActions.SIGNOUT_SUCCESSFUL });
         return Promise.resolve(true);
       })
       .catch(error => {
-        // dispatch({ type: 'SIGNOUT_ERROR' });
-        // dispatch({ type: 'SIGNOUT_ERROR', payload: error });
         dispatch({ type: userActions.SIGNOUT_ERROR, payload: error });
-        // console.log('signOut error', error);
       });
     return Promise.resolve(true);
     // return true;
@@ -103,12 +73,7 @@ export const handleSignOut = () => dispatch => {
 
 // export const signOut = ({ auth: user, gathering }) => dispatch => {
 export const signOut = ({ gathering }) => dispatch => {
-  // dispatch({ type: 'SIGNOUT_REQUEST' });
   dispatch({ type: userActions.SIGNOUT_REQUEST });
-  // export const signOut = () => () => {
-  // console.log('received action request to signOut');
-  // console.log('gathering in signOut action', gathering);
-  // console.log('dispatch in signOut action', dispatch);
   if (gathering && Object.keys(gathering).length > 0 && typeof gathering.leave === 'function') {
     dispatch(leaveGathering(gathering));
     // console.log('executed leaveGathering action, now signing out');
@@ -116,7 +81,6 @@ export const signOut = ({ gathering }) => dispatch => {
   else {
     console.log('not leaving gathering, because it does not appear to be defined');
   }
-  
   // return Promise.resolve(handleSignOut());
   return dispatch(handleSignOut());
 };
@@ -158,19 +122,13 @@ export const registerUserAction = ({ username, email, password }) => dispatch =>
           type: modalActions.MODAL_MESSAGE,
           payload: {
             registrationError: false,
+            loginError: false,
             message: "Registration was successful!",
           }
         });
       });
-      // });
     })
     .catch(err => {
-      // console.log('error on registerUserAction', err);
-      // dispatch({
-      //   type: userActions.EMAIL_PASSWORD_REGISTRATION_FAIL,
-      //   payload: { message: err.message },
-      //   // payload: { username, email, password },
-      // });
       dispatch({
         type: modalActions.MODAL_MESSAGE,
         payload: {
@@ -198,6 +156,7 @@ export const loginUserWithEmailPassword = ({ email, password }) => dispatch => {
         type: modalActions.MODAL_MESSAGE,
         payload: {
           loginError: false,
+          registrationError: false,
           message: 'Login was successful!',
         }
       });

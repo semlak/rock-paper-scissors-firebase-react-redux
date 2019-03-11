@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components App shallow renders without crashing 1`] = `
+<BrowserRouter
+  basename=""
+>
+  <div
+    className="App"
+  >
+    <Connect(AppNavbar) />
+    <Connect(AuthenticationModal) />
+    <div
+      className="container main"
+    >
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/"
+      />
+      <Route
+        component={[Function]}
+        path="/app"
+      />
+    </div>
+  </div>
+</BrowserRouter>
+`;

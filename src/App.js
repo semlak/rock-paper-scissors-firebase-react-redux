@@ -3,24 +3,25 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Main from './pages/Main';
-// import { Navbar, SignIn, requireAuth, AuthenticationModal } from './components';
-import { Navbar, Landing, requireAuth, AuthenticationModal } from './components';
+// import { Navbar, Landing, requireAuth, AuthenticationModal } from './components';
+import { Landing, requireAuth, AuthenticationModal } from './components';
+import { NavbarContainer } from './containers';
 
 import { fetchUser } from './actions/user';
 
-export class UnconnectedApp extends Component {
+export class App extends Component {
   componentDidMount = () => {
     // this.props.fetchUser && typeof this.props.fetchUser === 'function' && this.props.fetchUser();
     this.props.fetchUser();
   }
 
   render() {
-    console.log('rendering App component');
-    console.log(`Your process.env.PUBLIC_URL: '${process.env.PUBLIC_URL}'`);
+    // console.log('rendering App component');
+    // console.log(`Your process.env.PUBLIC_URL: '${process.env.PUBLIC_URL}'`);
     return (
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         <div className="App">
-          <Navbar />
+          <NavbarContainer />
           <AuthenticationModal />
           <div className="container main">
             {/* <Route exact path="/" component={SignIn} /> */}
@@ -34,4 +35,4 @@ export class UnconnectedApp extends Component {
 }
 
 // export default App;
-export default connect(null, { fetchUser })(UnconnectedApp);
+export default connect(null, { fetchUser })(App);

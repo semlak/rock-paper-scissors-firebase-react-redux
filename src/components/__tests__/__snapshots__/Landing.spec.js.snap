@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components Landing should render to match snapshot 1`] = `
+<div>
+  <Row
+    className="social-signin-container"
+    tag="div"
+  >
+    <Col
+      tag="div"
+      widths={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+        ]
+      }
+    >
+      <img
+        alt="Rock Paper Scissors"
+        id="sign-in"
+        src="landing-rps.jpg"
+        width="100%"
+      />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Button
+        className="social-signin"
+        color="secondary"
+        href="/#"
+        onClick={[Function]}
+        tag="button"
+      >
+        Sign in to start
+      </Button>
+    </Col>
+  </Row>
+  <Row
+    className="mt-4 mb-4 text-left"
+    tag="div"
+  >
+    <Col
+      tag="div"
+      widths={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+          "xl",
+        ]
+      }
+    >
+      <Card
+        body={true}
+        color="danger"
+        outline={true}
+        tag="div"
+      >
+        <p>
+          For trying out the game with multiple players, you can use separate logins in separate browsing sessions.
+        </p>
+        <p>
+          You can create your own logins or use the following sample logins (each with password '
+          <samp>
+            password
+          </samp>
+          '):
+        </p>
+        <ul>
+          <li>
+            <samp>
+              harry@hogwarts.co.uk
+            </samp>
+          </li>
+          <li>
+            <samp>
+              ron@hogwarts.co.uk
+            </samp>
+          </li>
+          <li>
+            <samp>
+              hermione@hogwarts.co.uk
+            </samp>
+          </li>
+        </ul>
+      </Card>
+    </Col>
+  </Row>
+</div>
+`;

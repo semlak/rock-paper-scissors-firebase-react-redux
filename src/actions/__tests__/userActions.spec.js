@@ -346,6 +346,7 @@ describe('authenticate action', () => {
             type: modalActions.MODAL_MESSAGE,
             payload: {
               loginError: false,
+              registrationError: false,
               message: 'Login was successful!',
             }
           });
@@ -416,6 +417,7 @@ describe('authenticate action', () => {
             type: modalActions.MODAL_MESSAGE,
             payload: {
               registrationError: false,
+              loginError: false,
               message: 'Registration was successful!',
             }
           });

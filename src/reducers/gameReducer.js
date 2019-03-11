@@ -10,7 +10,7 @@ import gameStatuses from '../gameStatuses';
 
 const getGameStateAfterPlayMade = (state, actionPayload) => {
   // if (actionPayload && actionPayload.status === 'attempted') {
-  console.log('in getGameStateAfterPlayMade, state', state);
+  // console.log('in getGameStateAfterPlayMade, state', state);
   const { gameStatus } = state;
   const newGameStatus = gameStatus === gameStatuses.OPPONENT_PLAY_WAITING_FOR_USER ? gameStatuses.DETERMINING_ROUND_WINNER : gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT;
   const newState = { ...state, gameStatus: newGameStatus, playerPlay: actionPayload.playerAction };
@@ -24,7 +24,7 @@ const getGameStateAfterPlayMade = (state, actionPayload) => {
 
 const getGameStateAfterPlayReceived = (state, actionPayload) => {
   // console.log('in getGameStateAfterPlayReceived, actionPayload', actionPayload);
-  console.log('in getGameStateAfterPlayReceived, state:', state);
+  // console.log('in getGameStateAfterPlayReceived, state:', state);
   // const { gameStatus } = state;
   // const newGameStatus = gameStatus === gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT ? gameStatuses.DETERMINING_ROUND_WINNER : gameStatuses.OPPONENT_PLAY_WAITING_FOR_USER;
   // const newState = { ...state, gameStatus: newGameStatus, playerPlay: actionPayload.playerAction };
@@ -77,7 +77,7 @@ const getGameStateAfterPlayReceived = (state, actionPayload) => {
 // export default (state = { gameStatus: gameStatuses.GAME_STARTED }, action) => {
 export default (state = { gameStatus: gameStatuses.NO_GAME }, action) => {
   if (Object.keys(gameActions).indexOf(action.type) > -1) {
-    console.log('received game action dispatch in gameReducer, state:', state, 'action', action);
+    // console.log('received game action dispatch in gameReducer, state:', state, 'action', action);
   }
   switch (action.type) {
     // case GAME_CREATED:
@@ -108,10 +108,10 @@ export default (state = { gameStatus: gameStatuses.NO_GAME }, action) => {
       // const newRound = action.payload.player1Actions.length + 1
       return { ...state, gameData: { ...action.payload, round: newRound }, gameStatus: gameStatuses.WAITING_FOR_BOTH_PLAYERS };
     case gameActions.GAME_UPDATE:
-      console.log('in reducer GAME_UPDATE, action.payload', action.payload);
+      // console.log('in reducer GAME_UPDATE, action.payload', action.payload);
       return { ...state, gameData: action.payload, gameStatus: action.payload && action.payload.gameInProgress ? gameStatuses.WAITING_FOR_BOTH_PLAYERS : gameStatuses.GAME_ENDED };
     case gameActions.GAME_IN_PROGRESS:
-      console.log('in reducer GAME_IN_PROGRESS, action.payload', action.payload);
+      // console.log('in reducer GAME_IN_PROGRESS, action.payload', action.payload);
       return { ...state, gameData: { ...state.gameData, gameInProgress: action.payload, }, gameStatus: !action.payload ? gameStatuses.GAME_ENDED : state.gameStatus };
     default:
       return state;

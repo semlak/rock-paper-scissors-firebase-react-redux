@@ -1,7 +1,6 @@
 import Game from './Game';
 import Navbar from './Navbar';
 import requireAuth from './requireAuth';
-import SignIn from './SignIn';
 import PlayerList from './PlayerList';
 import AuthenticationModal from './AuthenticationModal';
 import LoginForm from './LoginForm';
@@ -12,7 +11,6 @@ export {
   Game,
   Navbar,
   requireAuth,
-  SignIn,
   PlayerList,
   AuthenticationModal,
   LoginForm,
