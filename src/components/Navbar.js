@@ -33,16 +33,11 @@ const AppNavbar = (props) => {
         }
       </DropdownToggle>
       <DropdownMenu right>
-        <DropdownItem onClick={userSignOut}>Log Out {auth.displayName}
-        </DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem disabled>
-          Option 2
-        </DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem disabled>
-          Reset
-        </DropdownItem>
+        <DropdownItem onClick={userSignOut}>Log Out {auth.displayName}</DropdownItem>
+        {/* <DropdownItem divider />                       */}
+        {/* <DropdownItem disabled>Option 2</DropdownItem> */}
+        {/* <DropdownItem divider />                       */}
+        {/* <DropdownItem disabled>Reset</DropdownItem>    */}
       </DropdownMenu>
     </UncontrolledDropdown>
   ) : (

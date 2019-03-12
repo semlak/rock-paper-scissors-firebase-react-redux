@@ -57,7 +57,9 @@ class Main extends Component {
         <CardBody className="">
           { game && Object.keys(game).length > 1 && game.gameKey && game.gameKey.length > 1 ?
             <Game gameUID={game.key} /> :
-            !players || players.length < 0 ? <div>Loading</div> : <PlayerList players="players" selectPlayer={this.selectPlayer} /> }
+            !players || players.length < 0 ?
+              <div>Loading...</div> :
+              <PlayerList players="players" selectPlayer={this.selectPlayer} /> }
         </CardBody>
         {/* <CardFooter className="card-footer">{appStatus || ' '}</CardFooter> */}
         {/* </Card> */}

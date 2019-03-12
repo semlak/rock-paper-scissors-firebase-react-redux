@@ -38,7 +38,6 @@ const sampleGameKey = '-LVEt37BYdH4eSgrRlPG';
 const badGameKey = '-lkajdsfkljasdkflj';
 
 
-
 const sampleUser = {
   displayName: "Artie",
   email: "artie@blah.edu",
@@ -331,33 +330,31 @@ const sampleTieRoundOutcomeData1Result = {
 };
 
 
-
-
 // player 1 wins in 3 rounds
-const sampleFinalRoundOutcomeData2 = {
-  ...sampleGameReceived,
-  player1Actions: ['rock', 'paper', 'scissors'],
-  player2Actions: ['scissors', 'rock', 'paper'],
-  player1Wins: 3,
-  player2Wins: 0,
-  round: 3,
-  gameInProgress: true,
-};
+// const sampleFinalRoundOutcomeData2 = {
+//   ...sampleGameReceived,
+//   player1Actions: ['rock', 'paper', 'scissors'],
+//   player2Actions: ['scissors', 'rock', 'paper'],
+//   player1Wins: 3,
+//   player2Wins: 0,
+//   round: 3,
+//   gameInProgress: true,
+// };
 
 
 // player 1 wins in 7 rounds
-const sampleFinalRoundOutcomeData3 = {
-  ...sampleGameReceived,
-  player1Actions: ['rock', 'paper', 'scissors', 'rock', 'rock', 'paper', 'scissors'],
-  player2Actions: ['scissors', 'scissors', 'rock', 'rock', 'scissors', 'rock', 'paper'],
-  player1Wins: 2,
-  player2Wins: 4,
-  ties: 1,
-  round: 7,
-  gameInProgress: true,
-};
+// const sampleFinalRoundOutcomeData3 = {
+//   ...sampleGameReceived,
+//   player1Actions: ['rock', 'paper', 'scissors', 'rock', 'rock', 'paper', 'scissors'],
+//   player2Actions: ['scissors', 'scissors', 'rock', 'rock', 'scissors', 'rock', 'paper'],
+//   player1Wins: 2,
+//   player2Wins: 4,
+//   ties: 1,
+//   round: 7,
+//   gameInProgress: true,
+// };
 
-var mockFirebaseRef = (dbRef) => ({
+const mockFirebaseRef = (dbRef) => ({
   signOut: jest.fn(() => Promise.resolve(true)),
   on: jest.fn(),
   currentUser: true,
@@ -396,7 +393,8 @@ var mockFirebaseRef = (dbRef) => ({
     // console.log('called mockFirebasRef.update, obj:', obj, 'dbRef:', dbRef);
   }),
   // child1: jest.fn((ref) => mockFirebaseRef(ref)),
-  ref: jest.fn((ref) => mockFirebaseRef(ref)),
+  // ref: jest.fn((ref) => mockFirebaseRef(ref)),
+  ref: jest.fn((ref) => this(ref)),
 });
 
 const firebaseDatabaseMock = () => jest.fn().mockReturnValue({

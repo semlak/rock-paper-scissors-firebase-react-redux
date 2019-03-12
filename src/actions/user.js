@@ -16,12 +16,21 @@ export const fetchUser = () => dispatch => firebase.auth().onAuthStateChanged(us
       type: userActions.FETCH_USER,
       payload: user
     });
-    dispatch({
+    setTimeout(() => dispatch({
       type: modalActions.CLOSE_AUTHENTICATION_MODAL,
       payload: {
+        // loginError: false,
+        // registrationError: false,
         loginError: undefined,
+        registrationError: undefined,
       }
-    });
+    }), 1600);
+    // dispatch({
+    //   type: modalActions.CLOSE_AUTHENTICATION_MODAL,
+    //   payload: {
+    //     loginError: undefined,
+    //   }
+    // });
   }
   else {
     dispatch({
@@ -160,12 +169,12 @@ export const loginUserWithEmailPassword = ({ email, password }) => dispatch => {
           message: 'Login was successful!',
         }
       });
-      setTimeout(() => dispatch({
-        type: modalActions.CLOSE_AUTHENTICATION_MODAL,
-        payload: {
-          loginError: undefined,
-        }
-      }), 1600);
+      // setTimeout(() => dispatch({
+      //   type: modalActions.CLOSE_AUTHENTICATION_MODAL,
+      //   payload: {
+      //     loginError: undefined,
+      //   }
+      // }), 1600);
     })
     .catch((err) => {
       // console.log('error on loginUserWithEmailPassword', err);

@@ -109,7 +109,8 @@ class LoginForm extends React.Component {
           <Label for="email" sm={3} >Email</Label>
           <Col sm={9}>
             <Input valid={validEmail} invalid={invalidEmail} type="email" name="email" value={email} placeholder="Email" onChange={handleInputChange} />
-            <FormFeedback valid={validEmail} invalid={typeof invalidEmail !== 'undefined' ? 'false' : undefined} >{loginUsernameMessage}</FormFeedback>
+            {/* <FormFeedback valid={validEmail} invalid={typeof invalidEmail !== 'undefined' ? 'false' : undefined} >{loginUsernameMessage}</FormFeedback> */}
+            <FormFeedback>{loginUsernameMessage}</FormFeedback>
           </Col>
         </FormGroup>
         <FormGroup row >
@@ -118,8 +119,9 @@ class LoginForm extends React.Component {
             {/* <Input valid={valid} invalid={invalid} type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} /> */}
             <Input valid={validPass} invalid={invalidPass} type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} />
             {/* <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback> */}
-            <FormFeedback valid={!loginPasswordError} invalid={typeof loginPassswordMessage !== 'undefined' ? 'false' : undefined} >{loginPasswordMessage}</FormFeedback>
-            <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback>
+            {/* <FormFeedback valid={!loginPasswordError} invalid={typeof loginPassswordMessage !== 'undefined' ? 'false' : undefined} >{loginPasswordMessage}</FormFeedback> */}
+            {/* <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback> */}
+            <FormFeedback>{message || loginPasswordMessage}</FormFeedback>
           </Col>
           {/* <FormFeedback valid={modalError}>Logging in. Please wait...</FormFeedback> */}
         </FormGroup>

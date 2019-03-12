@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 import reducers from './reducers';
-import './index.css';
+import './css/bootstrap.min.css';
+import './css/index.css';
 import App from './App';
 
 // import * as serviceWorker from './serviceWorker';

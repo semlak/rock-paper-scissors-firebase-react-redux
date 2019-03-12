@@ -27,3 +27,4 @@ yarn-error.log*
 # firebase config
 src/config/firebase.js
 .firebase
+Session.vim
