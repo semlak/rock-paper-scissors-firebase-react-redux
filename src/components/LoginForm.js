@@ -119,9 +119,9 @@ class LoginForm extends React.Component {
             {/* <Input valid={valid} invalid={invalid} type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} /> */}
             <Input valid={validPass} invalid={invalidPass} type="password" name="password" value={password} placeholder="password" onChange={handleInputChange} />
             {/* <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback> */}
-            {/* <FormFeedback valid={!loginPasswordError} invalid={typeof loginPassswordMessage !== 'undefined' ? 'false' : undefined} >{loginPasswordMessage}</FormFeedback> */}
-            {/* <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback> */}
-            <FormFeedback>{message || loginPasswordMessage}</FormFeedback>
+            <FormFeedback valid={!loginPasswordError} invalid={typeof loginPassswordMessage !== 'undefined' ? 'false' : undefined} >{loginPasswordMessage}</FormFeedback>
+            <FormFeedback valid={valid} invalid={typeof invalid !== 'undefined' ? 'false' : undefined} >{message}</FormFeedback>
+            {/* <FormFeedback>{message || loginPasswordMessage}</FormFeedback> */}
           </Col>
           {/* <FormFeedback valid={modalError}>Logging in. Please wait...</FormFeedback> */}
         </FormGroup>
