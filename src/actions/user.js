@@ -121,6 +121,7 @@ export const registerUserAction = ({ username, email, password }) => dispatch =>
           type: modalActions.CLOSE_AUTHENTICATION_MODAL,
           payload: {
             registrationError: undefined,
+            loginError: undefined,
           }
         }), 2000);
         dispatch({
@@ -164,17 +165,20 @@ export const loginUserWithEmailPassword = ({ email, password }) => dispatch => {
       dispatch({
         type: modalActions.MODAL_MESSAGE,
         payload: {
+          // loginError: undefined,
+          // registrationError: undefined,
           loginError: false,
           registrationError: false,
           message: 'Login was successful!',
         }
       });
-      // setTimeout(() => dispatch({
-      //   type: modalActions.CLOSE_AUTHENTICATION_MODAL,
-      //   payload: {
-      //     loginError: undefined,
-      //   }
-      // }), 1600);
+      setTimeout(() => dispatch({
+        type: modalActions.CLOSE_AUTHENTICATION_MODAL,
+        payload: {
+          loginError: undefined,
+          registrationError: undefined,
+        }
+      }), 1600);
     })
     .catch((err) => {
       // console.log('error on loginUserWithEmailPassword', err);

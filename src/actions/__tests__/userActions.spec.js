@@ -347,11 +347,14 @@ describe('authenticate action', () => {
             payload: {
               loginError: false,
               registrationError: false,
+              // loginError: undefined,
+              // registrationError: undefined,
               message: 'Login was successful!',
             }
           });
           jest.runAllTimers();
-          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { loginError: undefined } });
+          // expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { loginError: undefined } });
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { loginError: undefined, registrationError: undefined } });
         })
         .catch(err => expect(err).toBeFalsy());
     });
@@ -412,10 +415,13 @@ describe('authenticate action', () => {
         .dispatch(registerUserAction(fakeCredetials))
         .then(() => {
           expect(store.getActions()).toContainEqual({ type: userActions.EMAIL_PASSWORD_REGISTRATION_SUCCESS });
-          expect(store.getActions()).not.toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+          // expect(store.getActions()).not.toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+          expect(store.getActions()).not.toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined, loginError: undefined } });
           expect(store.getActions()).toContainEqual({
             type: modalActions.MODAL_MESSAGE,
             payload: {
+              // registrationError: undefined,
+              // loginError: undefined,
               registrationError: false,
               loginError: false,
               message: 'Registration was successful!',
@@ -425,7 +431,8 @@ describe('authenticate action', () => {
           expect(firebase.auth().currentUser.updateProfile).toHaveBeenCalled();
 
           jest.runAllTimers();
-          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+          // expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined } });
+          expect(store.getActions()).toContainEqual({ type: modalActions.CLOSE_AUTHENTICATION_MODAL, payload: { registrationError: undefined, loginError: undefined } });
 
         })
         .catch(err => expect(err).toBeFalsy());
