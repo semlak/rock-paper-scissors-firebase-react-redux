@@ -6,6 +6,7 @@ import AuthenticationModal from './AuthenticationModal';
 import LoginForm from './LoginForm';
 import RegistrationForm from './RegistrationForm';
 import Landing from './Landing';
+import Chat from './Chat';
 
 export {
   Game,
@@ -16,4 +17,5 @@ export {
   LoginForm,
   RegistrationForm,
   Landing,
+  Chat,
 };

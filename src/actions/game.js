@@ -346,6 +346,7 @@ export const requestGame = (user, otherPlayer) => dispatch => {
       gameClosed: false,
       winner: 0,
       round: 1,
+      timestamp: firebase.database.ServerValue.TIMESTAMP,
     };
     // console.log('GamesRef():', GamesRef().toString());
     // Object.keys(GamesRef()).forEach(key => console.log('GamesRef key:', key, 'value:', GamesRef()[key] && GamesRef()[key].toString()));

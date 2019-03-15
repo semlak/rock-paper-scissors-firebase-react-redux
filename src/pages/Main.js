@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
   // Button,
-  // Card,
-  CardBody,
+  Card,
+  // CardBody,
   // CardTitle,
   // CardText,
   // CardFooter,
@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 
 import { joinGathering, } from '../actions/gatheringActions';
 import { requestGame } from '../actions/game';
-import { PlayerList, Game } from '../components';
+import { PlayerList, Game, Chat } from '../components';
 
 class Main extends Component {
   // const { users, selectUser } = props;
@@ -47,6 +47,8 @@ class Main extends Component {
     // const { appStatus, appHeaderText, game } = this.props;
     const { game } = this.props;
     const players = this.props.players && Array.isArray(this.props.players) ? this.props.players : [];
+    const inGame = game && Object.keys(game).length > 1 && game.gameKey && game.gameKey.length > 1;
+    const havePlayers = players && players.length > 1;
     // console.log('rendering main');
 
     // console.log('players', players, 'this.props', this.props);
@@ -54,13 +56,16 @@ class Main extends Component {
       <div id="main" style={{ display: "block" }} >
         {/* <Card className="border-info " id="main" style={{ display: "block" }} > */}
         {/* <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader> */}
-        <CardBody className="">
-          { game && Object.keys(game).length > 1 && game.gameKey && game.gameKey.length > 1 ?
+        <Card className="mt-2">
+          { inGame ?
             <Game gameUID={game.key} /> :
-            !players || players.length < 0 ?
+            !havePlayers ?
               <div>Loading...</div> :
-              <PlayerList players="players" selectPlayer={this.selectPlayer} /> }
-        </CardBody>
+              <PlayerList players="players" selectPlayer={this.selectPlayer} />
+          }
+        </Card>
+
+        { inGame ? <Chat /> : "" }
         {/* <CardFooter className="card-footer">{appStatus || ' '}</CardFooter> */}
         {/* </Card> */}
       </div>

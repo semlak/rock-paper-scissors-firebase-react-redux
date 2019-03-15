@@ -46,7 +46,7 @@ export class Landing extends Component {
         </Row>
         <Row className="mt-4 mb-4 text-left">
           <Col >
-            <Card body outline color="danger">
+            <Card body outline color="danger" className="bs-callout bs-callout-danger">
               <p>For trying out the game with multiple players, you can use separate logins in separate browsing sessions.</p>
               <p>You can create your own logins or use the following sample logins (each with password &apos;<samp>password</samp>&apos;):</p>
               <ul>
