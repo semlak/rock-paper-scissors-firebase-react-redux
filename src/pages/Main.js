@@ -59,7 +59,7 @@ class Main extends Component {
       // <div id="main" style={{ display: "block" }} >
       // <Card className="border-info " id="main" style={{ display: "block" }} >
       // <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader>
-      <Container>
+      <Container className="mt-3">
         { inGame ?
           <Row>
             <Col lg={4} md={12} className="mb-10 pb-10">

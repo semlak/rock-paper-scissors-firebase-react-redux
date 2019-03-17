@@ -163,26 +163,26 @@ class Game extends Component {
     const activeCardBody = (
       <CardBody className="">
         <Row>
-          <Col xl={6} lg={8} md={6} className="text-right">Your Opponent:</Col>
+          <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Your Opponent:</Col>
           <Col className="text-left">{opponentName}</Col>
         </Row>
         <Row>
-          <Col xl={6} lg={8} md={6} className="text-right">Round Number:</Col>
+          <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Round Number:</Col>
           <Col className="text-left "><Badge color="secondary">{round}</Badge></Col>
         </Row>
 
         <Row>
-          <Col xl={6} lg={8} md={6} className="text-right">Your Wins:</Col>
+          <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Your Wins:</Col>
           {/* <Col className="text-left">{loadingMessage === 'You Won!' ? <Bounce>{myWins}</Bounce> : myWins}</Col> */}
           <Col className="text-left"><Badge>{myWins}</Badge></Col>
           {/* <Col className="text-left"><Bounce><Badge>{myWins}</Badge></Bounce></Col> */}
         </Row>
         <Row>
-          <Col xl={6} lg={8} md={6} className="text-right">Opponent Wins:</Col>
+          <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Opponent Wins:</Col>
           <Col className="text-left"><Badge>{opponentWins}</Badge></Col>
         </Row>
         <Row className="mb-2">
-          <Col xl={6} lg={8} md={6} className="text-right">Ties:</Col>
+          <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Ties:</Col>
           <Col className="text-left"><Badge>{ties}</Badge></Col>
         </Row>
 
@@ -190,7 +190,7 @@ class Game extends Component {
         {/*     <>                                                    */}
         <Button color="primary" className="mr-2 game-action" onClick={this.play} value="rock" disabled={!playEnabled}> Rock </Button>
         <Button color="primary" className="mr-2 game-action" onClick={this.play} value="paper" disabled={!playEnabled}> Paper </Button>
-        <Button color="primary" className="mr-2 game-action" onClick={this.play} value="scissors" disabled={!playEnabled}> Scissors </Button>
+        <Button color="primary" className="game-action" onClick={this.play} value="scissors" disabled={!playEnabled}> Scissors </Button>
         <br />
         <br />
         {/*     </> */}
