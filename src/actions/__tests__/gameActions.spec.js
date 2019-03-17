@@ -395,6 +395,9 @@ const mockFirebaseRef = (dbRef) => ({
   // child1: jest.fn((ref) => mockFirebaseRef(ref)),
   // ref: jest.fn((ref) => mockFirebaseRef(ref)),
   ref: jest.fn((ref) => this(ref)),
+  // ServerValue: {
+  //   TIMESTAMP: 1552603967218,
+  // },
 });
 
 const firebaseDatabaseMock = () => jest.fn().mockReturnValue({
@@ -403,6 +406,9 @@ const firebaseDatabaseMock = () => jest.fn().mockReturnValue({
   signOut: jest.fn(() => Promise.resolve(true)),
   // recurrsive ref
   ref: jest.fn((dbRef) => mockFireBaseRef(dbRef)),
+  // ServerValue: {
+  //   TIMESTAMP: 1552603967218,
+  // },
 });
 
 const mockOn = () => jest.fn();
@@ -437,6 +443,10 @@ const createDatabaseSpy = () => jest.spyOn(firebase, 'database').mockImplementat
   currentUser: true,
   signOut: jest.fn(() => Promise.resolve(true)),
   ref: jest.fn((dbRef) => mockFirebaseRef(dbRef)),
+  ServerValue: {
+    TIMESTAMP: 1552603967218,
+  },
+
   // ref1: jest.fn((dbRef) => ({
   //   // on: jest.fn().mockReturnValue((onRef) => {
   //   // on: jest.fn((onRef) => {

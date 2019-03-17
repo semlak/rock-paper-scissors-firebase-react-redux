@@ -53,7 +53,7 @@ const AppNavbar = (props) => {
   
   return (
     // <Navbar color="dark" light expand="md" user={user} dark>
-    <Navbar color="dark" light expand="md" dark >
+    <Navbar color="dark" light expand="md" dark className="sticky-top" >
       <NavbarBrand href="/">
         <img src={props.logo} height="45" alt="Rock Paper Scissors" />
       </NavbarBrand>

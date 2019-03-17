@@ -106,14 +106,14 @@ class Game extends Component {
       this.props.makePlay(gameKey, player1or2, myUID, playerAction);
     }
     else {
-      console.log('invalid playerAction or playerinfo', playerAction, player1or2);
+      // console.log('invalid playerAction or playerinfo', playerAction, player1or2);
     }
   }
 
   endCurrentGame = () => {
-    console.log('ending current game');
+    // console.log('ending current game');
     if (this.props.endGame && this.props.gameUID) {
-      console.log('creating endGame action');
+      // console.log('creating endGame action');
       this.props.endGame(this.props.gameUID);
     }
   }
@@ -137,7 +137,7 @@ class Game extends Component {
     const { gameStatus, } = this.props.game;
     const { gameInProgress, round } = this.props.game.gameData;
     const playEnabled = gameInProgress && gameStatus !== gameStatuses.PLAY_MADE_WAITING_FOR_OPPONENT && gameStatus !== gameStatuses.DETERMINING_ROUND_WINNER;
-    console.log('gameInProgress', gameInProgress, 'gameStatus', gameStatus);
+    // console.log('gameInProgress', gameInProgress, 'gameStatus', gameStatus);
     // const playEnabled = true;
 
 
@@ -163,26 +163,26 @@ class Game extends Component {
     const activeCardBody = (
       <CardBody className="">
         <Row>
-          <Col className="text-right">Your Opponent:</Col>
+          <Col xl={6} lg={8} md={6} className="text-right">Your Opponent:</Col>
           <Col className="text-left">{opponentName}</Col>
         </Row>
         <Row>
-          <Col className="text-right">Round Number:</Col>
+          <Col xl={6} lg={8} md={6} className="text-right">Round Number:</Col>
           <Col className="text-left "><Badge color="secondary">{round}</Badge></Col>
         </Row>
 
         <Row>
-          <Col className="text-right">Your Wins:</Col>
+          <Col xl={6} lg={8} md={6} className="text-right">Your Wins:</Col>
           {/* <Col className="text-left">{loadingMessage === 'You Won!' ? <Bounce>{myWins}</Bounce> : myWins}</Col> */}
           <Col className="text-left"><Badge>{myWins}</Badge></Col>
           {/* <Col className="text-left"><Bounce><Badge>{myWins}</Badge></Bounce></Col> */}
         </Row>
         <Row>
-          <Col className="text-right">Opponent Wins:</Col>
+          <Col xl={6} lg={8} md={6} className="text-right">Opponent Wins:</Col>
           <Col className="text-left"><Badge>{opponentWins}</Badge></Col>
         </Row>
         <Row className="mb-2">
-          <Col className="text-right">Ties:</Col>
+          <Col xl={6} lg={8} md={6} className="text-right">Ties:</Col>
           <Col className="text-left"><Badge>{ties}</Badge></Col>
         </Row>
 
@@ -202,7 +202,7 @@ class Game extends Component {
 
 
     return (
-      <Card className="border-success game" style={{ display: "block" }} >
+      <Card className="border-success game" >
         <CardHeader className="text-white bg-success bg">
           Your Active Game
         </CardHeader>

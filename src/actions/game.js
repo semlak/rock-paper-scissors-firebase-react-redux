@@ -37,7 +37,7 @@ export const createEndGameListener = gameRef => dispatch => {
   // return gameRef.child('gameInProgress').on('value', (snapshot) => {
   // gameRef.child('gameInProgress').on('value', (snapshot) => {
   gameRef.child('gameInProgress').on('value', () => {
-    console.log('received gameInProgress change indicator');
+    // console.log('received gameInProgress change indicator');
     // dispatch({
     //   type: gameActions.GAME_IN_PROGRESS,
     //   payload: snapshot.val(),
@@ -52,7 +52,7 @@ export const createEndGameListener = gameRef => dispatch => {
   });
 
   return gameRef.child('gameClosed').on('value', (snapshot) => {
-    console.log('received endGame indicator from firebase, snapshot.val()', snapshot.val());
+    // console.log('received endGame indicator from firebase, snapshot.val()', snapshot.val());
     // if (snapshot.val() == null || !snapshot.val()) {
     if (snapshot.val() == null || snapshot.val() === true) {
       const gameUID = gameRef.key;
@@ -89,12 +89,12 @@ const createPlayerActionListener = (gameRef, player) => dispatch => {
   const refString = `${player}Actions`;
   // console.log('creating player action listener', refString);
   return gameRef.child(refString).on('value', (snapshot) => {
-    console.log('received updated on player action, snapshot.val()', snapshot.val());
+    // console.log('received updated on player action, snapshot.val()', snapshot.val());
     const plays = snapshot.val();
     const playerActions = plays && Object.keys(plays).length > 0 ? Object.keys(plays).map(key => plays[key]) : [];
     // if (play && Object.keys(play).length === 1) {
     if (playerActions.length > 0) {
-      console.log('playerActions for player', player, playerActions);
+      // console.log('playerActions for player', player, playerActions);
       dispatch({
         type: gameActions.PLAY_RECEIVED,
         payload: { player, playerActions }
@@ -107,9 +107,9 @@ const createRoundUpdateListener = (gameRef) => dispatch => {
 
   // console.log('creating player action listener', refString);
   return gameRef.child('round').on('value', () => {
-    console.log('createRoundUpdateListener listener triggered');
+    // console.log('createRoundUpdateListener listener triggered');
     return gameRef.once('value', (snapshot) => {
-      console.log('createRoundUpdateListener game snapshot', snapshot.val());
+      // console.log('createRoundUpdateListener game snapshot', snapshot.val());
       const gameData = snapshot.val();
       dispatch({
         type: gameActions.GAME_UPDATE,
@@ -346,7 +346,7 @@ export const requestGame = (user, otherPlayer) => dispatch => {
       gameClosed: false,
       winner: 0,
       round: 1,
-      timestamp: firebase.database.ServerValue.TIMESTAMP,
+      timestamp: firebase.database.ServerValue && firebase.database.ServerValue.TIMESTAMP,
     };
     // console.log('GamesRef():', GamesRef().toString());
     // Object.keys(GamesRef()).forEach(key => console.log('GamesRef key:', key, 'value:', GamesRef()[key] && GamesRef()[key].toString()));
@@ -362,12 +362,12 @@ export const requestGame = (user, otherPlayer) => dispatch => {
       // });
       })
       .catch(err => {
-        console.log('error when creating new game', err);
+        // console.log('error when creating new game', err);
         return Promise.reject(err);
       });
   }
   else {
-    console.log('not creating new game');
+    // console.log('not creating new game');
     return Promise.reject(new Error('not creating new game'));
   }
 };

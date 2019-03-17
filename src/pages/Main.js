@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import {
   // Button,
-  Card,
+  // Card,
+  Row,
+  Col,
+  Container,
   // CardBody,
   // CardTitle,
   // CardText,
@@ -53,22 +56,29 @@ class Main extends Component {
 
     // console.log('players', players, 'this.props', this.props);
     return (
-      <div id="main" style={{ display: "block" }} >
-        {/* <Card className="border-info " id="main" style={{ display: "block" }} > */}
-        {/* <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader> */}
-        <Card className="mt-2">
-          { inGame ?
-            <Game gameUID={game.key} /> :
-            !havePlayers ?
-              <div>Loading...</div> :
-              <PlayerList players="players" selectPlayer={this.selectPlayer} />
-          }
-        </Card>
+      // <div id="main" style={{ display: "block" }} >
+      // <Card className="border-info " id="main" style={{ display: "block" }} >
+      // <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader>
+      <Container>
+        { inGame ?
+          <Row>
+            <Col lg={4} md={12} className="mb-10 pb-10">
+              <Game gameUID={game.key} className="mb-5" />
+            </Col>
+            <Col lg={8} md={12}>
+              <Chat />
+            </Col>
+          </Row> :
+          !havePlayers ?
+            <div>Loading...</div> :
+            <PlayerList players="players" selectPlayer={this.selectPlayer} />
+        }
+      </Container>
 
-        { inGame ? <Chat /> : "" }
-        {/* <CardFooter className="card-footer">{appStatus || ' '}</CardFooter> */}
-        {/* </Card> */}
-      </div>
+      // { inGame ? <Chat /> : "" }
+      // <CardFooter className="card-footer">{appStatus || ' '}</CardFooter>
+      // </Card>
+      // </div>
     );
   }
 }

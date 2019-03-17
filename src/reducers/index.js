@@ -5,6 +5,7 @@ import auth from './authReducer';
 import gathering from './gatheringReducer';
 import game from './gameReducer';
 import modals from './modalsReducer';
+import chat from './chatReducer';
 
 export default combineReducers({
   // data,
@@ -12,4 +13,5 @@ export default combineReducers({
   gathering,
   game,
   modals,
+  chat,
 });

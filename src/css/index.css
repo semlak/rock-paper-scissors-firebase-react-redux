@@ -116,7 +116,6 @@ code {
     color: #d9534f;
 }
 
-
-
-
-
+.card.game {
+  margin-bottom: 20px;
+}
