@@ -119,3 +119,10 @@ code {
 .card.game {
   margin-bottom: 20px;
 }
+
+.main {
+  margin: 2rem auto;
+  width: 90%;
+  /* margin-left: 10 */
+  
+}

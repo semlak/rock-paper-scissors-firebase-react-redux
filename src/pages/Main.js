@@ -59,13 +59,13 @@ class Main extends Component {
       // <div id="main" style={{ display: "block" }} >
       // <Card className="border-info " id="main" style={{ display: "block" }} >
       // <CardHeader className="text-white bg-info">{appHeaderText || ' '}</CardHeader>
-      <Container className="mt-3">
+      <div>
         { inGame ?
           <Row>
-            <Col lg={4} md={12} className="mb-10 pb-10">
-              <Game gameUID={game.key} className="mb-5" />
+            <Col lg={5} md={12}>
+              <Game gameUID={game.key} />
             </Col>
-            <Col lg={8} md={12}>
+            <Col lg={7} md={12}>
               <Chat />
             </Col>
           </Row> :
@@ -73,7 +73,7 @@ class Main extends Component {
             <div>Loading...</div> :
             <PlayerList players="players" selectPlayer={this.selectPlayer} />
         }
-      </Container>
+      </div>
 
       // { inGame ? <Chat /> : "" }
       // <CardFooter className="card-footer">{appStatus || ' '}</CardFooter>

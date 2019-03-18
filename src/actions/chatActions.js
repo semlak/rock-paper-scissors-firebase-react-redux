@@ -76,10 +76,11 @@ export const sendMessageFull = ({ message, gameUID, playerUID }) => (dispatch) =
 };
 
 export const updateStatus = ({ userIsTyping, userUID, gameUID }) => dispatch => {
-  console.log('userIsTyping', userIsTyping, 'userUID', userUID, 'gameUID', gameUID);
-  sendStatusChange({ userIsTyping, userUID, gameUID }).then(() => {
-    dispatch(updatePlayerStatus({ userIsTyping }));
-  });
+  // console.log('userIsTyping', userIsTyping, 'userUID', userUID, 'gameUID', gameUID);
+  dispatch(updatePlayerStatus({ userIsTyping }));
+  sendStatusChange({ userIsTyping, userUID, gameUID });
+  // sendStatusChange({ userIsTyping, userUID, gameUID }).then(() => {
+  // });
 };
 
 export const createChatUpdateListeners = ({ gameUID, opponentUID, }) => dispatch => {
@@ -89,11 +90,16 @@ export const createChatUpdateListeners = ({ gameUID, opponentUID, }) => dispatch
     // console.log('received chat messages update, snapshot:', snapshot.val());
     dispatch(updateMessages(snapshot.val()));
   });
-  console.log('opponentUID listening for', opponentUID);
+  // console.log('opponentUID listening for', opponentUID);
   GamesRefChild(`${gameUID}/chat/statuses/${opponentUID}`).on('value', (snapshot) => {
-    console.log('received opponent chat status update, snapshot:', snapshot.val());
-    const { isTyping: opponentIsTyping } = snapshot.val();
-    dispatch(updateOpponentStatus({ opponentIsTyping }));
+    // console.log('received opponent chat status update, snapshot:', snapshot.val());
+    if (snapshot.val() != null) {
+      const { isTyping: opponentIsTyping } = snapshot.val();
+      dispatch(updateOpponentStatus({ opponentIsTyping }));
+    }
+    else {
+      dispatch(updateOpponentStatus({ opponentIsTyping: false }));
+    }
   });
 
 };

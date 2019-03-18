@@ -164,7 +164,7 @@ class Game extends Component {
       <CardBody className="">
         <Row>
           <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Your Opponent:</Col>
-          <Col className="text-left">{opponentName}</Col>
+          <Col xl={6} lg={4} md={6} sm={6} xs={6} className="text-left">{opponentName}</Col>
         </Row>
         <Row>
           <Col xl={6} lg={8} md={6} sm={6} xs={6} className="text-right">Round Number:</Col>

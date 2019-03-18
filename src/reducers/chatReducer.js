@@ -16,7 +16,7 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   // console.log('in auth reducer, state:', state, 'action:', action);
-  // if (Object.keys(userActions).indexOf(action.type) > -1) {
+  // if (Object.keys(chatActions).indexOf(action.type) > -1) {
   //   console.log('in auth reducer, state:', state, 'action:', action);
   // }
   switch (action.type) {
@@ -24,6 +24,8 @@ export default (state = defaultState, action) => {
       return { ...state, messages: action.payload.messages };
     case chatActions.OPPONENT_IS_TYPING:
       return { ...state, opponentStatus: { ...state.opponentStatus, isTyping: action.payload } };
+    case chatActions.USER_IS_TYPING:
+      return { ...state, userStatus: { ...state.userStatus, isTyping: action.payload } };
     case chatActions.SEND_MESSAGE:
       return { ...state, sendingMessage: !!(action.payload && action.payload.message) };
     default:
