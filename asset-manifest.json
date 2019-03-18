@@ -1,15 +1,15 @@
 {
-  "main.css": "/rock-paper-scissors-firebase-react-redux/static/css/main.8b684c13.chunk.css",
-  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.4daac157.chunk.js",
-  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.4daac157.chunk.js.map",
+  "main.css": "/rock-paper-scissors-firebase-react-redux/static/css/main.1006b2b1.chunk.css",
+  "main.js": "/rock-paper-scissors-firebase-react-redux/static/js/main.9f254db0.chunk.js",
+  "main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/main.9f254db0.chunk.js.map",
   "runtime~main.js": "/rock-paper-scissors-firebase-react-redux/static/js/runtime~main.8c1513eb.js",
   "runtime~main.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/runtime~main.8c1513eb.js.map",
-  "static/js/2.c67e1431.chunk.js": "/rock-paper-scissors-firebase-react-redux/static/js/2.c67e1431.chunk.js",
-  "static/js/2.c67e1431.chunk.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/2.c67e1431.chunk.js.map",
+  "static/js/2.8f2f4643.chunk.js": "/rock-paper-scissors-firebase-react-redux/static/js/2.8f2f4643.chunk.js",
+  "static/js/2.8f2f4643.chunk.js.map": "/rock-paper-scissors-firebase-react-redux/static/js/2.8f2f4643.chunk.js.map",
   "index.html": "/rock-paper-scissors-firebase-react-redux/index.html",
-  "precache-manifest.e482bb00b91f7b7fe3da6f45ee363910.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.e482bb00b91f7b7fe3da6f45ee363910.js",
+  "precache-manifest.1aec6561eaf5f60ddee8cbc53b16feda.js": "/rock-paper-scissors-firebase-react-redux/precache-manifest.1aec6561eaf5f60ddee8cbc53b16feda.js",
   "service-worker.js": "/rock-paper-scissors-firebase-react-redux/service-worker.js",
-  "static/css/main.8b684c13.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/main.8b684c13.chunk.css.map",
+  "static/css/main.1006b2b1.chunk.css.map": "/rock-paper-scissors-firebase-react-redux/static/css/main.1006b2b1.chunk.css.map",
   "static/media/landing-rps.jpg": "/rock-paper-scissors-firebase-react-redux/static/media/landing-rps.7015b724.jpg",
   "static/media/rpsLogo.png": "/rock-paper-scissors-firebase-react-redux/static/media/rpsLogo.94b40bc8.png"
 }
